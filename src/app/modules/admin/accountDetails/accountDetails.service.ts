@@ -82,9 +82,9 @@ const deleteUser = async (userId: ObjectId) => {
 
   const user = await User.isUserExistById(userId);
 
-  if (user.role === USER_ROLE.USER) {
+  if (user?.profile.role === USER_ROLE.USER) {
     await User.findByIdAndUpdate(userId, { isDeleted: true });
-    return `The buyer ${user.name} is deleted successful`;
+    return `The buyer ${user?.profile.firstName} is deleted successful`;
   }
 
   const session = await startSession();
@@ -96,7 +96,7 @@ const deleteUser = async (userId: ObjectId) => {
 
     await session.commitTransaction();
 
-    return `The ${user.role} ${user.name} is deleted successful`;
+    return `The ${user?.profile.role} ${user?.profile.firstName} is deleted successful`;
   } catch (error) {
     await session.abortTransaction();
     throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Transaction field");

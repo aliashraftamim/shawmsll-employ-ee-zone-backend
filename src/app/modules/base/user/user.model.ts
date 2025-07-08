@@ -5,201 +5,238 @@ import httpStatus from "http-status";
 import { model, Schema } from "mongoose";
 
 import { CONFIG } from "../../../core/config";
-import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
-import { IUser, IUserVerification, UserModel } from "./user.interface";
+import { IUser, UserModel } from "./user.interface";
+import {
+  AuthSchema,
+  LocationSchema,
+  MessageResponseSchema,
+  PaymentSchema,
+  ProfileSchema,
+  RatingsSchema,
+  UserVerificationSchema,
+} from "./user.schema";
 
-const userVerificationSchema = new Schema<IUserVerification>(
+// const userVerificationSchema = new Schema<IUserVerification>(
+//   {
+//     verified: {
+//       type: Boolean,
+//     },
+//     plans: {
+//       type: Schema.Types.ObjectId,
+//       ref: "Subscription",
+//     },
+//     plansType: {
+//       type: String,
+//       enum: ["basic", "advanced"],
+//     },
+//     otp: {
+//       type: String,
+//       select: 0,
+//     },
+//   },
+//   { timestamps: true }
+// );
+
+// const userSchema = new Schema<IUser, UserModel>(
+//   {
+//     name: {
+//       type: String,
+//       required: false,
+//       trim: true,
+//     },
+//     userName: {
+//       type: String,
+//       required: true,
+//       unique: true,
+//       trim: true,
+//       lowercase: true,
+//       // validate: {
+//       //   validator: function (value) {
+//       //     // Regex to match valid usernames (alphanumeric and underscores)
+//       //     return /^[a-zA-Z0-9_]+$/.test(value);
+//       //   },
+//       //   message: "Username must be alphanumeric and can include underscores",
+//       // },
+//       default: "", // Default value for userName
+//     },
+
+//     bio: {
+//       type: String,
+//       required: false,
+//       trim: true,
+//       maxlength: 160,
+//     },
+
+//     profileImage: {
+//       type: String,
+//       default:
+//         "https://res.cloudinary.com/dyalzfwd4/image/upload/v1738207704/user_wwrref.png",
+//       required: false,
+//     },
+
+//     email: {
+//       type: String,
+//       required: true,
+//       unique: true,
+//     },
+
+//     contactNumber: {
+//       type: String,
+//       required: false,
+//       // unique: true,
+//       // validate: {
+//       //   validator: function (value) {
+//       //     // Regex to match phone numbers with a country code
+//       //     return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
+//       //   },
+//       //   message:
+//       //     "Phone number must be a valid phone number with a country code",
+//       // },
+//     },
+
+//     location: {
+//       type: {
+//         type: String,
+//         enum: ["Point"],
+//         default: "Point",
+//       },
+//       coordinates: {
+//         type: [Number],
+//         default: [0, 0],
+//       },
+//     },
+
+//     locationName: {
+//       type: String,
+//       default: "",
+//     },
+
+//     password: {
+//       type: String,
+//       required: true,
+//       minlength: 8,
+//       select: 0,
+//     },
+
+//     confirmPassword: {
+//       type: String,
+//       validate: {
+//         validator: function (this: IUser, value: string) {
+//           return value === this.password;
+//         },
+//         message: "Passwords do not match.",
+//       },
+//       select: 0,
+//     },
+
+//     role: {
+//       type: String,
+//       enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN],
+//       required: true,
+//     },
+
+//     fcmToken: {
+//       type: String,
+//       default: "",
+//     },
+
+//     verification: {
+//       type: userVerificationSchema,
+//     },
+
+//     status: {
+//       type: String,
+//       enum: ["active", "blocked", "pending"],
+//       default: "active",
+//     },
+//     payment: {
+//       status: {
+//         type: String,
+//         enum: ["paid", "not-paid", "expired", "free"],
+//         default: "not-paid",
+//       },
+//       subscription: {
+//         type: Schema.Types.ObjectId,
+//         ref: "Subscription",
+//         default: null,
+//       },
+//       deadline: {
+//         type: Number,
+//         default: 0,
+//       },
+//       issuedAt: {
+//         type: Date,
+//         default: null,
+//       },
+//     },
+//     msgResponse: {
+//       isMyLastMessage: {
+//         type: Boolean,
+//         default: true,
+//       },
+//     },
+//     ratings: {
+//       totalUser: {
+//         type: Number,
+//         default: 0,
+//       },
+//       totalReview: {
+//         type: Number,
+//         default: 0,
+//       },
+//       star: {
+//         type: Number,
+//         default: 0,
+//       },
+//     },
+
+//     passwordChangedAt: {
+//       type: Date,
+//     },
+
+//     isDeleted: {
+//       type: Boolean,
+//       default: false,
+//     },
+//     isOnline: {
+//       type: Boolean,
+//       default: false,
+//     },
+//   },
+//   { timestamps: true }
+// );
+
+// Main User Schema
+const UserSchema = new Schema<IUser>(
   {
-    verified: {
-      type: Boolean,
-    },
-    plans: {
-      type: Schema.Types.ObjectId,
-      ref: "Subscription",
-    },
-    plansType: {
-      type: String,
-      enum: ["basic", "advanced"],
-    },
-    otp: {
-      type: String,
-      select: 0,
-    },
-  },
-  { timestamps: true }
-);
+    profile: { type: ProfileSchema },
+    auth: { type: AuthSchema, required: true },
+    location: { type: LocationSchema, required: false },
+    payment: { type: PaymentSchema, required: false },
 
-const userSchema = new Schema<IUser, UserModel>(
-  {
-    name: {
-      type: String,
-      required: false,
-      trim: true,
-    },
-    userName: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      // validate: {
-      //   validator: function (value) {
-      //     // Regex to match valid usernames (alphanumeric and underscores)
-      //     return /^[a-zA-Z0-9_]+$/.test(value);
-      //   },
-      //   message: "Username must be alphanumeric and can include underscores",
-      // },
-      default: "", // Default value for userName
-    },
+    verification: { type: UserVerificationSchema },
+    msgResponse: { type: MessageResponseSchema },
+    ratings: { type: RatingsSchema },
 
-    bio: {
-      type: String,
-      required: false,
-      trim: true,
-      maxlength: 160,
-    },
-
-    profileImage: {
-      type: String,
-      default:
-        "https://res.cloudinary.com/dyalzfwd4/image/upload/v1738207704/user_wwrref.png",
-      required: false,
-    },
-
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-
-    contactNumber: {
-      type: String,
-      required: false,
-      // unique: true,
-      // validate: {
-      //   validator: function (value) {
-      //     // Regex to match phone numbers with a country code
-      //     return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
-      //   },
-      //   message:
-      //     "Phone number must be a valid phone number with a country code",
-      // },
-    },
-
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number],
-        default: [0, 0],
-      },
-    },
-
-    locationName: {
-      type: String,
-      default: "",
-    },
-
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-      select: 0,
-    },
-
-    confirmPassword: {
-      type: String,
-      validate: {
-        validator: function (this: IUser, value: string) {
-          return value === this.password;
-        },
-        message: "Passwords do not match.",
-      },
-      select: 0,
-    },
-
-    role: {
-      type: String,
-      enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN],
-      required: true,
-    },
-
-    fcmToken: {
-      type: String,
-      default: "",
-    },
-
-    verification: {
-      type: userVerificationSchema,
-    },
-
+    fcmToken: { type: String },
+    isOnline: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
     status: {
       type: String,
       enum: ["active", "blocked", "pending"],
-      default: "active",
-    },
-    payment: {
-      status: {
-        type: String,
-        enum: ["paid", "not-paid", "expired", "free"],
-        default: "not-paid",
-      },
-      subscription: {
-        type: Schema.Types.ObjectId,
-        ref: "Subscription",
-        default: null,
-      },
-      deadline: {
-        type: Number,
-        default: 0,
-      },
-      issuedAt: {
-        type: Date,
-        default: null,
-      },
-    },
-    msgResponse: {
-      isMyLastMessage: {
-        type: Boolean,
-        default: true,
-      },
-    },
-    ratings: {
-      totalUser: {
-        type: Number,
-        default: 0,
-      },
-      totalReview: {
-        type: Number,
-        default: 0,
-      },
-      star: {
-        type: Number,
-        default: 0,
-      },
-    },
-
-    passwordChangedAt: {
-      type: Date,
-    },
-
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
+      default: "pending",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-userSchema.pre("save", async function () {
+// Indexing location for geo queries
+UserSchema.index({ "location.coordinates": "2dsphere" });
+
+UserSchema.pre("save", async function () {
   // const isVerifiedEmail = await isEmailVerified(this?.email);
 
   if (!this.isModified("password")) {
@@ -207,7 +244,7 @@ userSchema.pre("save", async function () {
   }
 
   // Validate that passwords match
-  if (this.password !== this.confirmPassword) {
+  if (this.auth.password !== this.auth.confirmPassword) {
     throw new AppError(
       httpStatus.UNPROCESSABLE_ENTITY,
       "Passwords don't match"
@@ -215,16 +252,16 @@ userSchema.pre("save", async function () {
   }
 
   // Hash the password
-  this.password = await bcrypt.hash(
-    this.password,
+  this.auth.password = await bcrypt.hash(
+    this.auth.password,
     Number(CONFIG.BCRYPT.bcrypt_salt_rounds)
   );
 
   // Remove the confirmPassword field
-  this.confirmPassword = undefined;
+  this.auth.confirmPassword = undefined;
 });
 
-userSchema.statics.isUserExistById = async function (id: string) {
+UserSchema.statics.isUserExistById = async function (id: string) {
   try {
     const user = await User.findById(id);
 
@@ -258,7 +295,7 @@ userSchema.statics.isUserExistById = async function (id: string) {
   }
 };
 
-userSchema.statics.isUserExistByEmail = async function (email: string) {
+UserSchema.statics.isUserExistByEmail = async function (email: string) {
   try {
     const user = await User.findOne({ email });
 
@@ -293,7 +330,7 @@ userSchema.statics.isUserExistByEmail = async function (email: string) {
   }
 };
 
-userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+UserSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   passwordChangedTimestamp: Date,
   jwtIssuedTimestamp: number
 ) {
@@ -302,4 +339,4 @@ userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   return passwordChangedTime > jwtIssuedTimestamp;
 };
 
-export const User = model<IUser, UserModel>("User", userSchema);
+export const User = model<IUser, UserModel>("User", UserSchema);

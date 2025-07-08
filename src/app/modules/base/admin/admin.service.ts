@@ -9,35 +9,28 @@ import { User } from "../user/user.model";
 
 const seedSuperAdmin = async () => {
   const superUser: IUser = {
-    name: "Super Admin",
-    email: CONFIG.CORE.supper_admin_email!,
-    password: CONFIG.CORE.supper_admin_pass!,
-    confirmPassword: CONFIG.CORE.supper_admin_pass!,
-    contactNumber: "+17788990011",
-    role: USER_ROLE.ADMIN,
-    locationName: "Miami, USA",
-    location: {
-      type: "Point",
-      coordinates: [0, 0],
+    profile: {
+      firstName: "Supper",
+      lastName: "Admin",
+      fullName: "Super Admin",
+      phoneNumber: "01812345678",
+      contactNumber: "01812345678",
+      companyName: "Tech Innovators",
+      role: USER_ROLE.ADMIN,
+      bio: "Full-stack developer with a love for clean UI.",
+      profileImage: "https://example.com/images/ali.jpg",
     },
-    verification: {
-      verified: true,
+    auth: {
+      email: CONFIG.CORE.supper_admin_email!,
+      password: CONFIG.CORE.supper_admin_pass!,
+      confirmPassword: CONFIG.CORE.supper_admin_pass!,
+      agreeToTerms: true,
     },
-    msgResponse: {
-      isMyLastMessage: true,
-    },
-    payment: {
-      status: "free",
-      amount: 0,
-      issuedAt: new Date(),
-      deadline: 0,
-      deadlineType: "month",
-      subscription: undefined as any, // Replace with a valid ObjectId if available
-    }, // default payment object as required by IUser
+    status: "active",
   };
 
   const isSuperAdminExits = await User.findOne({
-    role: USER_ROLE.ADMIN,
+    "profile.role": USER_ROLE.ADMIN,
   });
 
   if (!isSuperAdminExits) {

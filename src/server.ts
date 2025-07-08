@@ -16,7 +16,18 @@ process.on("uncaughtException", (err) => {
   console.error(err);
   process.exit(1);
 });
+console.log({
+  host: CONFIG.MAIL.smtp_host,
+  port: Number(CONFIG.MAIL.smtp_port),
+  secure: CONFIG.CORE.node_env === "production",
+  auth: {
+    user: CONFIG.MAIL.service_user,
+    pass: CONFIG.MAIL.mail_app_pass,
+  },
 
+  from: CONFIG.MAIL.send_from,
+  otp_expr: CONFIG?.MAIL.otp_expires,
+});
 // ✅ Main function to connect DB and start servers
 async function main() {
   try {

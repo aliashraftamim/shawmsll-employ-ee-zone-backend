@@ -58,7 +58,7 @@ const loginUser = async (payload: IUserLogin) => {
   // Create JWT payload
   const jwtPayload = {
     id: updatedUser._id,
-    email: updatedUser.email,
+    email: updatedUser?.auth.email,
     role: updatedUser.role,
   };
 
@@ -180,7 +180,7 @@ const forgotPasswordLInk = async (email: string) => {
   const user = await User.isUserExistByEmail(email);
   // create  short time reset  password  jwt token
   const jwtPayload: any = {
-    email: user?.email,
+    email: user?.auth.email,
   };
 
   const resetToken = jwt.sign(
@@ -192,19 +192,19 @@ const forgotPasswordLInk = async (email: string) => {
   );
 
   sendEmailWithLink(
-    user.email,
+    user?.auth.email,
     "Reset email verification",
-    `${CONFIG.CORE.frontend_url}/reset-password?email=${user.email}&token=${resetToken}`
+    `${CONFIG.CORE.frontend_url}/reset-password?email=${user?.auth.email}&token=${resetToken}`
   );
 
   // set the otp  on the db
   await User.findOneAndUpdate(
-    { email: user?.email },
+    { email: user?.auth.email },
     { "verification.otp": 123 },
     { new: true }
   );
 
-  // sendEmail(user?.email, otp, "OTP for reset new password!");
+  // sendEmail(user?.auth.email, otp, "OTP for reset new password!");
 
   // send password reset token
   return { resetToken };
@@ -222,8 +222,8 @@ const forgotPassword = async (email: string) => {
 
   // create  short time reset  password  jwt token
   const jwtPayload: IOtpToken = {
-    email: user?.email,
-    role: user?.role,
+    email: user?.auth.email,
+    role: user?.profile.role,
     otp: hashingOtp,
   };
 
@@ -237,7 +237,7 @@ const forgotPassword = async (email: string) => {
 
   // set the otp  on the db
   await User.findOneAndUpdate(
-    { email: user?.email },
+    { email: user?.auth.email },
     { "verification.otp": hashingOtp },
     { new: true }
   );
@@ -302,7 +302,7 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
   }
 
   const jwtPayload = {
-    email: user?.email,
+    email: user?.auth.email,
   };
 
   const resetToken = jwt.sign(
@@ -314,7 +314,7 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
   );
   // update new hashed password
   await User.findOneAndUpdate(
-    { email: user?.email },
+    { email: user?.auth.email },
     {
       "verification.otp": "",
     },
@@ -338,9 +338,9 @@ const resetPassword = async (payload: IResetPassPayload, token: string) => {
   const user = await User.isUserExistByEmail(decodedToken?.email);
 
   if (
-    user.passwordChangedAt &&
+    user?.auth.passwordChangedAt &&
     User.isJWTIssuedBeforePasswordChanged(
-      user.passwordChangedAt,
+      user?.auth.passwordChangedAt,
       decodedToken.iat as number
     )
   ) {
@@ -365,17 +365,15 @@ const resetPassword = async (payload: IResetPassPayload, token: string) => {
   );
 
   // update new hashed password
-  const result = await User.findOneAndUpdate(
-    { email: user?.email },
-    {
-      password: newHashedPassword,
-      "verification.otp": "",
-      passwordChangedAt: new Date(),
-    },
-    { new: true }
-  );
-
-  return result;
+  return await User.findOneAndUpdate(
+      { email: user?.auth.email },
+      {
+        password: newHashedPassword,
+        "verification.otp": "",
+        passwordChangedAt: new Date(),
+      },
+      { new: true }
+    );
 };
 
 const changePassword = async (
@@ -394,7 +392,7 @@ const changePassword = async (
   // Check password by bcrypt compare
   const isPasswordMatch = await bcrypt.compare(
     payload.oldPassword,
-    user.password
+    user?.auth.password
   );
 
   if (!isPasswordMatch) {
@@ -433,15 +431,18 @@ const refreshToken = async (token: string) => {
   const user = await User.isUserExistByEmail(email);
 
   if (
-    user.passwordChangedAt &&
-    User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
+    user?.auth.passwordChangedAt &&
+    User.isJWTIssuedBeforePasswordChanged(
+      user?.auth.passwordChangedAt,
+      iat as number
+    )
   ) {
     throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized !");
   }
 
   const jwtPayload = {
-    userId: user?.email,
-    role: user?.role,
+    userId: user?.auth.email,
+    role: user?.profile.role,
   };
 
   const accessToken = jwt.sign(

@@ -19,7 +19,7 @@ const createUser = async (payload: Partial<IUser>) => {
   const newUser = await User.create([{ ...userData }]);
 
   const verifyEmail: any = await authService.sendOtpForVerifyEmail(
-    (payload as any)?.email
+    payload?.auth?.email as any
   );
   return {
     user: newUser[0],
@@ -154,18 +154,15 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
     };
   }
 
-  const updatedUser = await User.findByIdAndUpdate(userId, payload, {
+  return await User.findByIdAndUpdate(userId, payload, {
     new: true,
   });
-
-  return updatedUser;
 };
 
 const getMe = async (currentUser: ObjectId) => {
   // Step 1: Match only active & verified users
 
-  const users = await User.findById(currentUser);
-  return users;
+  return await User.findById(currentUser);
 };
 
 export const userService = {

@@ -1,53 +1,33 @@
 /* eslint-disable no-unused-vars */
 import { Model, ObjectId } from "mongoose";
 import { USER_ROLE } from "../../../core/constants/global.constants";
+import {
+  IAuth,
+  ILocation,
+  IMessageResponse,
+  IPayment,
+  IProfile,
+  IRatings,
+  IUserVerification,
+} from "./user.helper.types";
 
-export interface IUserVerification {
-  verified: boolean;
-  plans?: ObjectId;
-  plansType?: "basic" | "advanced";
-  otp?: string;
-}
-
+// Main IUser Interface
 export interface IUser {
   _id?: ObjectId;
-  name: string;
-  userName?: string;
-  bio?: string;
-  profileImage?: string;
-  email: string;
-  contactNumber: string;
-  location: {
-    type: string;
-    coordinates: number[];
-  };
-  locationName?: string;
-  password: string;
-  confirmPassword: string | undefined;
-  role: TUserRole;
-  fcmToken?: string;
-  verification?: IUserVerification;
-  status?: "active" | "blocked" | "pending";
-  payment: {
-    status: "paid" | "not-paid" | "expired" | "free";
-    amount: number;
-    issuedAt: Date;
-    deadline: number;
-    deadlineType: "day" | "week" | "month" | "year";
-    subscription: ObjectId;
-  };
-  msgResponse?: {
-    isMyLastMessage: boolean;
-  };
-  ratings?: {
-    star: number;
-    totalReview: number;
-    totalUser: number;
-  };
 
-  passwordChangedAt?: Date;
+  profile: IProfile;
+  auth: IAuth;
+  location?: ILocation;
+  payment?: IPayment;
+
+  verification?: IUserVerification;
+  msgResponse?: IMessageResponse;
+  ratings?: IRatings;
+
+  fcmToken?: string;
   isOnline?: boolean;
   isDeleted?: boolean;
+  status?: "active" | "blocked" | "pending";
 }
 
 export type TUserRole = keyof typeof USER_ROLE;

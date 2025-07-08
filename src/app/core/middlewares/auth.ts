@@ -24,14 +24,13 @@ const auth = (...requiredRoles: TUserRole[]) => {
     ) as JwtPayload;
 
     const { role, id, iat } = decoded;
-    // console.log("🚀 ~ returncatchAsync ~ decoded:", decoded);
 
     // Find validate log in user
     const user = await User.isUserExistById(id);
     if (
-      user.passwordChangedAt &&
+      user.auth.passwordChangedAt &&
       User.isJWTIssuedBeforePasswordChanged(
-        user.passwordChangedAt,
+        user.auth.passwordChangedAt,
         iat as number
       )
     ) {
