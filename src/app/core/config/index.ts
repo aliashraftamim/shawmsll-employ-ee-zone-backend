@@ -15,6 +15,8 @@ export const CONFIG = {
 
     supper_admin_email: process.env.SUPPER_ADMIN_EMAIL,
     supper_admin_pass: process.env.SUPPER_ADMIN_PASS,
+
+    password_length: process.env.PASSWORD_LENGTH,
   },
 
   BCRYPT: { bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS },

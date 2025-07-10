@@ -3,6 +3,5 @@
 import { Socket } from "socket.io";
 
 export const emitSocketError = (socket: Socket, message: string) => {
-  console.log("🚀 ~ emitSocketError ~ message:", message);
-  socket.emit("io-error", "gdfgdf");
+  socket.emit("io-error", message);
 };

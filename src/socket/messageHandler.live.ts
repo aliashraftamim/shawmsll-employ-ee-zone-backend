@@ -14,12 +14,6 @@ const messageHandler = (io: Server, socket: Socket, user: any) => {
       socket.emit("io-error-t", "gdfgdf");
       // ✅ Input validation
       if (!message?.content || !message?.receiver) {
-        console.log(
-          "🚀 ~ socket.on ~ message: ERROR🚦",
-          message,
-          message?.content,
-          message?.receiver
-        );
         return emitSocketError(
           socket,
           "Invalid message format. 'content' and 'receiver' are required."

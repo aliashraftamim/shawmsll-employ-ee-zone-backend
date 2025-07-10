@@ -17,23 +17,16 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [
-      "https://victoriaade12.vercel.app",
       "http://localhost:3000",
       "http://localhost:3001",
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:5175",
       "http://localhost:5176",
-      "http://204.197.173.195:4174",
-      "http://192.168.40.112:3001",
     ],
     credentials: true,
   })
 );
-
-// async function setupGraphQL(app: Express) {
-//   await initializeApolloServer(app);
-// }
 
 (async () => {
   // await setupGraphQL(app);
@@ -43,7 +36,7 @@ app.use(
     "/api/v1",
     (req, res, next) => {
       const now = new Date().toLocaleString().replace(/\//g, "-");
-      console.log(chalk.bgYellowBright(` Hit detected at `), now);
+      console.info(chalk.bgYellowBright(` Hit detected at `), now);
       next();
     },
     router

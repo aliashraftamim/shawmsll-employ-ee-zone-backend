@@ -8,216 +8,34 @@ import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
 import { IUser, UserModel } from "./user.interface";
 import {
-  AuthSchema,
   LocationSchema,
-  MessageResponseSchema,
   PaymentSchema,
   ProfileSchema,
   RatingsSchema,
   UserVerificationSchema,
 } from "./user.schema";
 
-// const userVerificationSchema = new Schema<IUserVerification>(
-//   {
-//     verified: {
-//       type: Boolean,
-//     },
-//     plans: {
-//       type: Schema.Types.ObjectId,
-//       ref: "Subscription",
-//     },
-//     plansType: {
-//       type: String,
-//       enum: ["basic", "advanced"],
-//     },
-//     otp: {
-//       type: String,
-//       select: 0,
-//     },
-//   },
-//   { timestamps: true }
-// );
-
-// const userSchema = new Schema<IUser, UserModel>(
-//   {
-//     name: {
-//       type: String,
-//       required: false,
-//       trim: true,
-//     },
-//     userName: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//       trim: true,
-//       lowercase: true,
-//       // validate: {
-//       //   validator: function (value) {
-//       //     // Regex to match valid usernames (alphanumeric and underscores)
-//       //     return /^[a-zA-Z0-9_]+$/.test(value);
-//       //   },
-//       //   message: "Username must be alphanumeric and can include underscores",
-//       // },
-//       default: "", // Default value for userName
-//     },
-
-//     bio: {
-//       type: String,
-//       required: false,
-//       trim: true,
-//       maxlength: 160,
-//     },
-
-//     profileImage: {
-//       type: String,
-//       default:
-//         "https://res.cloudinary.com/dyalzfwd4/image/upload/v1738207704/user_wwrref.png",
-//       required: false,
-//     },
-
-//     email: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//     },
-
-//     contactNumber: {
-//       type: String,
-//       required: false,
-//       // unique: true,
-//       // validate: {
-//       //   validator: function (value) {
-//       //     // Regex to match phone numbers with a country code
-//       //     return /^\+(\d{1,4})\d{6,15}$/.test(value); // Ensures the phone number starts with a + followed by a country code and valid phone number
-//       //   },
-//       //   message:
-//       //     "Phone number must be a valid phone number with a country code",
-//       // },
-//     },
-
-//     location: {
-//       type: {
-//         type: String,
-//         enum: ["Point"],
-//         default: "Point",
-//       },
-//       coordinates: {
-//         type: [Number],
-//         default: [0, 0],
-//       },
-//     },
-
-//     locationName: {
-//       type: String,
-//       default: "",
-//     },
-
-//     password: {
-//       type: String,
-//       required: true,
-//       minlength: 8,
-//       select: 0,
-//     },
-
-//     confirmPassword: {
-//       type: String,
-//       validate: {
-//         validator: function (this: IUser, value: string) {
-//           return value === this.password;
-//         },
-//         message: "Passwords do not match.",
-//       },
-//       select: 0,
-//     },
-
-//     role: {
-//       type: String,
-//       enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN],
-//       required: true,
-//     },
-
-//     fcmToken: {
-//       type: String,
-//       default: "",
-//     },
-
-//     verification: {
-//       type: userVerificationSchema,
-//     },
-
-//     status: {
-//       type: String,
-//       enum: ["active", "blocked", "pending"],
-//       default: "active",
-//     },
-//     payment: {
-//       status: {
-//         type: String,
-//         enum: ["paid", "not-paid", "expired", "free"],
-//         default: "not-paid",
-//       },
-//       subscription: {
-//         type: Schema.Types.ObjectId,
-//         ref: "Subscription",
-//         default: null,
-//       },
-//       deadline: {
-//         type: Number,
-//         default: 0,
-//       },
-//       issuedAt: {
-//         type: Date,
-//         default: null,
-//       },
-//     },
-//     msgResponse: {
-//       isMyLastMessage: {
-//         type: Boolean,
-//         default: true,
-//       },
-//     },
-//     ratings: {
-//       totalUser: {
-//         type: Number,
-//         default: 0,
-//       },
-//       totalReview: {
-//         type: Number,
-//         default: 0,
-//       },
-//       star: {
-//         type: Number,
-//         default: 0,
-//       },
-//     },
-
-//     passwordChangedAt: {
-//       type: Date,
-//     },
-
-//     isDeleted: {
-//       type: Boolean,
-//       default: false,
-//     },
-//     isOnline: {
-//       type: Boolean,
-//       default: false,
-//     },
-//   },
-//   { timestamps: true }
-// );
-
 // Main User Schema
 const UserSchema = new Schema<IUser>(
   {
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    confirmPassword: { type: String },
+    role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
+
     profile: { type: ProfileSchema },
-    auth: { type: AuthSchema, required: true },
     location: { type: LocationSchema, required: false },
     payment: { type: PaymentSchema, required: false },
 
     verification: { type: UserVerificationSchema },
-    msgResponse: { type: MessageResponseSchema },
+    isMyLastMessage: {
+      type: Boolean,
+      default: false,
+    },
+
     ratings: { type: RatingsSchema },
+    agreeToTerms: { type: Boolean, required: true },
+    passwordChangedAt: { type: Date },
 
     fcmToken: { type: String },
     isOnline: { type: Boolean, default: false },
@@ -238,13 +56,12 @@ UserSchema.index({ "location.coordinates": "2dsphere" });
 
 UserSchema.pre("save", async function () {
   // const isVerifiedEmail = await isEmailVerified(this?.email);
-
   if (!this.isModified("password")) {
     return;
   }
 
   // Validate that passwords match
-  if (this.auth.password !== this.auth.confirmPassword) {
+  if (this.password !== this.confirmPassword) {
     throw new AppError(
       httpStatus.UNPROCESSABLE_ENTITY,
       "Passwords don't match"
@@ -252,13 +69,13 @@ UserSchema.pre("save", async function () {
   }
 
   // Hash the password
-  this.auth.password = await bcrypt.hash(
-    this.auth.password,
+  this.password = await bcrypt.hash(
+    this.password,
     Number(CONFIG.BCRYPT.bcrypt_salt_rounds)
   );
 
   // Remove the confirmPassword field
-  this.auth.confirmPassword = undefined;
+  this.confirmPassword = undefined;
 });
 
 UserSchema.statics.isUserExistById = async function (id: string) {

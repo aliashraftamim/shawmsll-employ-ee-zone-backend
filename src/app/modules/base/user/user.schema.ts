@@ -1,16 +1,24 @@
 import { Schema } from "mongoose";
+import {
+  IAuth,
+  ILocation,
+  IPayment,
+  IProfile,
+  IRatings,
+  IUserVerification,
+} from "./user.helper.types";
 
-export const UserVerificationSchema = new Schema(
+export const UserVerificationSchema = new Schema<IUserVerification>(
   {
     verified: { type: Boolean, default: false },
-    plans: { type: Schema.Types.ObjectId, ref: "Plan" },
-    plansType: { type: String, enum: ["basic", "advanced"] },
-    otp: { type: String },
+    plans: { type: Schema.Types.ObjectId, ref: "Plan", default: null },
+    plansType: { type: String, enum: ["basic", "advanced", ""], default: "" },
+    otp: { type: String, default: "" },
   },
   { _id: false }
 );
 
-export const RatingsSchema = new Schema(
+export const RatingsSchema = new Schema<IRatings>(
   {
     star: { type: Number, default: 0 },
     totalReview: { type: Number, default: 0 },
@@ -19,14 +27,7 @@ export const RatingsSchema = new Schema(
   { _id: false }
 );
 
-export const MessageResponseSchema = new Schema(
-  {
-    isMyLastMessage: { type: Boolean, default: false },
-  },
-  { _id: false }
-);
-
-export const PaymentSchema = new Schema(
+export const PaymentSchema = new Schema<IPayment>(
   {
     status: {
       type: String,
@@ -49,7 +50,7 @@ export const PaymentSchema = new Schema(
   { _id: false }
 );
 
-export const LocationSchema = new Schema(
+export const LocationSchema = new Schema<ILocation>(
   {
     type: { type: String, default: "Point" },
     coordinates: { type: [Number], default: [0, 0] },
@@ -58,21 +59,20 @@ export const LocationSchema = new Schema(
   { _id: false }
 );
 
-export const ProfileSchema = new Schema(
+export const ProfileSchema = new Schema<IProfile>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     userName: { type: String },
     contactNumber: { type: String, required: true },
     companyName: { type: String },
-    role: { type: String, required: true },
     bio: { type: String },
     profileImage: { type: String },
   },
   { _id: false }
 );
 
-export const AuthSchema = new Schema(
+export const AuthSchema = new Schema<IAuth>(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },

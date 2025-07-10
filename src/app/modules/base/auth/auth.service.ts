@@ -5,6 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongoose";
 
 import { generateOTP } from "../../../common/utils/generate.otp";
+import { otpMailTemplate } from "../../../common/utils/sendEmail/mail.template";
 import { sendEmail } from "../../../common/utils/sendEmail/sendEmail";
 import { sendEmailWithLink } from "../../../common/utils/sendEmail/sendEmailWithLink";
 import { CONFIG } from "../../../core/config";
@@ -58,7 +59,7 @@ const loginUser = async (payload: IUserLogin) => {
   // Create JWT payload
   const jwtPayload = {
     id: updatedUser._id,
-    email: updatedUser?.auth.email,
+    email: updatedUser?.email,
     role: updatedUser.role,
   };
 
@@ -104,23 +105,12 @@ const sendOtpForVerifyEmail = async (email: string): Promise<unknown> => {
   );
 
   // set the otp  on the db
-  await User.findOneAndUpdate(
+  const uOTP = await User.findOneAndUpdate(
     { email },
     { "verification.otp": hashingOtp },
     { new: true }
   );
-  sendEmail(
-    email,
-    "OTP for verify user email!",
-    `<div style="max-width: 600px; border: 1px dashed #4caf50; padding: 10px 20px;  width: 100%; background-color:rgb(255, 248, 242); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
-        <h1 style="font-size: 24px; color: #4caf50; margin-bottom: 20px;">Your One-Time Password</h1>
-        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">This OTP will expire in <strong style="color: #4caf50;">${CONFIG.MAIL.otp_expires}</strong> minutes.</p>
-        <div style=" display: inline-block; background-color: #FF4F00;  padding: 10px 20px; font-size: 24px; font-weight: bold; color:rgb(255, 255, 255); letter-spacing: 4px; border-radius: 8px; margin-bottom: 20px;">
-          ${otp}
-        </div>
-        <p style="font-size: 14px; color: #888888; margin-top: 20px;">If you didn't request this, please ignore this email.</p>
-      </div>`
-  );
+  sendEmail(email, "OTP for verify user email!", otpMailTemplate(otp));
 
   // send password reset token
   return { verifyEmailToken };
@@ -159,10 +149,11 @@ const verifyUser = async (otp: string, token: string) => {
   if (user?.status === "blocked") {
     throw new AppError(httpStatus.FORBIDDEN, "User was blocked!");
   }
+  console.log("🚀 ~ verifyUser ~ otp:", otp);
   const compareOtp = await bcrypt.compare(otp, user?.verification?.otp);
   // Compare OTP (assuming it's stored as plain text, otherwise use bcrypt.compare)
   if (!compareOtp) {
-    throw new AppError(httpStatus.BAD_REQUEST, "OTP did not matchdsf!");
+    throw new AppError(httpStatus.BAD_REQUEST, "OTP did not match!");
   }
 
   // Update user verification status
@@ -180,7 +171,7 @@ const forgotPasswordLInk = async (email: string) => {
   const user = await User.isUserExistByEmail(email);
   // create  short time reset  password  jwt token
   const jwtPayload: any = {
-    email: user?.auth.email,
+    email: user?.email,
   };
 
   const resetToken = jwt.sign(
@@ -192,19 +183,19 @@ const forgotPasswordLInk = async (email: string) => {
   );
 
   sendEmailWithLink(
-    user?.auth.email,
+    user?.email,
     "Reset email verification",
-    `${CONFIG.CORE.frontend_url}/reset-password?email=${user?.auth.email}&token=${resetToken}`
+    `${CONFIG.CORE.frontend_url}/reset-password?email=${user?.email}&token=${resetToken}`
   );
 
   // set the otp  on the db
   await User.findOneAndUpdate(
-    { email: user?.auth.email },
+    { email: user?.email },
     { "verification.otp": 123 },
     { new: true }
   );
 
-  // sendEmail(user?.auth.email, otp, "OTP for reset new password!");
+  // sendEmail(user?.email, otp, "OTP for reset new password!");
 
   // send password reset token
   return { resetToken };
@@ -222,8 +213,8 @@ const forgotPassword = async (email: string) => {
 
   // create  short time reset  password  jwt token
   const jwtPayload: IOtpToken = {
-    email: user?.auth.email,
-    role: user?.profile.role,
+    email: user?.email,
+    role: user?.role,
     otp: hashingOtp,
   };
 
@@ -237,23 +228,12 @@ const forgotPassword = async (email: string) => {
 
   // set the otp  on the db
   await User.findOneAndUpdate(
-    { email: user?.auth.email },
+    { email: user?.email },
     { "verification.otp": hashingOtp },
     { new: true }
   );
 
-  await sendEmail(
-    email,
-    "OTP for verify your account!",
-    `<div style="max-width: 600px; border: 1px dashed #4caf50; padding: 10px 20px;  width: 100%; background-color:rgb(255, 248, 242); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
-        <h1 style="font-size: 24px; color: #4caf50; margin-bottom: 20px;">Your One-Time Password</h1>
-        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">This OTP will expire in <strong style="color: #4caf50;">${CONFIG.MAIL.otp_expires}</strong> minutes.</p>
-        <div style=" display: inline-block; background-color: #FF4F00;  padding: 10px 20px; font-size: 24px; font-weight: bold; color:rgb(255, 255, 255); letter-spacing: 4px; border-radius: 8px; margin-bottom: 20px;">
-          ${otp}
-        </div>
-        <p style="font-size: 14px; color: #888888; margin-top: 20px;">If you didn't request this, please ignore this email.</p>
-      </div>`
-  );
+  await sendEmail(email, "OTP for verify your account!", otpMailTemplate(otp));
 
   return { resetToken };
 };
@@ -302,7 +282,7 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
   }
 
   const jwtPayload = {
-    email: user?.auth.email,
+    email: user?.email,
   };
 
   const resetToken = jwt.sign(
@@ -314,7 +294,7 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
   );
   // update new hashed password
   await User.findOneAndUpdate(
-    { email: user?.auth.email },
+    { email: user?.email },
     {
       "verification.otp": "",
     },
@@ -338,9 +318,9 @@ const resetPassword = async (payload: IResetPassPayload, token: string) => {
   const user = await User.isUserExistByEmail(decodedToken?.email);
 
   if (
-    user?.auth.passwordChangedAt &&
+    user?.passwordChangedAt &&
     User.isJWTIssuedBeforePasswordChanged(
-      user?.auth.passwordChangedAt,
+      user?.passwordChangedAt,
       decodedToken.iat as number
     )
   ) {
@@ -366,14 +346,14 @@ const resetPassword = async (payload: IResetPassPayload, token: string) => {
 
   // update new hashed password
   return await User.findOneAndUpdate(
-      { email: user?.auth.email },
-      {
-        password: newHashedPassword,
-        "verification.otp": "",
-        passwordChangedAt: new Date(),
-      },
-      { new: true }
-    );
+    { email: user?.email },
+    {
+      password: newHashedPassword,
+      "verification.otp": "",
+      passwordChangedAt: new Date(),
+    },
+    { new: true }
+  );
 };
 
 const changePassword = async (
@@ -392,7 +372,7 @@ const changePassword = async (
   // Check password by bcrypt compare
   const isPasswordMatch = await bcrypt.compare(
     payload.oldPassword,
-    user?.auth.password
+    user?.password
   );
 
   if (!isPasswordMatch) {
@@ -431,9 +411,9 @@ const refreshToken = async (token: string) => {
   const user = await User.isUserExistByEmail(email);
 
   if (
-    user?.auth.passwordChangedAt &&
+    user?.passwordChangedAt &&
     User.isJWTIssuedBeforePasswordChanged(
-      user?.auth.passwordChangedAt,
+      user?.passwordChangedAt,
       iat as number
     )
   ) {
@@ -441,8 +421,8 @@ const refreshToken = async (token: string) => {
   }
 
   const jwtPayload = {
-    userId: user?.auth.email,
-    role: user?.profile.role,
+    userId: user?.email,
+    role: user?.role,
   };
 
   const accessToken = jwt.sign(

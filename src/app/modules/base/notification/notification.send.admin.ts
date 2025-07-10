@@ -27,7 +27,7 @@ export const sendAdminNotifications = async (
     sendNotification([admin.fcmToken], {
       sender: payload.sender,
       receiver: admin?._id as any,
-      receiverEmail: admin?.auth.email,
+      receiverEmail: admin?.email,
       receiverRole: "admin",
       title: payload.title,
       message: payload.message,

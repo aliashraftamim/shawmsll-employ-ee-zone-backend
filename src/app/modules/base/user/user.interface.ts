@@ -2,9 +2,7 @@
 import { Model, ObjectId } from "mongoose";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import {
-  IAuth,
   ILocation,
-  IMessageResponse,
   IPayment,
   IProfile,
   IRatings,
@@ -15,13 +13,19 @@ import {
 export interface IUser {
   _id?: ObjectId;
 
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  agreeToTerms: boolean;
+  passwordChangedAt?: Date;
+  role: string;
+
   profile: IProfile;
-  auth: IAuth;
   location?: ILocation;
   payment?: IPayment;
 
   verification?: IUserVerification;
-  msgResponse?: IMessageResponse;
+  isMyLastMessage?: boolean;
   ratings?: IRatings;
 
   fcmToken?: string;

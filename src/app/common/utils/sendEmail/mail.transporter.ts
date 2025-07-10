@@ -19,6 +19,6 @@ transporter.verify((error, success) => {
   if (error) {
     console.error("❌ Mail Transporter Error:", error);
   } else {
-    console.log("✅ Mail Transporter is ready to send emails");
+    console.info("✅ Mail Transporter is ready to send emails");
   }
 });

@@ -32,53 +32,15 @@ const socketHandler = (io: Server) => {
   // ✅ Actual socket connection (only if middleware passes)
   io.on("connection", async (socket: Socket) => {
     const { user } = socket as any;
-    console.log(`✅ Authenticated user connected: ${socket.id}`);
+    console.info(`✅ Authenticated user connected: ${socket.id}`);
 
     messageHandler(io, socket, user);
 
     socket.on("disconnect", async () => {
       await userStatusHandler.setUserOffline(user._id);
-      console.log(`❌ User disconnected: ${socket.id}`);
+      console.info(`❌ User disconnected: ${socket.id}`);
     });
   });
 };
 
 export default socketHandler;
-
-// /* eslint-disable no-console */
-// import { Server } from "socket.io";
-
-// import { emitSocketError } from "./errorHandler";
-// import { messageHandler } from "./messageHandler.live";
-// import userStatusHandler from "./userStatusHandler";
-
-// const socketHandler = (io: Server) => {
-//   io.on("connection", async (socket) => {
-//     console.log(`✅ User connected: ${socket.id}`);
-
-//     // Get token from handshake
-//     const token =
-//       socket.handshake.auth?.token || socket.handshake.headers?.token;
-//     console.log("🚀 ~ io.on ~ token:", token);
-//     if (!token) {
-//       console.log("🚀 ~ io.on ~ token:2", token);
-//       emitSocketError(socket, "Token not found");
-//       return;
-//     }
-
-//     const user = await userStatusHandler.setUserOnline(token, io);
-//     if (!user) {
-//       emitSocketError(socket, "Invalid token");
-//       return;
-//     }
-
-//     messageHandler(io, socket, user);
-
-//     socket.on("disconnect", async () => {
-//       await userStatusHandler.setUserOffline(user._id);
-//       console.log(`❌ User disconnected: ${socket.id}`);
-//     });
-//   });
-// };
-
-// export default socketHandler;

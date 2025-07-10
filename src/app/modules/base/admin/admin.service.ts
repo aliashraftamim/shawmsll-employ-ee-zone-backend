@@ -9,6 +9,11 @@ import { User } from "../user/user.model";
 
 const seedSuperAdmin = async () => {
   const superUser: IUser = {
+    email: CONFIG.CORE.supper_admin_email!,
+    password: CONFIG.CORE.supper_admin_pass!,
+    confirmPassword: CONFIG.CORE.supper_admin_pass!,
+    agreeToTerms: true,
+    role: USER_ROLE.ADMIN,
     profile: {
       firstName: "Supper",
       lastName: "Admin",
@@ -16,21 +21,14 @@ const seedSuperAdmin = async () => {
       phoneNumber: "01812345678",
       contactNumber: "01812345678",
       companyName: "Tech Innovators",
-      role: USER_ROLE.ADMIN,
       bio: "Full-stack developer with a love for clean UI.",
       profileImage: "https://example.com/images/ali.jpg",
-    },
-    auth: {
-      email: CONFIG.CORE.supper_admin_email!,
-      password: CONFIG.CORE.supper_admin_pass!,
-      confirmPassword: CONFIG.CORE.supper_admin_pass!,
-      agreeToTerms: true,
     },
     status: "active",
   };
 
   const isSuperAdminExits = await User.findOne({
-    "profile.role": USER_ROLE.ADMIN,
+    role: USER_ROLE.ADMIN,
   });
 
   if (!isSuperAdminExits) {
@@ -42,7 +40,7 @@ const seedSuperAdmin = async () => {
 const getAdmin = async (id: string) => {
   const admin: IUser | any = await User.findById(id);
 
-  if (admin?.role === "admin") {
+  if (admin?.role === USER_ROLE.ADMIN) {
     return admin;
   }
 

@@ -105,7 +105,6 @@ const getWeather = async (query: Record<string, unknown>) => {
   }
 
   const apiKey = CONFIG.OTHER.open_weather_pai_key;
-  console.log("🚀 ~ getWeather ~ apiKey:", apiKey);
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${query?.city}&units=metric&appid=${apiKey}`;
 
   return await axios.get(url);

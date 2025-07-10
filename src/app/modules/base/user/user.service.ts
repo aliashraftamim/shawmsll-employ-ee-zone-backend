@@ -19,7 +19,7 @@ const createUser = async (payload: Partial<IUser>) => {
   const newUser = await User.create([{ ...userData }]);
 
   const verifyEmail: any = await authService.sendOtpForVerifyEmail(
-    payload?.auth?.email as any
+    payload?.email as any
   );
   return {
     user: newUser[0],

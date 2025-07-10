@@ -28,9 +28,9 @@ const auth = (...requiredRoles: TUserRole[]) => {
     // Find validate log in user
     const user = await User.isUserExistById(id);
     if (
-      user.auth.passwordChangedAt &&
+      user.passwordChangedAt &&
       User.isJWTIssuedBeforePasswordChanged(
-        user.auth.passwordChangedAt,
+        user.passwordChangedAt,
         iat as number
       )
     ) {

@@ -5,7 +5,7 @@ import { ObjectId } from "mongoose";
 export interface IUserVerification {
   verified: boolean;
   plans?: ObjectId;
-  plansType?: "basic" | "advanced";
+  plansType?: "basic" | "advanced" | "";
   otp?: string;
 }
 
@@ -14,11 +14,6 @@ export interface IRatings {
   star: number;
   totalReview: number;
   totalUser: number;
-}
-
-// Message Response
-export interface IMessageResponse {
-  isMyLastMessage: boolean;
 }
 
 // Payment Info
@@ -47,7 +42,6 @@ export interface IProfile {
   phoneNumber: string;
   contactNumber: string;
   companyName?: string;
-  role: string;
   bio?: string;
   profileImage?: string;
 }

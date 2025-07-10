@@ -7,7 +7,6 @@ export const sendEmail = async (
   subject: string,
   htmlEmailBody: string
 ) => {
-  console.log("🚀 ~ to:", to);
   // Validate the recipient email
   if (!to || !to.includes("@")) {
     console.error("❌ Invalid email recipient:", to);
@@ -23,7 +22,7 @@ export const sendEmail = async (
       html: htmlEmailBody,
     });
 
-    console.log("✅ Email sent:", info.messageId);
+    console.info("✅ Email sent:", info.messageId);
   } catch (error) {
     console.error("❌ Failed to send email:", error);
     throw error;

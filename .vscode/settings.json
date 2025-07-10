@@ -4,6 +4,8 @@
     "graphiql",
     "maxlength",
     "navigi",
+    "noblock",
+    "nocatchall",
     "productorders",
     "productwishlists",
     "servicewishlists",

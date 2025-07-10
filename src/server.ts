@@ -16,18 +16,7 @@ process.on("uncaughtException", (err) => {
   console.error(err);
   process.exit(1);
 });
-console.log({
-  host: CONFIG.MAIL.smtp_host,
-  port: Number(CONFIG.MAIL.smtp_port),
-  secure: CONFIG.CORE.node_env === "production",
-  auth: {
-    user: CONFIG.MAIL.service_user,
-    pass: CONFIG.MAIL.mail_app_pass,
-  },
 
-  from: CONFIG.MAIL.send_from,
-  otp_expr: CONFIG?.MAIL.otp_expires,
-});
 // ✅ Main function to connect DB and start servers
 async function main() {
   try {
@@ -35,14 +24,14 @@ async function main() {
 
     // Connect to MongoDB
     await mongoose.connect(CONFIG.CORE.db_uri as string);
-    console.log(chalk.blueBright("📦 Connected to MongoDB"));
+    console.info(chalk.blueBright("📦 Connected to MongoDB"));
 
     // Start the Express application server
     server = app.listen(
       Number(CONFIG.CORE.port),
       CONFIG.CORE.ip ?? "localhost",
       () => {
-        console.log(
+        console.info(
           chalk.bgBlackBright(
             `✅ Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `
           )
@@ -60,7 +49,7 @@ async function main() {
         host: CONFIG.CORE.ip,
       },
       () => {
-        console.log(
+        console.info(
           chalk.bgYellowBright(
             `🗨️  Socket is running at http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.socket_port}`
           )

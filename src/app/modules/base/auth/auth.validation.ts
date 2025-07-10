@@ -5,9 +5,7 @@ const loginValidationSchema = z.object({
   body: z
     .object({
       email: z.string().email("Invalid email address"),
-      password: z
-        .string()
-        .min(8, "Password must be at least 8 characters long"),
+      password: z.string().min(Number(CONFIG.CORE.password_length)),
       // .regex(/[A-Z]/, "Password must include at least one uppercase letter")
       // .regex(/[0-9]/, "Password must include at least one number")
       // .regex(/[\W_]/, "Password must include at least one special character"),
@@ -28,15 +26,12 @@ const verifyEmailSchema = z.object({
 const changePasswordValidationSchema = z.object({
   body: z
     .object({
-      oldPassword: z.string().min(8, "Password must be at least 8 characters"),
-      newPassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters long"), // .regex(/[A-Z]/, "Password must include at least one uppercase letter")
+      oldPassword: z.string().min(Number(CONFIG.CORE.password_length)),
+      newPassword: z.string().min(Number(CONFIG.CORE.password_length)),
+      // .regex(/[A-Z]/, "Password must include at least one uppercase letter")
       // .regex(/[0-9]/, "Password must include at least one number")
       // .regex(/[\W_]/, "Password must include at least one special character"),
-      confirmPassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters"),
+      confirmPassword: z.string().min(Number(CONFIG.CORE.password_length)),
     })
     .strict(),
 });
@@ -56,13 +51,11 @@ const resetPasswordValidationSchema = z.object({
     .object({
       newPassword: z
         .string()
-        .min(8, "Password must be at least 8 characters long")
+        .min(Number(CONFIG.CORE.password_length))
         .regex(/[A-Z]/, "Password must include at least one uppercase letter")
         .regex(/[0-9]/, "Password must include at least one number")
         .regex(/[\W_]/, "Password must include at least one special character"),
-      confirmPassword: z
-        .string()
-        .min(8, "Password must be at least 8 characters"),
+      confirmPassword: z.string().min(Number(CONFIG.CORE.password_length)),
     })
     .strict(),
 });
