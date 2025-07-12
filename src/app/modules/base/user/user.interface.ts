@@ -24,7 +24,7 @@ export interface IUser {
   location?: ILocation;
   payment?: IPayment;
 
-  verification?: IUserVerification;
+  verification: IUserVerification;
   isMyLastMessage?: boolean;
   ratings?: IRatings;
 

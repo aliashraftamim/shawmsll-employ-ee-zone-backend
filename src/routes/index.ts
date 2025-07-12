@@ -8,13 +8,13 @@ import { plansOrderRoutes } from "../app/modules/contextual/plansOrder/plansOrde
 
 import { accountDetailsRoute } from "../app/modules/admin/accountDetails/accountDetails.routes";
 import { overviewRouter } from "../app/modules/admin/overview/overview.routes";
+import { categoryRouter } from "../app/modules/base/category/category.routes";
 import { notificationRoute } from "../app/modules/base/notification/notification.routes";
 import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
-import { hunt_route } from "../app/modules/contextual/hunt/hunt.route";
-import { sos_route } from "../app/modules/contextual/SOS/sos.route";
+import { guidance_routes } from "../app/modules/contextual/guidance/guidance.routes";
 
 const router = Router();
 
@@ -65,13 +65,13 @@ const moduleRoutes = [
   },
 
   {
-    path: "/hunt",
-    route: hunt_route,
+    path: "/guidance",
+    route: guidance_routes,
   },
 
   {
-    path: "/sos",
-    route: sos_route,
+    path: "/g-category",
+    route: categoryRouter,
   },
 ];
 

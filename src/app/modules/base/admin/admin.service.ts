@@ -14,6 +14,9 @@ const seedSuperAdmin = async () => {
     confirmPassword: CONFIG.CORE.supper_admin_pass!,
     agreeToTerms: true,
     role: USER_ROLE.ADMIN,
+    verification: {
+      verified: true,
+    },
     profile: {
       firstName: "Supper",
       lastName: "Admin",

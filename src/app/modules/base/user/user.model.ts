@@ -27,7 +27,14 @@ const UserSchema = new Schema<IUser>(
     location: { type: LocationSchema, required: false },
     payment: { type: PaymentSchema, required: false },
 
-    verification: { type: UserVerificationSchema },
+    verification: {
+      type: UserVerificationSchema,
+      default: () => ({
+        verified: false,
+        plansType: "",
+        otp: "",
+      }),
+    },
     isMyLastMessage: {
       type: Boolean,
       default: false,
