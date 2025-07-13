@@ -22,7 +22,7 @@ export class ArrayFieldUpdater {
     this.field = field;
   }
 
-  private async getDocument() {
+  private async validateArrayField() {
     const doc = await this.model.findById(this.documentId);
     if (!doc) throw new AppError(httpStatus.NOT_FOUND, "Document not found");
 
@@ -33,36 +33,45 @@ export class ArrayFieldUpdater {
         `Field "${this.field}" is not an array`
       );
     }
-
-    return doc;
   }
 
   async add(value: string) {
-    const doc = await this.getDocument();
-    const array: string[] = doc[this.field];
+    await this.validateArrayField();
 
-    if (!array.includes(value)) {
-      array.push(value);
-    }
-
-    return await doc.save();
+    return await this.model.findByIdAndUpdate(
+      this.documentId,
+      { $addToSet: { [this.field]: value } }, // Avoids duplicates
+      { new: true }
+    );
   }
 
   async remove(value: string) {
-    const doc = await this.getDocument();
+    await this.validateArrayField();
 
-    doc[this.field] = doc[this.field].filter((item: string) => item !== value);
-
-    return await doc.save();
+    return await this.model.findByIdAndUpdate(
+      this.documentId,
+      { $pull: { [this.field]: value } },
+      { new: true }
+    );
   }
 
   async replace({ from, to }: ReplaceOptions) {
-    const doc = await this.getDocument();
+    await this.validateArrayField();
 
-    doc[this.field] = doc[this.field].map((item: string) =>
-      item === from ? to : item
-    );
-
-    return await doc.save();
+    return await this.model.updateOne({ _id: this.documentId }, [
+      {
+        $set: {
+          [this.field]: {
+            $map: {
+              input: `$${this.field}`,
+              as: "item",
+              in: {
+                $cond: [{ $eq: ["$$item", from] }, to, "$$item"],
+              },
+            },
+          },
+        },
+      },
+    ]);
   }
 }

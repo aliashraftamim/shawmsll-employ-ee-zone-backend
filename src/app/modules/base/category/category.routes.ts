@@ -10,14 +10,14 @@ import { categoryValidator } from "./category.validation";
 
 const router = Router();
 
-// router.post(
-//   "/create",
-//   auth(USER_ROLE.ADMIN),
-//   upload.single("image"),
-//   validateRequest(categoryValidator.createCategoryValidationSchema),
-//   AwsUploadSingle("image"),
-//   categoryController.createCategory
-// );
+router.post(
+  "/create",
+  auth(USER_ROLE.ADMIN),
+  upload.single("image"),
+  validateRequest(categoryValidator.createCategoryValidationSchema),
+  AwsUploadSingle("image"),
+  categoryController.createCategory
+);
 
 router.put(
   "/update/:categoryId",
