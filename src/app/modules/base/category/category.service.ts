@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import { ObjectId } from "mongoose";
+import { ArrayFieldUpdater } from "../../../common/helpers/ArrayFieldUpdater";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
 import AppError from "../../../core/error/AppError";
 import { User } from "../user/user.model";
@@ -32,6 +33,31 @@ const updateCategory = async (categoryId: string, payload: ICategory) => {
 
   return result;
 };
+
+export const updateScenarioInCategory = async (
+  categoryId: string,
+  oldScenario: string,
+  newScenario: string
+) => {
+  // category existence check
+  const category = await Category.findById(categoryId);
+
+  if (!category) {
+    throw new AppError(httpStatus.NOT_FOUND, "Category not found!");
+  }
+
+  if (category.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, "Category was deleted!");
+  }
+
+  // now delegate array update to the utility class
+  const updater = new ArrayFieldUpdater(Category, categoryId, "scenario");
+
+  const result = await updater.replace({ from: oldScenario, to: newScenario });
+
+  return result;
+};
+
 const deleteCategory = async (categoryId: string) => {
   const isCategoryExist = await Category.findById(categoryId);
 
@@ -74,5 +100,6 @@ export const categoryService = {
   createCategory,
   updateCategory,
   getCategory,
+  updateScenarioInCategory,
   deleteCategory,
 };

@@ -5,8 +5,8 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
-import { adminService } from "./app/modules/base/admin/admin.service";
 
+import { defaultJob } from "./app/common/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
 
 let server: Server;
@@ -39,8 +39,8 @@ async function main() {
       }
     );
 
-    // Seed the initial Super Admin user (if needed)
-    await adminService.seedSuperAdmin();
+    // * Default data creation
+    await defaultJob();
 
     // Start the Socket.IO server
     socketServer.listen(

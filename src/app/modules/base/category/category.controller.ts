@@ -13,6 +13,7 @@ const createCategory = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 const updateCategory = catchAsync(async (req, res) => {
   const result = await categoryService.updateCategory(
     req?.params.categoryId,
@@ -26,6 +27,26 @@ const updateCategory = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const updateScenarioInCategory = catchAsync(async (req, res) => {
+  const { categoryId } = req.params;
+  const { from, to } = req.body;
+
+  // Replace using utility
+  const result = await categoryService.updateScenarioInCategory(
+    categoryId,
+    from,
+    to
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Scenario replaced successfully",
+    data: result,
+  });
+});
+
 const deleteCategory = catchAsync(async (req, res) => {
   const result = await categoryService.deleteCategory(req?.params?.categoryId);
 
@@ -51,6 +72,7 @@ const getCategory = catchAsync(async (req, res) => {
 export const categoryController = {
   createCategory,
   updateCategory,
+  updateScenarioInCategory,
   getCategory,
   deleteCategory,
 };

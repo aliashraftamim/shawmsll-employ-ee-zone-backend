@@ -15,6 +15,7 @@ import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { guidance_routes } from "../app/modules/contextual/guidance/guidance.routes";
+import { workPlaceJournal_routes } from "../app/modules/contextual/workPlaceJournal/workPlaceJournal.routes";
 
 const router = Router();
 
@@ -72,6 +73,11 @@ const moduleRoutes = [
   {
     path: "/g-category",
     route: categoryRouter,
+  },
+
+  {
+    path: "/workplace-journal",
+    route: workPlaceJournal_routes,
   },
 ];
 

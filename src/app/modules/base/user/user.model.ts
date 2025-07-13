@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import { model, Schema } from "mongoose";
 
 import { CONFIG } from "../../../core/config";
+import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
 import { IUser, UserModel } from "./user.interface";
 import {
@@ -21,7 +22,11 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     confirmPassword: { type: String },
-    role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
+    role: {
+      type: String,
+      enum: Object.values(USER_ROLE),
+      default: "USER",
+    },
 
     profile: { type: ProfileSchema },
     location: { type: LocationSchema, required: false },

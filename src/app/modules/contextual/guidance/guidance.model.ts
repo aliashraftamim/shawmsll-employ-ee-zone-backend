@@ -10,7 +10,7 @@ const guidanceSchema = new Schema<IGuidance>(
     },
     category: {
       type: Schema.Types.ObjectId,
-      ref: "GCategory",
+      ref: "Category",
       required: true,
     },
     isDeleted: {

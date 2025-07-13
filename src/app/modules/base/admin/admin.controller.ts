@@ -4,8 +4,8 @@ import catchAsync from "../../../common/utils/catchAsync";
 import sendResponse from "../../../common/utils/sendResponse";
 import { adminService } from "./admin.service";
 
-const getAdmin = catchAsync(async (req, res) => {
-  const result = await adminService.getAdmin(req?.user?.id);
+const getSupperAdmin = catchAsync(async (req, res) => {
+  const result = await adminService.getSupperAdmin();
 
   sendResponse(res, {
     success: true,
@@ -16,5 +16,5 @@ const getAdmin = catchAsync(async (req, res) => {
 });
 
 export const adminController = {
-  getAdmin,
+  getSupperAdmin,
 };

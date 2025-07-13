@@ -6,6 +6,6 @@ import { adminController } from "./admin.controller";
 
 const router = Router();
 
-router.get("/", auth(USER_ROLE.ADMIN), adminController.getAdmin);
+router.get("/", auth(USER_ROLE.ADMIN), adminController.getSupperAdmin);
 
 export const adminRoute = router;

@@ -13,7 +13,7 @@ const seedSuperAdmin = async () => {
     password: CONFIG.CORE.supper_admin_pass!,
     confirmPassword: CONFIG.CORE.supper_admin_pass!,
     agreeToTerms: true,
-    role: USER_ROLE.ADMIN,
+    role: USER_ROLE.SUPPER_ADMIN,
     verification: {
       verified: true,
     },
@@ -31,7 +31,7 @@ const seedSuperAdmin = async () => {
   };
 
   const isSuperAdminExits = await User.findOne({
-    role: USER_ROLE.ADMIN,
+    role: USER_ROLE.SUPPER_ADMIN,
   });
 
   if (!isSuperAdminExits) {
@@ -40,10 +40,12 @@ const seedSuperAdmin = async () => {
   return null;
 };
 
-const getAdmin = async (id: string) => {
-  const admin: IUser | any = await User.findById(id);
+const getSupperAdmin = async () => {
+  const admin: IUser | any = await User.findOne({
+    role: USER_ROLE.SUPPER_ADMIN,
+  });
 
-  if (admin?.role === USER_ROLE.ADMIN) {
+  if (admin?.role === USER_ROLE.SUPPER_ADMIN) {
     return admin;
   }
 
@@ -52,5 +54,5 @@ const getAdmin = async (id: string) => {
 
 export const adminService = {
   seedSuperAdmin,
-  getAdmin,
+  getSupperAdmin,
 };

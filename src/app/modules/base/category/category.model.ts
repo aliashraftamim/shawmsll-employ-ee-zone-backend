@@ -7,6 +7,10 @@ const categorySchema = new Schema<ICategory>(
     image: { type: String, default: null },
     admin: { type: Schema.Types.ObjectId, ref: "User" },
     description: { type: String },
+    scenario: {
+      type: [String],
+      default: [],
+    },
     isDeleted: { type: Boolean, default: false },
   },
   {
