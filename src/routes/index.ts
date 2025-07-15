@@ -13,6 +13,7 @@ import { notificationRoute } from "../app/modules/base/notification/notification
 import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
+import { communicationToolkit_routes } from "../app/modules/contextual/communicationToolkit/communicationToolkit.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { guidance_routes } from "../app/modules/contextual/guidance/guidance.routes";
 import { workPlaceJournal_routes } from "../app/modules/contextual/workPlaceJournal/workPlaceJournal.routes";
@@ -78,6 +79,11 @@ const moduleRoutes = [
   {
     path: "/workplace-journal",
     route: workPlaceJournal_routes,
+  },
+
+  {
+    path: "/communication-toolkit",
+    route: communicationToolkit_routes,
   },
 ];
 
