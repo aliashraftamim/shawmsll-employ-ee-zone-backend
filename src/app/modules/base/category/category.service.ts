@@ -11,12 +11,12 @@ const createCategory = async (adminId: ObjectId, payload: ICategory) => {
   // validate admin
   await User.isUserExistById(adminId);
 
-  const result = await Category.create(payload);
-
-  return result;
+  return await Category.create(payload);
 };
 
 const updateCategory = async (categoryId: string, payload: ICategory) => {
+  console.log("🚀 ~ updateCategory ~ categoryId:", categoryId);
+  console.log("🚀 ~ updateCategory ~ payload:", payload);
   const isCategoryExist = await Category.findById(categoryId);
 
   if (!isCategoryExist) {
@@ -103,3 +103,4 @@ export const categoryService = {
   updateScenarioInCategory,
   deleteCategory,
 };
+ 

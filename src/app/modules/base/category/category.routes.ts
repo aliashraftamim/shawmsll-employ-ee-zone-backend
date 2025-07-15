@@ -12,7 +12,7 @@ const router = Router();
 
 router.post(
   "/create",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(categoryValidator.createCategoryValidationSchema),
   AwsUploadSingle("image"),
@@ -20,30 +20,30 @@ router.post(
 );
 
 router.put(
-  "/update/:categoryId",
-  auth(USER_ROLE.ADMIN),
+  "/update-scenario/:categoryId",
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  validateRequest(categoryValidator.updateScenarioInCategory),
+  categoryController.updateScenarioInCategory
+);
+
+router.put(
+  "/:categoryId",
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(categoryValidator.updateCategoryValidationSchema),
   AwsUploadSingle("image"),
   categoryController.updateCategory
 );
 
-router.put(
-  "/update-scenario/:categoryId",
-  auth(USER_ROLE.ADMIN),
-  validateRequest(categoryValidator.updateScenarioInCategory),
-  categoryController.updateScenarioInCategory
-);
-
 router.delete(
   "/delete/:categoryId",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   categoryController.deleteCategory
 );
 
 router.get(
   "/",
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN, USER_ROLE.USER),
   categoryController.getCategory
 );
 

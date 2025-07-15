@@ -55,9 +55,32 @@ export class ArrayFieldUpdater {
     );
   }
 
+
   async replace({ from, to }: ReplaceOptions) {
     await this.validateArrayField();
 
+    // ডকুমেন্ট থেকে ফিল্ডের অ্যারে নিয়ে আসা
+    const doc = await this.model.findById(this.documentId).select(this.field);
+    if (!doc) throw new AppError(httpStatus.NOT_FOUND, "Document not found");
+
+    const arr = doc[this.field];
+    if (!Array.isArray(arr)) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Field "${this.field}" is not an array`
+      );
+    }
+
+    // from মান আছে কিনা চেক
+    const found = arr.includes(from);
+    if (!found) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Value "${from}" not found in the array "${this.field}"`
+      );
+    }
+
+    // from পাওয়া গেলে replace করা
     return await this.model.updateOne({ _id: this.documentId }, [
       {
         $set: {

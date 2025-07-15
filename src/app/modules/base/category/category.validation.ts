@@ -38,19 +38,22 @@ const updateCategoryValidationSchema = z.object({
       size: z.number().positive().max(5000000),
     })
     .optional(),
-  body: z.object({
-    name: z.string().min(2).max(50).optional(),
-    image: z.string().min(5).optional(),
-    description: z.string().min(10).max(1000).optional(),
-    scenario: z.string().array().optional(),
-  }),
+  body: z
+    .object({
+      name: z.string().min(2).max(50).optional(),
+      image: z.string().min(5).optional(),
+      description: z.string().min(10).max(1000).optional(),
+    })
+    .strict(),
 });
 
 const updateScenarioInCategory = z.object({
-  body: z.object({
-    from: z.string(),
-    to: z.string(),
-  }),
+  body: z
+    .object({
+      from: z.string(),
+      to: z.string(),
+    })
+    .strict(),
 });
 
 export const categoryValidator = {
