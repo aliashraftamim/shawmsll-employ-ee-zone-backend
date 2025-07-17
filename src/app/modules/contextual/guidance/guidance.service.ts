@@ -1,23 +1,25 @@
 import httpStatus from "http-status";
 import AppError from "../../../core/error/AppError";
+import { ICategory } from "../../base/category/category.interface";
 import { Category } from "../../base/category/category.model";
 import { IGuidance } from "./guidance.interface";
 import { Guidance } from "./guidance.model";
 
 const createGuidance = async (payload: IGuidance) => {
-  const isGCatExist = await Category.findById(payload.category);
+  const isGCatExist: ICategory | null = await Category.findById(
+    payload.category
+  );
   if (!isGCatExist) {
     throw new AppError(httpStatus.NOT_FOUND, "Category is not found!!");
   }
-  const result = await Guidance.create(payload);
-  return result;
+
+  payload.categoryName = isGCatExist.name;
+
+  return await Guidance.create(payload);
 };
 
 const getAllGuidance = async () => {
-  const results = await Guidance.find({ isDeleted: false }).populate(
-    "category"
-  );
-  return results;
+  return await Guidance.find({ isDeleted: false }).populate("category");
 };
 
 const getSingleGuidance = async (id: string) => {

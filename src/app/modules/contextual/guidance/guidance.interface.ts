@@ -1,7 +1,9 @@
 import { ObjectId } from "mongoose";
 
 export interface IGuidance {
-  title: string;
+  categoryName: string;
   category: ObjectId;
+  scenario: string;
+  content: string;
   isDeleted: boolean;
 }

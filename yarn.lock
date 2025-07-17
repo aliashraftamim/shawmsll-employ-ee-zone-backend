@@ -3422,6 +3422,7 @@ __metadata:
     ioredis: "npm:^5.6.1"
     jsonwebtoken: "npm:^9.0.2"
     lint-staged: "npm:^15.1.0"
+    modkit: "npm:^1.0.0"
     moment: "npm:^2.30.1"
     mongoose: "npm:^8.0.1"
     multer: "npm:^1.4.5-lts.1"
@@ -6248,6 +6249,15 @@ __metadata:
   bin:
     mkdirp: dist/cjs/src/bin.js
   checksum: 10c0/9f2b975e9246351f5e3a40dcfac99fcd0baa31fbfab615fe059fb11e51f10e4803c63de1f384c54d656e4db31d000e4767e9ef076a22e12a641357602e31d57d
+  languageName: node
+  linkType: hard
+
+"modkit@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "modkit@npm:1.0.0"
+  bin:
+    modkit: dist/bin/modkit.js
+  checksum: 10c0/e968a047536b9c59e96d09cd2dc8ba97f396deff81e3475021d04aa3d08436aa3820c2c616e126fa3952299b1e00dd019dd7a9e727488dabc8e837893aa94f04
   languageName: node
   linkType: hard
 

@@ -1,16 +1,23 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { IGuidance } from "./guidance.interface";
 
 const guidanceSchema = new Schema<IGuidance>(
   {
-    title: {
+    category: {
+      type: Types.ObjectId,
+      ref: "GCategory",
+      required: true,
+    },
+    categoryName: {
       type: String,
       required: true,
-      trim: true,
     },
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
+    scenario: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
       required: true,
     },
     isDeleted: {
