@@ -1,78 +1,97 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
-import { guidance_history_service } from "./guidance_history.service";
+import httpStatus from "http-status";
+import catchAsync from "../../../common/utils/catchAsync";
+import sendResponse from "../../../common/utils/sendResponse";
+import { GuidHist_service } from "./guidance_history.service";
 
-export class GuidanceHistoryController {
-  // Create new guidance history
-  static async create(req: Request, res: Response) {
-    try {
-      const payload = req.body;
-      const result = await guidance_history_service.createGuiHist(payload);
-      res.status(201).json({ success: true, data: result });
-    } catch (error: any) {
-      res.status(500).json({ success: false, message: error.message });
-    }
-  }
+// Create new guidance history
+const createGuidHist = catchAsync(async (req: Request, res: Response) => {
+  const result = await GuidHist_service.createGuiHist(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Guidance history created successfully",
+    data: result,
+  });
+});
 
-  // Get all guidance histories
-  static async getAll(req: Request, res: Response) {
-    try {
-      const result = await guidance_history_service.getAllGuiHist();
-      res.status(200).json({ success: true, data: result });
-    } catch (error: any) {
-      res.status(500).json({ success: false, message: error.message });
-    }
-  }
+// Get all guidance histories
+const getAllGuidHist = catchAsync(async (req: Request, res: Response) => {
+  const result = await GuidHist_service.getAllGuiHist();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Guidance histories retrieved successfully",
+    data: result,
+  });
+});
 
-  // Get one by ID
-  static async getById(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const result = await guidance_history_service.getGuiHistById(id);
-      if (!result) {
-        return res.status(404).json({ success: false, message: "Not found" });
-      }
-      res.status(200).json({ success: true, data: result });
-    } catch (error: any) {
-      res.status(500).json({ success: false, message: error.message });
-    }
+// Get single guidance history by id
+const getGuidHistById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await GuidHist_service.getGuiHistById(id);
+  if (!result) {
+    return sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Guidance history not found",
+      data: result,
+    });
   }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Guidance history retrieved successfully",
+    data: result,
+  });
+});
 
-  // Update by ID
-  static async update(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const updateData = req.body;
-      const result = await guidance_history_service.updateGuiHist(
-        id,
-        updateData
-      );
-      if (!result) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Not found or not updated" });
-      }
-      res.status(200).json({ success: true, data: result });
-    } catch (error: any) {
-      res.status(500).json({ success: false, message: error.message });
-    }
+// Update guidance history by id
+const updateGuidHist = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const updateData = req.body;
+  const result = await GuidHist_service.updateGuiHist(id, updateData);
+  if (!result) {
+    return sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Guidance history not found to update",
+      data: result,
+    });
   }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Guidance history updated successfully",
+    data: result,
+  });
+});
 
-  // Soft delete by ID
-  static async softDelete(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const result = await guidance_history_service.softDeleteGuiHist(id);
-      if (!result) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Not found or not deleted" });
-      }
-      res
-        .status(200)
-        .json({ success: true, message: "Soft deleted successfully" });
-    } catch (error: any) {
-      res.status(500).json({ success: false, message: error.message });
-    }
+// Soft delete guidance history by id
+const softDeleteGuidHist = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await GuidHist_service.softDeleteGuiHist(id);
+  if (!result) {
+    return sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "Guidance history not found to delete",
+      data: undefined,
+    });
   }
-}
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Guidance history deleted successfully",
+    data: result,
+  });
+});
+
+export const guidance_history_controller = {
+  createGuidHist,
+  getAllGuidHist,
+  getGuidHistById,
+  updateGuidHist,
+  softDeleteGuidHist,
+};

@@ -16,7 +16,4 @@ const allHistorySchema = new Schema<IGuidanceHist>(
   }
 );
 
-export const Guidance_history = model<IGuidanceHist>(
-  "Guidance_history",
-  allHistorySchema
-);
+export const GuidHist = model<IGuidanceHist>("GuidHist", allHistorySchema);

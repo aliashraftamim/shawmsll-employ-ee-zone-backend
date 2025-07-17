@@ -1,15 +1,15 @@
 import { Types } from "mongoose";
 import { IGuidanceHist } from "./guidance_history.interface";
-import { Guidance_history } from "./guidance_history.model";
+import { GuidHist } from "./guidance_history.model";
 
 // Create new guidance history
 const createGuiHist = async (payload: IGuidanceHist) => {
-  return await Guidance_history.create(payload);
+  return await GuidHist.create(payload);
 };
 
 // Get all guidance histories (exclude soft deleted)
 const getAllGuiHist = async () => {
-  return await Guidance_history.find({ isDeleted: { $ne: true } });
+  return await GuidHist.find({ isDeleted: { $ne: true } });
 };
 
 // Get single guidance history by id (exclude soft deleted)
@@ -17,7 +17,7 @@ const getGuiHistById = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await Guidance_history.findOne({ _id: id, isDeleted: { $ne: true } });
+  return await GuidHist.findOne({ _id: id, isDeleted: { $ne: true } });
 };
 
 // Update guidance history by id
@@ -28,7 +28,7 @@ const updateGuiHist = async (
   if (!Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await Guidance_history.findByIdAndUpdate(id, updateData, {
+  return await GuidHist.findByIdAndUpdate(id, updateData, {
     new: true,
   });
 };
@@ -38,14 +38,14 @@ const softDeleteGuiHist = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await Guidance_history.findByIdAndUpdate(
+  return await GuidHist.findByIdAndUpdate(
     id,
     { isDeleted: true },
     { new: true }
   );
 };
 
-export const guidance_history_service = {
+export const GuidHist_service = {
   createGuiHist,
   getAllGuiHist,
   getGuiHistById,
