@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 import { ObjectId } from "mongoose";
-import { adminService } from "../admin/admin.service";
+import { adminService } from "../../../base/admin/admin.service";
 import { ICategory } from "./category.interface";
 import { Category } from "./category.model"; // Mongoose model ধরছি
 import { categoryService } from "./category.service";
@@ -8,11 +9,9 @@ export async function defaultGuidanceCategory() {
   const admin = await adminService.getSupperAdmin();
   const adminId: ObjectId = admin._id;
 
-  // প্রথমে চেক করবো কোনো category আছে কিনা
-  const existing = await Category.findOne(); // অথবা: { admin: adminId } দিয়ে ফিল্টার করো
+  const existing = await Category.findOne();
 
   if (existing) {
-    console.log("✅ Categories already exist. Skipping default insert.");
     return;
   }
 
@@ -75,5 +74,5 @@ export async function defaultGuidanceCategory() {
     )
   );
 
-  console.log("✅ Default categories inserted.");
+  console.info("✅ Default categories inserted.");
 }

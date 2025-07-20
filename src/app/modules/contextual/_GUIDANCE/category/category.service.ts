@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 import { ObjectId } from "mongoose";
-import { ArrayFieldUpdater } from "../../../common/helpers/ArrayFieldUpdater";
-import QueryBuilder from "../../../core/builders/QueryBuilder";
-import AppError from "../../../core/error/AppError";
-import { User } from "../user/user.model";
+import { ArrayFieldUpdater } from "../../../../common/helpers/ArrayFieldUpdater";
+import QueryBuilder from "../../../../core/builders/QueryBuilder";
+import AppError from "../../../../core/error/AppError";
+import { User } from "../../../base/user/user.model";
 import { ICategory } from "./category.interface";
 import { Category } from "./category.model";
 
@@ -15,8 +15,6 @@ const createCategory = async (adminId: ObjectId, payload: ICategory) => {
 };
 
 const updateCategory = async (categoryId: string, payload: ICategory) => {
-  console.log("🚀 ~ updateCategory ~ categoryId:", categoryId);
-  console.log("🚀 ~ updateCategory ~ payload:", payload);
   const isCategoryExist = await Category.findById(categoryId);
 
   if (!isCategoryExist) {
@@ -103,4 +101,3 @@ export const categoryService = {
   updateScenarioInCategory,
   deleteCategory,
 };
- 

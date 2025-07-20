@@ -8,15 +8,16 @@ import { plansOrderRoutes } from "../app/modules/contextual/plansOrder/plansOrde
 
 import { accountDetailsRoute } from "../app/modules/admin/accountDetails/accountDetails.routes";
 import { overviewRouter } from "../app/modules/admin/overview/overview.routes";
-import { categoryRouter } from "../app/modules/base/category/category.routes";
 import { notificationRoute } from "../app/modules/base/notification/notification.routes";
 import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
+import { categoryRouter } from "../app/modules/contextual/_GUIDANCE/category/category.routes";
+import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/guidance.routes";
+import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
+import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { communicationToolkit_routes } from "../app/modules/contextual/communicationToolkit/communicationToolkit.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
-import { guidance_routes } from "../app/modules/contextual/guidance/guidance.routes";
-import { workPlaceJournal_routes } from "../app/modules/contextual/workPlaceJournal/workPlaceJournal.routes";
 
 const router = Router();
 
@@ -84,6 +85,11 @@ const moduleRoutes = [
   {
     path: "/communication-toolkit",
     route: communicationToolkit_routes,
+  },
+
+  {
+    path: "/workplace-tags",
+    route: tagsRoute,
   },
 ];
 

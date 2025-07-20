@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { USER_ROLE } from "../../../core/constants/global.constants";
-import auth from "../../../core/middlewares/auth";
-import validateRequest from "../../../core/middlewares/validateRequest";
+import { USER_ROLE } from "../../../../core/constants/global.constants";
+import auth from "../../../../core/middlewares/auth";
+import validateRequest from "../../../../core/middlewares/validateRequest";
 import { guidance_controller } from "./guidance.controller";
 import { guidance_validation } from "./guidance.validation";
 

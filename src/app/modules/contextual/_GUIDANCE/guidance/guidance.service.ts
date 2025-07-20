@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
-import AppError from "../../../core/error/AppError";
-import { ICategory } from "../../base/category/category.interface";
-import { Category } from "../../base/category/category.model";
+import AppError from "../../../../core/error/AppError";
+import { ICategory } from "../category/category.interface";
+import { Category } from "../category/category.model";
 import { IGuidance } from "./guidance.interface";
 import { Guidance } from "./guidance.model";
 
@@ -11,6 +11,13 @@ const createGuidance = async (payload: IGuidance) => {
   );
   if (!isGCatExist) {
     throw new AppError(httpStatus.NOT_FOUND, "Category is not found!!");
+  }
+
+  if (!isGCatExist.scenario.includes(payload.scenario)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Scenario is not exist in this category!"
+    );
   }
 
   payload.categoryName = isGCatExist.name;

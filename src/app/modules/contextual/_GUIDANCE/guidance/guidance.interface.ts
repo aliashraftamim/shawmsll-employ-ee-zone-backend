@@ -5,5 +5,6 @@ export interface IGuidance {
   category: ObjectId;
   scenario: string;
   content: string;
+  tips: string[];
   isDeleted: boolean;
 }

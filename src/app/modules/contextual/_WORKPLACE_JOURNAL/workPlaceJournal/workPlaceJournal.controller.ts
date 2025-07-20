@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
+import catchAsync from "../../../../common/utils/catchAsync";
+import sendResponse from "../../../../common/utils/sendResponse";
 import { workPlaceJournal_service } from "./workPlaceJournal.service";
 
 // ✅ Create

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import QueryBuilder from "../../../core/builders/QueryBuilder";
+import QueryBuilder from "../../../../core/builders/QueryBuilder";
 import { IWorkPlaceJournal } from "./workPlaceJournal.interface";
 import { WorkPlaceJournal } from "./workPlaceJournal.model";
 
@@ -34,7 +34,6 @@ const updateWorkplaceJournal = async (
   id: mongoose.Types.ObjectId,
   payload: Partial<IWorkPlaceJournal>
 ) => {
-  console.log("🚀 ~ id:", id, payload);
   return await WorkPlaceJournal.findOneAndUpdate(
     { _id: id, isDeleted: false },
     payload,

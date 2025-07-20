@@ -5,7 +5,7 @@ const guidanceSchema = new Schema<IGuidance>(
   {
     category: {
       type: Types.ObjectId,
-      ref: "GCategory",
+      ref: "Category",
       required: true,
     },
     categoryName: {
@@ -20,6 +20,12 @@ const guidanceSchema = new Schema<IGuidance>(
       type: String,
       required: true,
     },
+
+    tips: {
+      type: [String],
+      default: [],
+    },
+
     isDeleted: {
       type: Boolean,
       default: false,

@@ -1,5 +1,5 @@
 import { adminService } from "../../../modules/base/admin/admin.service";
-import { defaultGuidanceCategory } from "../../../modules/base/category/category.const";
+import { defaultGuidanceCategory } from "../../../modules/contextual/_GUIDANCE/category/category.const";
 
 export const defaultJob = async () => {
   // Create seed SUPPER ADMIN
