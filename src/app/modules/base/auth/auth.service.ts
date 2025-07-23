@@ -103,9 +103,13 @@ const sendOtpForVerifyEmail = async (email: string): Promise<unknown> => {
       expiresIn: CONFIG.MAIL.otp_expires,
     }
   );
+  console.log(
+    "🚀 ~ sendOtpForVerifyEmail ~ verifyEmailToken:",
+    verifyEmailToken
+  );
 
   // set the otp  on the db
-  const uOTP = await User.findOneAndUpdate(
+  await User.findOneAndUpdate(
     { email },
     { "verification.otp": hashingOtp },
     { new: true }
@@ -218,7 +222,7 @@ const forgotPassword = async (email: string) => {
     otp: hashingOtp,
   };
 
-  const resetToken = jwt.sign(
+  const forgetToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.forgot_pass_secret as string,
     {
@@ -235,7 +239,7 @@ const forgotPassword = async (email: string) => {
 
   await sendEmail(email, "OTP for verify your account!", otpMailTemplate(otp));
 
-  return { resetToken };
+  return { forgetToken };
 };
 
 const verifyOtp = async (payload: { otp: string }, token: string) => {
