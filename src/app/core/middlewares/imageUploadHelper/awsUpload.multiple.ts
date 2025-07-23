@@ -18,7 +18,7 @@ export const AwsUploadMultiple = (fieldName: string) => {
       for (const file of files) {
         const fileNameParts = file.originalname.split(/[^a-zA-Z0-9]/);
         const firstWord = fileNameParts[0];
-        const imageName = `vouched-${firstWord}-image-${String(imageCount).padStart(2, "0")}.webp`;
+        const imageName = `${CONFIG.CORE.app_name}-${firstWord}-image-${String(imageCount).padStart(2, "0")}.webp`;
         imageCount++;
 
         // 👉 Resize and convert to webp

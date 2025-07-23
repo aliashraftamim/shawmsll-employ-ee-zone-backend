@@ -63,11 +63,11 @@ export const ProfileSchema = new Schema<IProfile>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    userName: { type: String },
+    userName: { type: String, default: "" },
     contactNumber: { type: String, required: true },
-    companyName: { type: String },
-    bio: { type: String },
-    profileImage: { type: String },
+    companyName: { type: String, default: "" },
+    bio: { type: String, default: "" },
+    profileImage: { type: String, default: "" },
   },
   { _id: false }
 );

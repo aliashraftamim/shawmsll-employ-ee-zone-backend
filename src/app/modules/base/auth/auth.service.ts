@@ -153,7 +153,6 @@ const verifyUser = async (otp: string, token: string) => {
   if (user?.status === "blocked") {
     throw new AppError(httpStatus.FORBIDDEN, "User was blocked!");
   }
-  console.log("🚀 ~ verifyUser ~ otp:", otp);
   const compareOtp = await bcrypt.compare(otp, user?.verification?.otp);
   // Compare OTP (assuming it's stored as plain text, otherwise use bcrypt.compare)
   if (!compareOtp) {

@@ -19,7 +19,7 @@ export const AwsUploadSingle = (fieldName: string) => {
         .replace(/-/g, "")
         .slice(2);
 
-      const uniqueFileName = `vouched-${firstPart}-${dateString}.webp`;
+      const uniqueFileName = `${CONFIG.CORE.app_name}-${firstPart}-${dateString}.webp`;
 
       // 👉 Resize and convert to webp
       const resizedImageBuffer = await sharp(file.buffer)

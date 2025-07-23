@@ -2,60 +2,75 @@ import { ObjectId } from "mongoose";
 import { IPat } from "./pat.interface";
 import { PrivacyAboutTerms } from "./pat.model";
 
+// ----- Create/Update Functions -----
 const createPrivacy = async (currentUser: ObjectId, payload: Partial<IPat>) => {
   payload.modifiedBy = currentUser;
   payload.type = "privacy-policy";
 
-  const result = await PrivacyAboutTerms.findByIdAndUpdate(
-    "679f2d9e4b1d18dc5879cecf",
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "privacy-policy" },
     payload,
-    {
-      new: true,
-      upsert: true,
-    }
+    { new: true, upsert: true }
   );
-
-  return result;
 };
+
 const createAbout = async (currentUser: ObjectId, payload: Partial<IPat>) => {
   payload.modifiedBy = currentUser;
   payload.type = "about-us";
 
-  const result = await PrivacyAboutTerms.findByIdAndUpdate(
-    "679f3183ef82a9d3f838adcc",
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "about-us" },
     payload,
-    {
-      new: true,
-      upsert: true,
-    }
+    { new: true, upsert: true }
   );
-
-  return result;
 };
+
 const createTerms = async (currentUser: ObjectId, payload: Partial<IPat>) => {
   payload.modifiedBy = currentUser;
   payload.type = "terms-condition";
 
-  const result = await PrivacyAboutTerms.findByIdAndUpdate(
-    "679f31fe189e813590f3df6e",
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "terms-condition" },
     payload,
-    {
-      new: true,
-      upsert: true,
-    }
+    { new: true, upsert: true }
   );
-
-  return result;
 };
 
+// ----- Auto-create if missing -----
 const getPrivacy = async () => {
-  return await PrivacyAboutTerms.findByIdAndUpdate("679f2d9e4b1d18dc5879cecf");
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "privacy-policy" },
+    {
+      $setOnInsert: {
+        body: "Privacy Policy content coming soon...",
+      },
+    },
+    { new: true, upsert: true }
+  );
 };
+
 const getAbout = async () => {
-  return await PrivacyAboutTerms.findByIdAndUpdate("679f3183ef82a9d3f838adcc");
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "about-us" },
+    {
+      $setOnInsert: {
+        body: "About Us content coming soon...",
+      },
+    },
+    { new: true, upsert: true }
+  );
 };
+
 const getTerms = async () => {
-  return await PrivacyAboutTerms.findByIdAndUpdate("679f31fe189e813590f3df6e");
+  return await PrivacyAboutTerms.findOneAndUpdate(
+    { type: "terms-condition" },
+    {
+      $setOnInsert: {
+        body: "Terms and Conditions content coming soon...",
+      },
+    },
+    { new: true, upsert: true }
+  );
 };
 
 export const patService = {

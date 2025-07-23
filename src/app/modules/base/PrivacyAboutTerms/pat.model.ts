@@ -4,6 +4,7 @@ import { IPat } from "./pat.interface";
 const patSchema = new Schema<IPat>({
   body: {
     type: String,
+
     required: true,
   },
   modifiedBy: {
