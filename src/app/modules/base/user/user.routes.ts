@@ -19,7 +19,7 @@ router.put(
   "/",
   upload.single("profileImage"),
   auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  validateRequest(userValidator.createUserValidationSchema),
+  validateRequest(userValidator.updateUserValidationSchema),
   AwsUploadSingle("profileImage"),
   userController.updateMe
 );

@@ -147,6 +147,9 @@ const getUsers = async (
 // const getSingleUser = async() => {};
 
 const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
+  if (payload?.profileImage) {
+    payload.profile.profileImage = payload.profileImage;
+  }
   if (payload?.location?.coordinates) {
     payload.location = {
       type: "Point",

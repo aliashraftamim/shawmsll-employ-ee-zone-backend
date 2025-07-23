@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { USER_ROLE } from "../../../core/constants/global.constants";
-import auth from "../../../core/middlewares/auth";
-import { AwsUploadSingle } from "../../../core/middlewares/imageUploadHelper/awsUpload.single";
-import { upload } from "../../../core/middlewares/imageUploadHelper/multer.config";
-import validateRequest from "../../../core/middlewares/validateRequest";
+
+import { USER_ROLE } from "../../../../core/constants/global.constants";
+import auth from "../../../../core/middlewares/auth";
+import { AwsUploadSingle } from "../../../../core/middlewares/imageUploadHelper/awsUpload.single";
+import { upload } from "../../../../core/middlewares/imageUploadHelper/multer.config";
+import validateRequest from "../../../../core/middlewares/validateRequest";
 import { communicationToolkitCategory_controller } from "./communicationToolkitCategory.controller";
 import { communicationToolkitCategoryValidation } from "./communicationToolkitCategory.validation";
 
@@ -36,4 +37,4 @@ router.delete(
   communicationToolkitCategory_controller.softDeleteCommunicationToolkitCategory
 );
 
-export const communicationToolkitRoute = router;
+export const communicationToolkitCategoryRoute = router;

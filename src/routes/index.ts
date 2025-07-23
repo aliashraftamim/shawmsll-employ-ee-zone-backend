@@ -12,11 +12,12 @@ import { notificationRoute } from "../app/modules/base/notification/notification
 import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
+import { communicationToolkitRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communication-toolkit/communication-toolkit.route";
+import { communicationToolkitCategoryRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communicationToolkitCategory/communicationToolkitCategory.route";
 import { categoryRouter } from "../app/modules/contextual/_GUIDANCE/category/category.routes";
 import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/guidance.routes";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
-import { communicationToolkitRoute } from "../app/modules/contextual/communicationToolkitCategory/communicationToolkitCategory.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 
 const router = Router();
@@ -84,6 +85,11 @@ const moduleRoutes = [
 
   {
     path: "/communication-toolkit-category",
+    route: communicationToolkitCategoryRoute,
+  },
+
+  {
+    path: "/communication-toolkit",
     route: communicationToolkitRoute,
   },
 
