@@ -20,9 +20,7 @@ const seedSuperAdmin = async () => {
     profile: {
       firstName: "Supper",
       lastName: "Admin",
-      fullName: "Super Admin",
       phoneNumber: "01812345678",
-      contactNumber: "01812345678",
       companyName: "Tech Innovators",
       bio: "Full-stack developer with a love for clean UI.",
       profileImage: "https://example.com/images/ali.jpg",
