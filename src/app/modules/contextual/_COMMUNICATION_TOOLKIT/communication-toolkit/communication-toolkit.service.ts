@@ -24,7 +24,6 @@ const updateCommunicationToolkit = async (
   id: string,
   updateData: Partial<ICommunicationToolkit>
 ) => {
-  console.log("🚀 ~ updateData:", updateData);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }

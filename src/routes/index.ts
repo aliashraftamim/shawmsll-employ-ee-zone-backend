@@ -19,6 +19,7 @@ import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/gu
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
+import { policyCategoryRoute } from "../app/modules/contextual/policyCategory/policyCategory.route";
 
 const router = Router();
 
@@ -91,6 +92,11 @@ const moduleRoutes = [
   {
     path: "/communication-toolkit",
     route: communicationToolkitRoute,
+  },
+
+  {
+    path: "/policy-category",
+    route: policyCategoryRoute,
   },
 
   {
