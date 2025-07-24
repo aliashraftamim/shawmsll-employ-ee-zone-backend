@@ -4,7 +4,6 @@ import { CONFIG } from "../../../core/config";
 const profileSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  fullName: z.string().min(1),
   userName: z.string().optional(),
   phoneNumber: z.string().min(6),
   contactNumber: z.string().min(6),
@@ -16,10 +15,8 @@ const profileSchema = z.object({
 const updateProfileSchema = z.object({
   firstName: z.string().min(1).optional(),
   lastName: z.string().min(1).optional(),
-  fullName: z.string().min(1).optional(),
   userName: z.string().optional(),
   phoneNumber: z.string().min(6).optional(),
-  contactNumber: z.string().min(6).optional(),
   companyName: z.string().optional(),
   bio: z.string().optional(),
   profileImage: z.string().url().optional(),

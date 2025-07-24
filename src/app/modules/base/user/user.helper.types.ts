@@ -37,10 +37,8 @@ export interface ILocation {
 export interface IProfile {
   firstName: string;
   lastName: string;
-  fullName: string;
   userName?: string;
   phoneNumber: string;
-  contactNumber: string;
   companyName?: string;
   bio?: string;
   profileImage?: string;

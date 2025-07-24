@@ -2,10 +2,10 @@ import { Router } from "express";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 
 import auth from "../../../core/middlewares/auth";
-import { upload } from "../../../core/middlewares/imageUploadHelper/multer.config";
+import { upload } from "../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../core/middlewares/validateRequest";
 
-import { AwsUploadMultiple } from "../../../core/middlewares/imageUploadHelper/awsUpload.multiple";
+import { AwsUploadMultiple } from "../../../core/middlewares/imageAndDocUploadHelper/awsUpload.multiple";
 import { chatController } from "./chat.controller";
 import { chatValidator } from "./chat.validation";
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import AppError from "../../../core/error/AppError";
+import AppError from "../../error/AppError";
 
 export const validateImageUpload = (
   requiredFields: { name: string; maxSizeMB?: number; required?: boolean }[]

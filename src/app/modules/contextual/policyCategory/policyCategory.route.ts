@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import auth from "../../../core/middlewares/auth";
-import { AwsUploadSingle } from "../../../core/middlewares/imageUploadHelper/awsUpload.single";
-import { upload } from "../../../core/middlewares/imageUploadHelper/multer.config";
+import { AwsUploadSingle } from "../../../core/middlewares/imageAndDocUploadHelper/awsUpload.single";
+import { upload } from "../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../core/middlewares/validateRequest";
 import { policyCategory_controller } from "./policyCategory.controller";
 import { policyCategoryValidation } from "./policyCategory.validation";
