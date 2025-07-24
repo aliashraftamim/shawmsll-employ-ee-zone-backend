@@ -9,7 +9,7 @@ import catchAsync from "../../../common/utils/catchAsync";
 type TUploadConfig = {
   fieldName: string;
   isImage: boolean;
-  multiple?: boolean;
+  multiple: boolean;
 };
 
 
