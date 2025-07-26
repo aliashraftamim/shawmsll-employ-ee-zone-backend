@@ -103,10 +103,6 @@ const sendOtpForVerifyEmail = async (email: string): Promise<unknown> => {
       expiresIn: CONFIG.MAIL.otp_expires,
     }
   );
-  console.log(
-    "🚀 ~ sendOtpForVerifyEmail ~ verifyEmailToken:",
-    verifyEmailToken
-  );
 
   // set the otp  on the db
   await User.findOneAndUpdate(

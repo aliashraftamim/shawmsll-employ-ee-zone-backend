@@ -27,6 +27,18 @@ const getWorkplaceJournal = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleWorkplaceJournal = catchAsync(async (req, res) => {
+  const result = await workPlaceJournal_service.getSingleWorkplaceJournal(
+    req.params.id as any
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Workplace journal retrieved successfully!",
+    data: result,
+  });
+});
+
 // ✅ Update
 const updateWorkplaceJournal = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -62,6 +74,7 @@ const deleteWorkplaceJournal = catchAsync(async (req, res) => {
 export const workPlaceJournal_controller = {
   createWorksJournal,
   getWorkplaceJournal,
+  getSingleWorkplaceJournal,
   updateWorkplaceJournal,
   deleteWorkplaceJournal,
 };

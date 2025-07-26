@@ -29,6 +29,11 @@ const getWorkplaceJournal = async (query: Record<string, unknown>) => {
   };
 };
 
+// ✅ Get Single
+const getSingleWorkplaceJournal = async (id: mongoose.Types.ObjectId) => {
+  return await WorkPlaceJournal.findOne({ _id: id, isDeleted: false });
+};
+
 // ✅ Update
 const updateWorkplaceJournal = async (
   id: mongoose.Types.ObjectId,
@@ -53,6 +58,7 @@ const deleteWorkplaceJournal = async (id: mongoose.Types.ObjectId) => {
 export const workPlaceJournal_service = {
   createWorksJournal,
   getWorkplaceJournal,
+  getSingleWorkplaceJournal,
   updateWorkplaceJournal,
   deleteWorkplaceJournal,
 };

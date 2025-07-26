@@ -16,6 +16,7 @@ import { communicationToolkitRoute } from "../app/modules/contextual/_COMMUNICAT
 import { communicationToolkitCategoryRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communicationToolkitCategory/communicationToolkitCategory.route";
 import { categoryRouter } from "../app/modules/contextual/_GUIDANCE/category/category.routes";
 import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/guidance.routes";
+import { jobSearchCategoryRoute } from "../app/modules/contextual/_JOB/jobSearchCategory/jobSearchCategory.route";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
@@ -102,6 +103,11 @@ const moduleRoutes = [
   {
     path: "/workplace-tags",
     route: tagsRoute,
+  },
+
+  {
+    path: "/job-search-category",
+    route: jobSearchCategoryRoute,
   },
 ];
 

@@ -3,7 +3,7 @@
 import admin from "firebase-admin";
 import httpStatus from "http-status";
 import AppError from "../../../core/error/AppError";
-import { INotification } from "./notification.inerface";
+import { INotification } from "./notification.interface";
 import Notification from "./notification.model";
 
 // Initialize Firebase Admin SDK only if not already initialized

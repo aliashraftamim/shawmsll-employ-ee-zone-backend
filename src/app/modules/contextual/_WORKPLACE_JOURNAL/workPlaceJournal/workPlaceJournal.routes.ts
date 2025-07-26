@@ -22,8 +22,14 @@ router.get(
   workPlaceJournal_controller.getWorkplaceJournal
 );
 
+router.get(
+  "/single/:id",
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
+  workPlaceJournal_controller.getSingleWorkplaceJournal
+);
+
 // ✅ Update
-router.patch(
+router.put(
   "/:id",
   auth(USER_ROLE.USER),
   validateRequest(workPlaceJournal_validation.updateWorkplaceJournal),

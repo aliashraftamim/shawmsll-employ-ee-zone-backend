@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { INotification } from "./notification.inerface";
+import { INotification } from "./notification.interface";
 import Notification from "./notification.model";
 
 const getNotificationFromDb = async (query: Record<string, any>) => {

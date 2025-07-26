@@ -28,7 +28,7 @@ router.get(
   "/:id",
   communicationToolkitCategory_controller.getCommunicationToolkitCategoryById
 );
-router.patch(
+router.put(
   "/:id",
   communicationToolkitCategory_controller.updateCommunicationToolkitCategory
 );
