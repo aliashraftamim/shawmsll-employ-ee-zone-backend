@@ -1,8 +1,8 @@
 export interface IJobSearchTracker {
-  title: string;
-  image: string;
-  content: string;
+  jobTitle: string;
+  companyName: string;
+  date: string;
 
-  status: "active" | "inactive" | "archived" | "pending";
+  status: "applied" | "rejected" | "interviewed";
   isDeleted?: boolean;
 }

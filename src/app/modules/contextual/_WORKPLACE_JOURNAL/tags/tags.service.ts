@@ -3,7 +3,6 @@ import { ITags } from "./tags.interface";
 import { TagsWorkplace } from "./tags.model";
 
 const createTags = async (payload: ITags) => {
-  console.log("🚀 ~ createTags ~ payload:", payload);
   return await TagsWorkplace.create(payload);
 };
 

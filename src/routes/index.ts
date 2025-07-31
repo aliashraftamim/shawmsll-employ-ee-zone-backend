@@ -16,11 +16,14 @@ import { communicationToolkitRoute } from "../app/modules/contextual/_COMMUNICAT
 import { communicationToolkitCategoryRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communicationToolkitCategory/communicationToolkitCategory.route";
 import { categoryRouter } from "../app/modules/contextual/_GUIDANCE/category/category.routes";
 import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/guidance.routes";
+import { interviewPrep_route } from "../app/modules/contextual/_JOB/interviewPrep/interviewPrep.route";
 import { jobSearchCategoryRoute } from "../app/modules/contextual/_JOB/jobSearchCategory/jobSearchCategory.route";
+import { resumeTips_route } from "../app/modules/contextual/_JOB/resumeTips/resumeTips.route";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { policyCategoryRoute } from "../app/modules/contextual/policyCategory/policyCategory.route";
+import { jobSearchTracker_route } from "../app/modules/contextual/_JOB/jobSearchTracker/jobSearchTracker.route";
 
 const router = Router();
 
@@ -108,6 +111,21 @@ const moduleRoutes = [
   {
     path: "/job-search-category",
     route: jobSearchCategoryRoute,
+  },
+
+  {
+    path: "/resume-tips",
+    route: resumeTips_route,
+  },
+
+  {
+    path: "/interview-prep",
+    route: interviewPrep_route,
+  },
+
+  {
+    path: "/job-search-tracker",
+    route: jobSearchTracker_route,
   },
 ];
 

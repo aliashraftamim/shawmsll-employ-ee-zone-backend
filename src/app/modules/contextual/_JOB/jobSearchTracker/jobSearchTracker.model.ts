@@ -1,22 +1,23 @@
-import mongoose, { Schema } from "mongoose";
-import { IJobSearchTracker } from "./jobSearchTracker.interface";
+// models/JobSearchTracker.model.ts
+import mongoose, { Schema, model } from "mongoose";
 
-const JobSearchTrackerSchema = new Schema<IJobSearchTracker>(
+const jobSearchTrackerSchema = new Schema(
   {
-    title: { type: String, required: true },
-    image: { type: String, required: true },  
-    content: { type: String, required: true },
+    jobTitle: { type: String, required: true },
+    companyName: { type: String, required: true },
+    date: { type: String, required: true }, // you can use Date type if it's ISO format
     status: {
       type: String,
-      enum: ["active", "inactive", "archived", "pending"],
-      default: "active",
+      enum: ["applied", "rejected", "interviewed"],
+      required: true,
     },
     isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // Optional: adds createdAt & updatedAt fields
+  }
 );
 
-export const JobSearchTracker = mongoose.model<IJobSearchTracker>(
-  "JobSearchTracker",
-  JobSearchTrackerSchema
-);
+export const JobSearchTracker =
+  mongoose.models.JobSearchTracker ||
+  model("JobSearchTracker", jobSearchTrackerSchema);
