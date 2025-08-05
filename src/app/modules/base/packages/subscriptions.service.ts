@@ -119,7 +119,9 @@ const paymentASubscription = async (
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid amount");
   }
 
-  const user: any = await User.isUserExistById(vendorId);
+  await User.isUserExistById(vendorId);
+
+  const user: any = await User.findById(vendorId);
 
   if (user.payment.status === "paid") {
     throw new AppError(httpStatus.BAD_REQUEST, "User already paid");

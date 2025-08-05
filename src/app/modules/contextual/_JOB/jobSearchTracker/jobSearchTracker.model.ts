@@ -14,7 +14,7 @@ const jobSearchTrackerSchema = new Schema(
     isDeleted: { type: Boolean, default: false },
   },
   {
-    timestamps: true, // Optional: adds createdAt & updatedAt fields
+    timestamps: true,
   }
 );
 

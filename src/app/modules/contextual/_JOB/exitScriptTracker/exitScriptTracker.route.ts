@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../../core/constants/global.constants";
 import auth from "../../../../core/middlewares/auth";
-import { AwsUploadSingle } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUpload.single";
+import { AwsUploadDocuments } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUpload.multipleDoc";
 import { upload } from "../../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../../core/middlewares/validateRequest";
 import { exitScriptTracker_controller } from "./exitScriptTracker.controller";
@@ -11,10 +11,10 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.USER),
-  upload.single("image"),
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  upload.fields([{ name: "documents", maxCount: 5 }]),
   validateRequest(exitScriptTracker_validation.createExitScriptTracker),
-  AwsUploadSingle("image"),
+  AwsUploadDocuments("documents"),
   exitScriptTracker_controller.createExitScriptTracker
 );
 
@@ -24,10 +24,10 @@ router.get("/:id", exitScriptTracker_controller.getExitScriptTrackerById);
 
 router.put(
   "/:id",
-  auth(USER_ROLE.USER),
-  upload.single("image"),
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  upload.fields([{ name: "documents", maxCount: 5 }]),
   validateRequest(exitScriptTracker_validation.updateExitScriptTracker),
-  AwsUploadSingle("image"),
+  AwsUploadDocuments("documents"),
   exitScriptTracker_controller.updateExitScriptTracker
 );
 

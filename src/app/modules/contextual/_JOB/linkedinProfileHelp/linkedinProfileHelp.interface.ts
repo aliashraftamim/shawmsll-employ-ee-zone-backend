@@ -1,8 +1,7 @@
 export interface ILinkedinProfileHelp {
-  title: string;
-  image: string;
+  name: string;
   content: string;
+  documents: string[];
 
-  status: "active" | "inactive" | "archived" | "pending";
   isDeleted?: boolean;
 }

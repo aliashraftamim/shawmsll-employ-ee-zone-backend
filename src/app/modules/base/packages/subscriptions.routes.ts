@@ -10,27 +10,27 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.SUPPER_ADMIN),
   validateRequest(subscriptionsValidator.createSubscriptionSchema),
   subscriptionsController.createSubscription
 );
 
 router.put(
   "/:id",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.SUPPER_ADMIN),
   validateRequest(subscriptionsValidator.updateSubscriptionSchema),
   subscriptionsController.updateSubscription
 );
 
 router.get(
   "/",
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN, USER_ROLE.USER),
   subscriptionsController.getSubscription
 );
 
 router.delete(
   "/:id",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   subscriptionsController.deleteSubscription
 );
 

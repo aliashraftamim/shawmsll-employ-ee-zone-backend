@@ -16,14 +16,18 @@ import { communicationToolkitRoute } from "../app/modules/contextual/_COMMUNICAT
 import { communicationToolkitCategoryRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communicationToolkitCategory/communicationToolkitCategory.route";
 import { categoryRouter } from "../app/modules/contextual/_GUIDANCE/category/category.routes";
 import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/guidance.routes";
+import { exitScriptTracker_route } from "../app/modules/contextual/_JOB/exitScriptTracker/exitScriptTracker.route";
+import { guidanceOnLeavingBenefits_route } from "../app/modules/contextual/_JOB/GuidanceOnLeavingBenefits/GuidanceOnLeavingBenefits.route";
 import { interviewPrep_route } from "../app/modules/contextual/_JOB/interviewPrep/interviewPrep.route";
 import { jobSearchCategoryRoute } from "../app/modules/contextual/_JOB/jobSearchCategory/jobSearchCategory.route";
+import { jobSearchTracker_route } from "../app/modules/contextual/_JOB/jobSearchTracker/jobSearchTracker.route";
+import { linkedinProfileHelp_route } from "../app/modules/contextual/_JOB/linkedinProfileHelp/linkedinProfileHelp.route";
 import { resumeTips_route } from "../app/modules/contextual/_JOB/resumeTips/resumeTips.route";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
+import { bookmark_route } from "../app/modules/contextual/bookmark/bookmark.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { policyCategoryRoute } from "../app/modules/contextual/policyCategory/policyCategory.route";
-import { jobSearchTracker_route } from "../app/modules/contextual/_JOB/jobSearchTracker/jobSearchTracker.route";
 
 const router = Router();
 
@@ -126,6 +130,26 @@ const moduleRoutes = [
   {
     path: "/job-search-tracker",
     route: jobSearchTracker_route,
+  },
+
+  {
+    path: "/exit-script-tracker",
+    route: exitScriptTracker_route,
+  },
+
+  {
+    path: "/guidance-on-leaving",
+    route: guidanceOnLeavingBenefits_route,
+  },
+
+  {
+    path: "/linkedin-profile-help",
+    route: linkedinProfileHelp_route,
+  },
+
+  {
+    path: "/bookmark",
+    route: bookmark_route,
   },
 ];
 

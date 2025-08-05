@@ -9,7 +9,7 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER),
   validateRequest(jobSearchTracker_validation.createJobSearchTracker),
   jobSearchTracker_controller.createJobSearchTracker
 );

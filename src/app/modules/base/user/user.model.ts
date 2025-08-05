@@ -30,7 +30,18 @@ const UserSchema = new Schema<IUser>(
 
     profile: { type: ProfileSchema },
     location: { type: LocationSchema, required: false },
-    payment: { type: PaymentSchema, required: false },
+    payment: {
+      type: PaymentSchema,
+      required: false,
+      default: () => ({
+        status: "free",
+        amount: 0,
+        issuedAt: null,
+        deadline: 0,
+        deadlineType: "month",
+        subscription: null,
+      }),
+    },
 
     verification: {
       type: UserVerificationSchema,
