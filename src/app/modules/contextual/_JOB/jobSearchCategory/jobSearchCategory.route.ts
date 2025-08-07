@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../../core/constants/global.constants";
 import auth from "../../../../core/middlewares/auth";
-import { awsFlexibleUploader } from "../../../../core/middlewares/imageAndDocUploadHelper/awsDocImg.upload.tuple";
 import { AwsUploadSingle } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUpload.single";
+import { AwsUploadDocImg } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUploadDocImg";
 import { upload } from "../../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../../core/middlewares/validateRequest";
 import { jobSearchCategory_controller } from "./jobSearchCategory.controller";
@@ -19,7 +19,7 @@ router.post(
   ]),
   // Validate the request body against
   validateRequest(jobSearchCategoryValidation.createJobSearchCategory),
-  awsFlexibleUploader(
+  AwsUploadDocImg(
     {
       fieldName: "image",
       isImage: true,

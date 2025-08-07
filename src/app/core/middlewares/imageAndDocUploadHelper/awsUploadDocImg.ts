@@ -14,7 +14,7 @@ type TUploadConfig = {
 
 
 
-export const awsFlexibleUploader = (...fields: TUploadConfig[]) => {
+export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const allFiles = req.files as {
       [fieldname: string]: Express.Multer.File[] | Express.Multer.File;
