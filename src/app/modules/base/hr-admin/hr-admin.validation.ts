@@ -1,28 +1,25 @@
 import z from "zod";
 
 const createHrAdmin = z.object({
-  file: z
-    .object({
-      fieldname: z.string().refine((val) => val === "profileImage", {
-        message: "Field name must be 'profileImage'",
-      }),
-      originalname: z.string(),
-      encoding: z.string(),
-      mimetype: z.string().refine((val) => val.startsWith("image/"), {
-        message: "Only image files are allowed",
-      }),
-      buffer: z.any(),
-      size: z
-        .number()
-        .positive()
-        .max(5000000, { message: "Image max length should be 5MB" }),
-    })
-    .optional(),
+  // file: z.object({
+  //   fieldname: z.string().refine((val) => val === "profileImage", {
+  //     message: "Field name must be 'profileImage'",
+  //   }),
+  //   originalname: z.string(),
+  //   encoding: z.string(),
+  //   mimetype: z.string().refine((val) => val.startsWith("image/"), {
+  //     message: "Only image files are allowed",
+  //   }),
+  //   buffer: z.any(),
+  //   size: z
+  //     .number()
+  //     .positive()
+  //     .max(5000000, { message: "Image max length should be 5MB" }),
+  // }),
 
   body: z
     .object({
       expertise: z.array(z.string()),
-      documents: z.array(z.string()),
       availableTime: z.array(
         z.object({
           date: z.string(),
@@ -39,7 +36,6 @@ const updateHrAdmin = z.object({
   body: z
     .object({
       expertise: z.array(z.string()).optional(),
-      documents: z.array(z.string()).optional(),
       availableTime: z
         .array(
           z.object({

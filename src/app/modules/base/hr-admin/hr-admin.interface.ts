@@ -6,7 +6,7 @@ export interface IAvailableTime {
 
 export interface IHrAdmin {
   expertise: string[];
-  documents: string[];
+  documents: string;
 
   availableTime: IAvailableTime[];
 

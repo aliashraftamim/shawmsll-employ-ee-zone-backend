@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
+import QueryBuilder from "../../../core/builders/QueryBuilder";
 import { IHrAdmin } from "./hr-admin.interface";
 import { HrAdmin } from "./hr-admin.model";
 
@@ -7,10 +9,9 @@ const createHrAdmin = async (payload: IHrAdmin) => {
 };
 
 const getAllHrAdmin = async (query: Record<string, any>) => {
-
   const hrAdminQuery = new QueryBuilder(
     HrAdmin.find({
-       isDeleted: { $ne: true },
+      isDeleted: { $ne: true },
     }),
     query
   )
@@ -32,10 +33,7 @@ const getHrAdminById = async (id: string) => {
   return await HrAdmin.findOne({ _id: id, isDeleted: { $ne: true } });
 };
 
-const updateHrAdmin = async (
-  id: string,
-  updateData: Partial<IHrAdmin>
-) => {
+const updateHrAdmin = async (id: string, updateData: Partial<IHrAdmin>) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }

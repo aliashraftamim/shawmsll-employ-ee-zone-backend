@@ -9,10 +9,10 @@ const availableTimeSchema = new Schema<IAvailableTime>({
 
 const hrAdminSchema = new Schema<IHrAdmin>({
   expertise: [{ type: String, required: true }],
-  documents: [{ type: String, required: true }],
+  documents: { type: String, required: true },
   availableTime: [availableTimeSchema],
   description: { type: String, required: true },
   isDeleted: { type: Boolean, default: false },
 });
 
-export const HrAdminModel = model<IHrAdmin>("HrAdmin", hrAdminSchema);
+export const HrAdmin = model<IHrAdmin>("HrAdmin", hrAdminSchema);

@@ -8,6 +8,7 @@ import { plansOrderRoutes } from "../app/modules/contextual/plansOrder/plansOrde
 
 import { accountDetailsRoute } from "../app/modules/admin/accountDetails/accountDetails.routes";
 import { overviewRouter } from "../app/modules/admin/overview/overview.routes";
+import { hrAdmin_route } from "../app/modules/base/hr-admin/hr-admin.route";
 import { notificationRoute } from "../app/modules/base/notification/notification.routes";
 import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
@@ -150,6 +151,11 @@ const moduleRoutes = [
   {
     path: "/bookmark",
     route: bookmark_route,
+  },
+
+  {
+    path: "/hr-admin",
+    route: hrAdmin_route,
   },
 ];
 

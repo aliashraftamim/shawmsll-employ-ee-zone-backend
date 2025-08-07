@@ -13,13 +13,13 @@ router.post(
   "/",
   auth(USER_ROLE.USER),
   upload.fields([
-    { name: "documents", maxCount: 5 },
+    { name: "documents", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },
   ]),
   validateRequest(hrAdmin_validation.createHrAdmin),
   AwsUploadDocImg(
     { fieldName: "profileImage", isImage: true, multiple: false },
-    { fieldName: "documents", isImage: false, multiple: true }
+    { fieldName: "documents", isImage: false, multiple: false }
   ),
   hrAdmin_controller.createHrAdmin
 );
@@ -40,13 +40,13 @@ router.put(
   "/:id",
   auth(USER_ROLE.USER),
   upload.fields([
-    { name: "documents", maxCount: 5 },
+    { name: "documents", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },
   ]),
   validateRequest(hrAdmin_validation.updateHrAdmin),
   AwsUploadDocImg(
     { fieldName: "profileImage", isImage: true, multiple: false },
-    { fieldName: "documents", isImage: false, multiple: true }
+    { fieldName: "documents", isImage: false, multiple: false }
   ),
   hrAdmin_controller.updateHrAdmin
 );
