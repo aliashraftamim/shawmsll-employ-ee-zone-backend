@@ -18,7 +18,6 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
       [fieldname: string]: Express.Multer.File[] | Express.Multer.File;
     };
 
-    console.log("📁 All Uploaded Files:", allFiles);
 
     for (const field of fields) {
       const fieldFiles = allFiles?.[field.fieldName];
@@ -31,9 +30,6 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
       } else if (fieldFiles) {
         files = [fieldFiles];
       }
-
-      console.log(`🧾 Files for field "${field.fieldName}":`, files);
-      console.log(`✅ First file originalname:`, files[0]?.originalname);
 
       const uploadedUrls: string[] = [];
 
@@ -74,7 +70,7 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
 
         try {
           const uploaded = await s3Client.upload(params).promise();
-          console.log(`✅ Uploaded to S3: ${uploaded.Location}`);
+          console.info(`✅ Uploaded to S3: ${uploaded.Location}`);
           uploadedUrls.push(uploaded.Location);
         } catch (err) {
           console.error(`❌ Upload failed for field "${field.fieldName}":`, err);

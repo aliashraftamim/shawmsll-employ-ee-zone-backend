@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { IPolicyCategory } from "./policyCategory.interface";
+import { IPolicyRights } from "./policy&rights.interface";
 
-const PolicyCategorySchema = new Schema<IPolicyCategory>(
+const PolicyRightsSchema = new Schema<IPolicyRights>(
   {
     title: { type: String, required: true },
     image: { type: String, required: true },
@@ -11,7 +11,7 @@ const PolicyCategorySchema = new Schema<IPolicyCategory>(
   { timestamps: true }
 );
 
-export const PolicyCategoryModel = mongoose.model<IPolicyCategory>(
-  "PolicyCategory",
-  PolicyCategorySchema
+export const PolicyRightsModel = mongoose.model<IPolicyRights>(
+  "PolicyRights",
+  PolicyRightsSchema
 );

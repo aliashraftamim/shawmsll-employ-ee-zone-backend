@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export interface IAvailableTime {
   date: string;
   startTime: string;
@@ -5,11 +7,11 @@ export interface IAvailableTime {
 }
 
 export interface IHrAdmin {
+  user: mongoose.Types.ObjectId;
+
   expertise: string[];
   documents: string;
-
   availableTime: IAvailableTime[];
-
   description: string;
 
   isDeleted?: boolean;

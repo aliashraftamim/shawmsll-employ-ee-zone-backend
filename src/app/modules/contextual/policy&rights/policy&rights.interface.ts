@@ -1,4 +1,4 @@
-export interface IPolicyCategory {
+export interface IPolicyRights {
   title: string;
   image: string;
   content: string;

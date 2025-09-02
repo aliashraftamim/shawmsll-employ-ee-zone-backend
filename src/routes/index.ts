@@ -28,7 +28,7 @@ import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tag
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { bookmark_route } from "../app/modules/contextual/bookmark/bookmark.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
-import { policyCategoryRoute } from "../app/modules/contextual/policyCategory/policyCategory.route";
+import { PolicyRightsRoute } from "../app/modules/contextual/policy&rights/policy&rights.route";
 
 const router = Router();
 
@@ -104,8 +104,8 @@ const moduleRoutes = [
   },
 
   {
-    path: "/policy-category",
-    route: policyCategoryRoute,
+    path: "/policy-rights",
+    route: PolicyRightsRoute,
   },
 
   {

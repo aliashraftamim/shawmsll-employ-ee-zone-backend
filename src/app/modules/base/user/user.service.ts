@@ -32,25 +32,22 @@ const getUsers = async (
   query: Record<string, unknown>
 ) => {
   const { filters, pagination } = await pickQuery(query);
-
   const paginationFields = paginationHelper.calculatePagination(pagination);
-
   const { searchField, ...filtersData } = filters;
-
   const pipeline: PipelineStage[] = [];
 
   // Step 1: Match only active & verified users
   pipeline.push({
     $match: {
       isDeleted: false,
-      status: "active",
+      status: { $ne: "blocked" },
       "verification.verified": true,
       _id: { $ne: currentUser },
-      role: { $eq: "USER" },
+      role: { $eq: USER_ROLE.USER },
     },
   });
 
-  // Step 2: Check if current user follows this user (followedUserId)
+  // Step 2: Check if current user follows this user
   pipeline.push({
     $lookup: {
       from: "friends",
@@ -77,7 +74,7 @@ const getUsers = async (
     },
   });
 
-  // Step 3: Add isImFollow field
+  // Step 3: Add isFriend field
   pipeline.push({
     $addFields: {
       isFriend: {
@@ -90,9 +87,9 @@ const getUsers = async (
     },
   });
 
-  // Step 3.1: Add search functionality
+  // Step 3.1: Search
   if (searchField) {
-    const searchRegex = new RegExp(searchField, "i");
+    const searchRegex = new RegExp(searchField as string, "i");
     pipeline.push({
       $match: {
         $or: [
@@ -103,45 +100,44 @@ const getUsers = async (
       },
     });
   }
-  // Step 3.2: Add filters
+
+  // Step 3.2: Additional filters
   if (Object.keys(filtersData).length > 0) {
-    pipeline.push({
-      $match: {
-        ...filtersData,
-      },
-    });
+    const filterCopy = { ...filtersData };
+    delete filterCopy.sort; // remove sort from filters
+    pipeline.push({ $match: filterCopy });
   }
-  // Step 3.3: Add sorting
+
+  // Step 3.3: Sorting
   if (filtersData?.sort) {
-    const sortField = filtersData.sort.startsWith("-")
-      ? filtersData.sort.slice(1)
-      : filtersData.sort;
-    const sortDirection = filtersData.sort.startsWith("-") ? -1 : 1;
-
-    pipeline.push({
-      $sort: {
-        [sortField]: sortDirection,
-      },
-    });
+    const sortField = (filtersData.sort as string).startsWith("-")
+      ? (filtersData.sort as string).slice(1)
+      : (filtersData.sort as string);
+    const sortDirection = (filtersData.sort as string).startsWith("-") ? -1 : 1;
+    pipeline.push({ $sort: { [sortField]: sortDirection } });
   }
 
-  // Step 4: Remove unnecessary field
-  pipeline.push({
-    $project: {
-      myFriendCheck: 0,
-    },
-  });
+  // Step 4: Remove unnecessary fields
+  pipeline.push({ $project: { myFriendCheck: 0 } });
 
-  pipeline.push({
-    $skip: paginationFields?.skip || 0,
-  });
+  // Step 5: Count total before pagination
+  const countPipeline = [...pipeline, { $count: "total" }];
+  const countResult = await User.aggregate(countPipeline);
+  const total = countResult[0]?.total || 0;
 
-  pipeline.push({
-    $limit: paginationFields?.limit || 10,
-  });
+  // Step 6: Apply pagination
+  pipeline.push({ $skip: paginationFields?.skip || 0 });
+  pipeline.push({ $limit: paginationFields?.limit || 10 });
 
   const users = await User.aggregate(pipeline);
-  return users;
+
+  const meta = {
+    total,
+    page: paginationFields?.page || 1,
+    limit: paginationFields?.limit || 10,
+  };
+
+  return { meta, data: users };
 };
 
 // const getSingleUser = async() => {};

@@ -4,8 +4,8 @@ import auth from "../../../core/middlewares/auth";
 import { AwsUploadSingle } from "../../../core/middlewares/imageAndDocUploadHelper/awsUpload.single";
 import { upload } from "../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../core/middlewares/validateRequest";
-import { policyCategory_controller } from "./policyCategory.controller";
-import { policyCategoryValidation } from "./policyCategory.validation";
+import { PolicyRights_controller } from "./policy&rights.controller";
+import { PolicyRightsValidation } from "./policy&rights.validation";
 
 const router = Router();
 
@@ -13,36 +13,36 @@ router.post(
   "/",
   auth(USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
-  validateRequest(policyCategoryValidation.createPolicyCategory),
+  validateRequest(PolicyRightsValidation.createPolicyRights),
   AwsUploadSingle("image"),
-  policyCategory_controller.createPolicyCategory
+  PolicyRights_controller.createPolicyRights
 );
 
 router.get(
   "/",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
-  policyCategory_controller.getAllPolicyCategory
+  PolicyRights_controller.getAllPolicyRights
 );
 
 router.get(
   "/:id",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
-  policyCategory_controller.getPolicyCategoryById
+  PolicyRights_controller.getPolicyRightsById
 );
 
 router.put(
   "/:id",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
-  validateRequest(policyCategoryValidation.updatePolicyCategory),
+  validateRequest(PolicyRightsValidation.updatePolicyRights),
   AwsUploadSingle("image"),
-  policyCategory_controller.updatePolicyCategory
+  PolicyRights_controller.updatePolicyRights
 );
 
 router.delete(
   "/:id",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
-  policyCategory_controller.softDeletePolicyCategory
+  PolicyRights_controller.softDeletePolicyRights
 );
 
-export const policyCategoryRoute = router;
+export const PolicyRightsRoute = router;

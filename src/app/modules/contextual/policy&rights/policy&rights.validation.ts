@@ -1,6 +1,6 @@
 import z from "zod";
 
-const createPolicyCategory = z.object({
+const createPolicyRights = z.object({
   file: z.object({
     fieldname: z.string().refine((val) => val === "image", {
       message: "Field name must be 'image'",
@@ -24,7 +24,7 @@ const createPolicyCategory = z.object({
     .strict(),
 });
 
-const updatePolicyCategory = z.object({
+const updatePolicyRights = z.object({
   body: z
     .object({
       title: z.string().min(1, "Title is required").optional(),
@@ -33,7 +33,7 @@ const updatePolicyCategory = z.object({
     .strict(),
 });
 
-export const policyCategoryValidation = {
-  createPolicyCategory,
-  updatePolicyCategory,
+export const PolicyRightsValidation = {
+  createPolicyRights,
+  updatePolicyRights,
 };

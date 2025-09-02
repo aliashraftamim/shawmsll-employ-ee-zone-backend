@@ -8,10 +8,11 @@ const availableTimeSchema = new Schema<IAvailableTime>({
 });
 
 const hrAdminSchema = new Schema<IHrAdmin>({
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   expertise: [{ type: String, required: true }],
   documents: { type: String, required: true },
   availableTime: [availableTimeSchema],
-  description: { type: String, required: true },
+  description: { type: String, default: "" },
   isDeleted: { type: Boolean, default: false },
 });
 

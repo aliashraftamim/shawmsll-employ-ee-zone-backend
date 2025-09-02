@@ -29,7 +29,7 @@ export interface IPayment {
 // Location Info
 export interface ILocation {
   type: string;
-  coordinates: number[]; // [longitude, latitude]
+  coordinates: number[];
   name?: string;
 }
 

@@ -18,7 +18,7 @@ export interface IUser {
   confirmPassword?: string;
   agreeToTerms: boolean;
   passwordChangedAt?: Date;
-  role: string;
+  role: keyof typeof USER_ROLE;
 
   profile: IProfile;
   location?: ILocation;

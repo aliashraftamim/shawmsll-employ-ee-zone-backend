@@ -24,10 +24,14 @@ router.put(
   userController.updateMe
 );
 
-router.get("/", auth(USER_ROLE.USER, USER_ROLE.ADMIN), userController.getUser);
+router.get(
+  "/",
+  auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
+  userController.getUser
+);
 router.get(
   "/get-me",
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN),
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   userController.getMe
 );
 

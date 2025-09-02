@@ -1,4 +1,5 @@
 import z from "zod";
+import { CONFIG } from "../../../core/config";
 
 const createHrAdmin = z.object({
   // file: z.object({
@@ -19,6 +20,8 @@ const createHrAdmin = z.object({
 
   body: z
     .object({
+      email: z.string().email("Invalid email address"),
+      password: z.string().min(Number(CONFIG.CORE.password_length)),
       expertise: z.array(z.string()),
       availableTime: z.array(
         z.object({
