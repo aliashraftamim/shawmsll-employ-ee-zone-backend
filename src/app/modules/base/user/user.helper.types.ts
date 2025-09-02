@@ -19,6 +19,7 @@ export interface IRatings {
 // Payment Info
 export interface IPayment {
   status: "paid" | "not-paid" | "expired" | "free";
+  isOneTime: boolean;
   amount: number;
   issuedAt: Date;
   deadline: number;

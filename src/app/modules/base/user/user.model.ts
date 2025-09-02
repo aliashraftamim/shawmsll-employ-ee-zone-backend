@@ -35,6 +35,7 @@ const UserSchema = new Schema<IUser>(
       required: false,
       default: () => ({
         status: "free",
+        isOneTime: false,
         amount: 0,
         issuedAt: null,
         deadline: 0,
