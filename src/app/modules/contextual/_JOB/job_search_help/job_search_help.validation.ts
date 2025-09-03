@@ -1,6 +1,6 @@
 import z from "zod";
 
-const createExitScriptTracker = z.object({
+const createJobSearchHelp = z.object({
   body: z
     .object({
       name: z.string().min(1, "Title is required"),
@@ -9,7 +9,7 @@ const createExitScriptTracker = z.object({
     .strict(),
 });
 
-const updateExitScriptTracker = z.object({
+const updateJobSearchHelp = z.object({
   body: z
     .object({
       name: z.string().min(1, "Title is required").optional(),
@@ -18,7 +18,7 @@ const updateExitScriptTracker = z.object({
     .strict(),
 });
 
-export const exitScriptTracker_validation = {
-  createExitScriptTracker,
-  updateExitScriptTracker,
+export const jobSearchHelp_validation = {
+  createJobSearchHelp,
+  updateJobSearchHelp,
 };

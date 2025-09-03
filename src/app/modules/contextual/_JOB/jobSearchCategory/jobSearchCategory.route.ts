@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../../core/constants/global.constants";
+import { AwsUploadSingle } from "../../../../core/middlewares/!awsUploader/awsUpload.single";
+import { AwsUploadDocImg } from "../../../../core/middlewares/!awsUploader/awsUploadDocImg";
+import { upload } from "../../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../../core/middlewares/auth";
-import { AwsUploadSingle } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUpload.single";
-import { AwsUploadDocImg } from "../../../../core/middlewares/imageAndDocUploadHelper/awsUploadDocImg";
-import { upload } from "../../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../../core/middlewares/validateRequest";
 import { jobSearchCategory_controller } from "./jobSearchCategory.controller";
 import { jobSearchCategoryValidation } from "./jobSearchCategory.validation";

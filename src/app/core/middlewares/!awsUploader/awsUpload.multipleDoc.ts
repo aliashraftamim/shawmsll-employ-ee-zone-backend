@@ -1,16 +1,10 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import express, { NextFunction, Request, Response } from "express";
-import multer from "multer";
+import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../common/utils/catchAsync";
 import { CONFIG } from "../../config";
 import { s3Client } from "./awsS3Client";
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
 
 export const AwsUploadDocuments = (fieldName: string) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -57,19 +51,3 @@ export const AwsUploadDocuments = (fieldName: string) => {
     next();
   });
 };
-
-const router = express.Router();
-
-router.post(
-  "/upload",
-  upload.fields([{ name: "documents", maxCount: 5 }]),
-  AwsUploadDocuments("documents"),
-  (req: Request, res: Response) => {
-    res.json({
-      message: "Files uploaded successfully!",
-      uploadedFiles: req.body.documents,
-    });
-  }
-);
-
-export default router;

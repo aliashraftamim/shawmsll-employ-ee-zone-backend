@@ -3,95 +3,92 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../../common/utils/catchAsync";
 import sendResponse from "../../../../common/utils/sendResponse";
-import { interviewPrep_service } from "./interviewPrep.service";
+import { jobSearchHelpService } from "./job_search_help.service";
 
-const createInterviewPrep = catchAsync(async (req: Request, res: Response) => {
-  const result = await interviewPrep_service.createInterviewPrep(req.body);
+const createJobSearchHelp = catchAsync(async (req: Request, res: Response) => {
+  const result = await jobSearchHelpService.create(req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
-    message: "InterviewPrep created successfully",
+    message: "JobSearchHelp created successfully",
     data: result,
   });
 });
 
-const getAllInterviewPrep = catchAsync(async (req: Request, res: Response) => {
-  const result = await interviewPrep_service.getAllInterviewPrep(req.query);
+const getAllJobSearchHelp = catchAsync(async (req: Request, res: Response) => {
+  const result = await jobSearchHelpService.getAll(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "InterviewPreps retrieved successfully",
+    message: "JobSearchHelps retrieved successfully",
     data: result,
   });
 });
 
-const getInterviewPrepById = catchAsync(async (req: Request, res: Response) => {
+const getJobSearchHelpById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await interviewPrep_service.getInterviewPrepById(id);
+  const result = await jobSearchHelpService.getSingle(id);
   if (!result) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
       success: false,
-      message: "InterviewPrep not found",
+      message: "JobSearchHelp not found",
       data: result,
     });
   }
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "InterviewPrep retrieved successfully",
+    message: "JobSearchHelp retrieved successfully",
     data: result,
   });
 });
 
-const updateInterviewPrep = catchAsync(async (req: Request, res: Response) => {
+const updateJobSearchHelp = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const updateData = req.body;
-  const result = await interviewPrep_service.updateInterviewPrep(
-    id,
-    updateData
-  );
+  const result = await jobSearchHelpService.update(id, updateData);
   if (!result) {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
       success: false,
-      message: "InterviewPrep not found to update",
+      message: "JobSearchHelp not found to update",
       data: result,
     });
   }
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "InterviewPrep updated successfully",
+    message: "JobSearchHelp updated successfully",
     data: result,
   });
 });
 
-const softDeleteInterviewPrep = catchAsync(
+const softDeleteJobSearchHelp = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await interviewPrep_service.softDeleteInterviewPrep(id);
+    const result = await jobSearchHelpService.softDelete(id);
     if (!result) {
       return sendResponse(res, {
         statusCode: httpStatus.NOT_FOUND,
         success: false,
-        message: "InterviewPrep not found to delete",
+        message: "JobSearchHelp not found to delete",
         data: undefined,
       });
     }
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: "InterviewPrep deleted successfully",
+      message: "JobSearchHelp deleted successfully",
       data: result,
     });
   }
 );
 
-export const interviewPrep_controller = {
-  createInterviewPrep,
-  getAllInterviewPrep,
-  getInterviewPrepById,
-  updateInterviewPrep,
-  softDeleteInterviewPrep,
+export const jobSearchHelp_controller = {
+  createJobSearchHelp,
+  getAllJobSearchHelp,
+  getJobSearchHelpById,
+  updateJobSearchHelp,
+  softDeleteJobSearchHelp,
 };

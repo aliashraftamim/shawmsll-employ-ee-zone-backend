@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../core/constants/global.constants";
+import { AwsUploadDocImg } from "../../../core/middlewares/!awsUploader/awsUploadDocImg";
+import { upload } from "../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../core/middlewares/auth";
-import { AwsUploadDocImg } from "../../../core/middlewares/imageAndDocUploadHelper/awsUploadDocImg";
-import { upload } from "../../../core/middlewares/imageAndDocUploadHelper/multer.config";
 import validateRequest from "../../../core/middlewares/validateRequest";
 import { hrAdmin_controller } from "./hr-admin.controller";
 import { hrAdmin_validation } from "./hr-admin.validation";

@@ -33,7 +33,7 @@ const getUsers = async (
 ) => {
   const { filters, pagination } = await pickQuery(query);
   const paginationFields = paginationHelper.calculatePagination(pagination);
-  const { searchField, ...filtersData } = filters;
+  const { searchTerms, ...filtersData } = filters;
   const pipeline: PipelineStage[] = [];
 
   // Step 1: Match only active & verified users
@@ -88,12 +88,13 @@ const getUsers = async (
   });
 
   // Step 3.1: Search
-  if (searchField) {
-    const searchRegex = new RegExp(searchField as string, "i");
+  if (searchTerms) {
+    const searchRegex = new RegExp(searchTerms as string, "i");
     pipeline.push({
       $match: {
         $or: [
-          { firstName: searchRegex },
+          { "profile.firstName": searchRegex },
+          { "profile.lastName": searchRegex },
           { email: searchRegex },
           { contactNumber: searchRegex },
         ],
