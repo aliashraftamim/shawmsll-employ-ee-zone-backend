@@ -28,7 +28,18 @@ const UserSchema = new Schema<IUser>(
       default: "USER",
     },
 
-    profile: { type: ProfileSchema },
+    profile: {
+      type: ProfileSchema,
+      default: () => ({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        phoneNumber: "",
+        companyName: "",
+        bio: "",
+        profileImage: "",
+      }),
+    },
     location: { type: LocationSchema, required: false },
     payment: {
       type: PaymentSchema,
@@ -67,7 +78,7 @@ const UserSchema = new Schema<IUser>(
     status: {
       type: String,
       enum: ["active", "blocked", "pending"],
-      default: "pending",
+      default: "active",
     },
   },
   {

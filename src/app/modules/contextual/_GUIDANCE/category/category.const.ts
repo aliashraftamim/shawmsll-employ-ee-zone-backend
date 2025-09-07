@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { adminService } from "../../../base/admin/admin.service";
 import { ICategory } from "./category.interface";
 import { Category } from "./category.model"; // Mongoose model ধরছি
@@ -7,7 +7,7 @@ import { categoryService } from "./category.service";
 
 export async function defaultGuidanceCategory() {
   const admin = await adminService.getSupperAdmin();
-  const adminId: ObjectId = admin._id;
+  const adminId: mongoose.Types.ObjectId = admin._id;
 
   const existing = await Category.findOne();
 
@@ -18,7 +18,6 @@ export async function defaultGuidanceCategory() {
   const categories: ICategory[] = [
     {
       name: "Workplace Dynamics",
-      image: "workplace_dynamics.png",
       admin: adminId,
       scenario: [
         "I feel I’m being micromanaged",
@@ -28,7 +27,6 @@ export async function defaultGuidanceCategory() {
     },
     {
       name: "Unfair Treatment",
-      image: "unfair_treatment.png",
       admin: adminId,
       scenario: [
         "I was passed over for a promotion",
@@ -38,7 +36,6 @@ export async function defaultGuidanceCategory() {
     },
     {
       name: "Inappropriate Behavior",
-      image: "inappropriate_behavior.png",
       admin: adminId,
       scenario: [
         "Someone made an offensive comment to me",
@@ -48,7 +45,6 @@ export async function defaultGuidanceCategory() {
     },
     {
       name: "Burnout & Workload",
-      image: "burnout_workload.png",
       admin: adminId,
       scenario: [
         "My workload is unmanageable",
@@ -58,7 +54,6 @@ export async function defaultGuidanceCategory() {
     },
     {
       name: "Career Concerns",
-      image: "career_concerns.png",
       admin: adminId,
       scenario: [
         "I need clearer performance feedback",

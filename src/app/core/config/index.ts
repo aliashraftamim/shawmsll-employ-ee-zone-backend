@@ -57,6 +57,15 @@ export const CONFIG = {
     aws_bucket: process.env.AWS_BUCKET,
   },
 
+  // # Digital Ocean Spaces
+  DigitalOcean_Space: {
+    aws_access_key_id: process.env.DO_SPACES_KEY!,
+    aws_secret_access_key: process.env.DO_SPACES_SECRET!,
+    aws_region: process.env.DO_SPACES_REGION!,
+    aws_bucket: process.env.DO_SPACES_BUCKET!,
+    aws_endpoint: process.env.DO_SPACES_ENDPOINT!,
+  },
+
   // # Mail so email checker credentials
   MAIL_SO: {
     mails_so_api_key: process.env.MAILS_SO_API_KEY,

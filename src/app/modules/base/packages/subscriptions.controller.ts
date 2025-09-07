@@ -41,6 +41,19 @@ const getSubscription = catchAsync(async (req, res) => {
   });
 });
 
+const getSubscriptionById = catchAsync(async (req, res) => {
+  const result = await subscriptionsService.getSubscriptionById(
+    req.params.id as any
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Subscription retrieve successfully!!",
+    data: result,
+  });
+});
+
 const deleteSubscription = catchAsync(async (req, res) => {
   const result = await subscriptionsService.deleteSubscription(
     req.params.id as any
@@ -95,8 +108,8 @@ export const subscriptionsController = {
   createSubscription,
   updateSubscription,
   getSubscription,
+  getSubscriptionById,
   deleteSubscription,
   paymentASubscription,
   paymentSuccessStripe,
-  // paymentCancelStripe,
 };

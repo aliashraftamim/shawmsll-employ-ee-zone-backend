@@ -39,6 +39,11 @@ async function main() {
       }
     );
 
+    /* The line `console.log(typeof hrAdmin_service);` is logging the data type of the variable
+    `hrAdmin_service` to the console. The `typeof` operator in JavaScript returns the data type of a
+    variable or expression. */
+    // console.log(typeof hrAdmin_service);
+
     // * Default data creation
     await defaultJob();
 

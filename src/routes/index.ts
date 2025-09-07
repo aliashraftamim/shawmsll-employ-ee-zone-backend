@@ -26,6 +26,8 @@ import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JO
 import { bookmark_route } from "../app/modules/contextual/bookmark/bookmark.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { PolicyRightsRoute } from "../app/modules/contextual/policy&rights/policy&rights.route";
+import { scheduleType_route } from "../app/modules/contextual/scheduleType/scheduleType.route";
+import { specialistSchedule_route } from "../app/modules/contextual/specialist_schedule/specialist_schedule.route";
 
 const router = Router();
 
@@ -133,6 +135,16 @@ const moduleRoutes = [
   {
     path: "/hr-admin",
     route: hrAdmin_route,
+  },
+
+  {
+    path: "/specialist-schedule",
+    route: specialistSchedule_route,
+  },
+
+  {
+    path: "/schedule-type",
+    route: scheduleType_route,
   },
 ];
 

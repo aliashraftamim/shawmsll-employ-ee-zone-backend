@@ -8,7 +8,9 @@ export interface ISubscription {
       active: boolean;
     },
   ];
-  duration: "monthly" | "yearly";
+  duration: number;
+  isOneTime: boolean;
+  durationType: "monthly" | "free" | "oneTime";
   services: string[];
   type: "basic" | "premium" | "advanced";
   status: "active" | "closed";

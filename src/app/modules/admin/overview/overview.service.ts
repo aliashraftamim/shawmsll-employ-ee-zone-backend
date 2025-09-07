@@ -6,7 +6,6 @@ import AppError from "../../../core/error/AppError";
 import { User } from "../../base/user/user.model";
 
 const getUserChart = async (year: string = "2025") => {
-  // Generate an array with all months, initializing buyers and sellers to 0
   const allMonths = Array.from({ length: 12 }, (_, i) => ({
     month: i + 1,
     buyers: 0,

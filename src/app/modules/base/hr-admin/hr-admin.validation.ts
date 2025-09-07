@@ -1,36 +1,26 @@
 import z from "zod";
 import { CONFIG } from "../../../core/config";
 
-const createHrAdmin = z.object({
-  // file: z.object({
-  //   fieldname: z.string().refine((val) => val === "profileImage", {
-  //     message: "Field name must be 'profileImage'",
-  //   }),
-  //   originalname: z.string(),
-  //   encoding: z.string(),
-  //   mimetype: z.string().refine((val) => val.startsWith("image/"), {
-  //     message: "Only image files are allowed",
-  //   }),
-  //   buffer: z.any(),
-  //   size: z
-  //     .number()
-  //     .positive()
-  //     .max(5000000, { message: "Image max length should be 5MB" }),
-  // }),
+const availableTimeSchema = z.object({
+  startDay: z.string().optional(),
+  endDay: z.string().optional(),
+  startTime: z.string().optional(),
+  endTime: z.string().optional(),
+});
 
+const createHrAdmin = z.object({
   body: z
     .object({
       email: z.string().email("Invalid email address"),
+      firstName: z.string().min(1).optional(),
+      lastName: z.string().min(1).optional(),
+      qualification: z.string(),
+      phoneNumber: z.string(),
       password: z.string().min(Number(CONFIG.CORE.password_length)),
       expertise: z.array(z.string()),
-      availableTime: z.array(
-        z.object({
-          date: z.string(),
-          startTime: z.string(),
-          endTime: z.string(),
-        })
-      ),
+      availableTime: availableTimeSchema,
       description: z.string(),
+      howHelp: z.array(z.string()),
     })
     .strict(),
 });
@@ -39,16 +29,14 @@ const updateHrAdmin = z.object({
   body: z
     .object({
       expertise: z.array(z.string()).optional(),
-      availableTime: z
-        .array(
-          z.object({
-            date: z.string().optional(),
-            startTime: z.string().optional(),
-            endTime: z.string().optional(),
-          })
-        )
-        .optional(),
+      firstName: z.string().min(1).optional(),
+      lastName: z.string().min(1).optional(),
+      qualification: z.string().optional(),
+      phoneNumber: z.string().optional(),
+      bio: z.string().optional(),
+      availableTime: availableTimeSchema.optional(),
       description: z.string().optional(),
+      howHelp: z.array(z.string()).optional(),
     })
     .strict(),
 });

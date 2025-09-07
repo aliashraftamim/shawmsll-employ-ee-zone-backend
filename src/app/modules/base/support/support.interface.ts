@@ -1,7 +1,7 @@
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export interface ISupport {
-  user: ObjectId;
+  user: mongoose.Types.ObjectId;
   subject: string;
   description: string;
   isDeleted: boolean;

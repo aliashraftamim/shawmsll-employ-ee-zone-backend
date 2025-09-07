@@ -1,92 +1,92 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
+import { BaseController } from "../../../common/BaseClasses/BaseController";
 import { hrAdmin_service } from "./hr-admin.service";
 
-const createHrAdmin = catchAsync(async (req: Request, res: Response) => {
-  const result = await hrAdmin_service.createHrAdmin(req.body);
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: "HrAdmin created successfully",
-    data: result,
-  });
-});
-
-const getAllHrAdmin = catchAsync(async (req: Request, res: Response) => {
-  const result = await hrAdmin_service.getAllHrAdmin(req.query);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "HrAdmins retrieved successfully",
-    data: result,
-  });
-});
-
-const getHrAdminById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await hrAdmin_service.getHrAdminById(id);
-  if (!result) {
-    return sendResponse(res, {
-      statusCode: httpStatus.NOT_FOUND,
-      success: false,
-      message: "HrAdmin not found",
-      data: result,
-    });
+export class HrAdminController extends BaseController<typeof hrAdmin_service> {
+  constructor() {
+    super(hrAdmin_service, "HrAdmin");
   }
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "HrAdmin retrieved successfully",
-    data: result,
-  });
-});
 
-const updateHrAdmin = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const updateData = req.body;
-  const result = await hrAdmin_service.updateHrAdmin(id, updateData);
-  if (!result) {
-    return sendResponse(res, {
-      statusCode: httpStatus.NOT_FOUND,
-      success: false,
-      message: "HrAdmin not found to update",
-      data: result,
-    });
+  async createHrAdmin(req: Request, res: Response, next: NextFunction) {
+    const result = await this.service.createHrAdmin(req.body);
+    this.handleResponse(
+      res,
+      httpStatus.CREATED,
+      true,
+      `${this.resourceName} created successfully`,
+      result
+    );
   }
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "HrAdmin updated successfully",
-    data: result,
-  });
-});
 
-const softDeleteHrAdmin = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await hrAdmin_service.softDeleteHrAdmin(id);
-  if (!result) {
-    return sendResponse(res, {
-      statusCode: httpStatus.NOT_FOUND,
-      success: false,
-      message: "HrAdmin not found to delete",
-      data: undefined,
-    });
+  async getAllHrAdmin(req: Request, res: Response, next: NextFunction) {
+    const result = await this.service.getAllHrAdmin(req.query);
+    this.handleResponse(
+      res,
+      httpStatus.OK,
+      true,
+      `${this.resourceName}s retrieved successfully`,
+      result
+    );
   }
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "HrAdmin deleted successfully",
-    data: result,
-  });
-});
 
-export const hrAdmin_controller = {
-  createHrAdmin,
-  getAllHrAdmin,
-  getHrAdminById,
-  updateHrAdmin,
-  softDeleteHrAdmin,
-};
+  async getHrAdminById(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    console.log("🚀 ~ HrAdminController ~ getHrAdminById ~ id:", id);
+    const result = await this.service.getHrAdminById(id);
+    if (!result) {
+      return this.handleResponse(
+        res,
+        httpStatus.NOT_FOUND,
+        false,
+        `${this.resourceName} not found`
+      );
+    }
+    this.handleResponse(
+      res,
+      httpStatus.OK,
+      true,
+      `${this.resourceName} retrieved successfully`,
+      result
+    );
+  }
+
+  async updateHrAdmin(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.user;
+    console.log("🚀 ~ HrAdminController ~ updateHrAdmin ~ id:", id);
+    const result = await this.service.updateHrAdmin(id, req.body);
+
+    this.handleResponse(
+      res,
+      httpStatus.OK,
+      true,
+      `${this.resourceName} updated successfully`,
+      result
+    );
+  }
+
+  async softDeleteHrAdmin(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const result = await this.service.softDeleteHrAdmin(id);
+    if (!result) {
+      return this.handleResponse(
+        res,
+        httpStatus.NOT_FOUND,
+        false,
+        `${this.resourceName} not found to delete`
+      );
+    }
+    this.handleResponse(
+      res,
+      httpStatus.OK,
+      true,
+      `${this.resourceName} deleted successfully`,
+      result
+    );
+  }
+}
+
+// Export instance
+export const hrAdmin_controller = new HrAdminController();

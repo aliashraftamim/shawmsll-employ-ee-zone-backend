@@ -11,7 +11,7 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.SUPPER_ADMIN),
   upload.fields([
     { name: "documents", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },
@@ -38,7 +38,7 @@ router.get(
 
 router.put(
   "/:id",
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.HR),
   upload.fields([
     { name: "documents", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },
@@ -51,6 +51,10 @@ router.put(
   hrAdmin_controller.updateHrAdmin
 );
 
-router.delete("/:id", hrAdmin_controller.softDeleteHrAdmin);
+router.delete(
+  "/:id",
+  auth(USER_ROLE.SUPPER_ADMIN),
+  hrAdmin_controller.softDeleteHrAdmin
+);
 
 export const hrAdmin_route = router;

@@ -8,16 +8,24 @@ const subscriptionSchema = new Schema<ISubscription>(
     amount: { type: Number, required: true },
     features: [
       {
-        title: { type: String, required: true },
+        title: { type: String, default: null },
         active: { type: Boolean, default: true },
       },
     ],
+    services: [{ type: String, default: null }],
     duration: {
-      type: String,
-      enum: ["monthly", "yearly"],
+      type: Number,
       required: true,
     },
-    services: [{ type: String, required: true }],
+    isOneTime: {
+      type: Boolean,
+      default: false,
+    },
+    durationType: {
+      type: String,
+      enum: ["monthly", "free", "oneTime"],
+      default: "monthly",
+    },
     type: {
       type: String,
       enum: ["basic", "premium", "advanced"],

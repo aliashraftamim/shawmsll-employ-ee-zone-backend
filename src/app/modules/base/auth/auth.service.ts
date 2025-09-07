@@ -2,7 +2,7 @@
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 import { generateOTP } from "../../../common/utils/generate.otp";
 import { otpMailTemplate } from "../../../common/utils/sendEmail/mail.template";
@@ -437,7 +437,7 @@ const refreshToken = async (token: string) => {
   };
 };
 
-const deleteMe = async (id: ObjectId) => {
+const deleteMe = async (id: mongoose.Types.ObjectId) => {
   await User.isUserExistById(id);
 
   await User.findByIdAndUpdate(id, { isDeleted: true });

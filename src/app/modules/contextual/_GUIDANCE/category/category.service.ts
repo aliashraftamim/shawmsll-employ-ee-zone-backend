@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { ArrayFieldUpdater } from "../../../../common/helpers/ArrayFieldUpdater";
 import QueryBuilder from "../../../../core/builders/QueryBuilder";
 import AppError from "../../../../core/error/AppError";
@@ -7,7 +7,10 @@ import { User } from "../../../base/user/user.model";
 import { ICategory } from "./category.interface";
 import { Category } from "./category.model";
 
-const createCategory = async (adminId: ObjectId, payload: ICategory) => {
+const createCategory = async (
+  adminId: mongoose.Types.ObjectId,
+  payload: ICategory
+) => {
   // validate admin
   await User.isUserExistById(adminId);
 

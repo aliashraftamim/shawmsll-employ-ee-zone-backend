@@ -2,7 +2,7 @@ import { Router } from "express";
 import { USER_ROLE } from "../../../../core/constants/global.constants";
 import { upload } from "../../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../../core/middlewares/auth";
-import { awsUpload } from "../../../../core/middlewares/awsUploaderClass/aws.upload";
+import { awsUpload } from "../../../../core/middlewares/AWS_UPLOAD_ANY_FILE/aws.upload";
 import validateRequest from "../../../../core/middlewares/validateRequest";
 import { jobSearchHelp_controller } from "./job_search_help.controller";
 import { jobSearchHelp_validation } from "./job_search_help.validation";

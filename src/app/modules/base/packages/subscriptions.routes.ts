@@ -28,6 +28,12 @@ router.get(
   subscriptionsController.getSubscription
 );
 
+router.get(
+  "/single/:id",
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN, USER_ROLE.USER),
+  subscriptionsController.getSubscriptionById
+);
+
 router.delete(
   "/:id",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),

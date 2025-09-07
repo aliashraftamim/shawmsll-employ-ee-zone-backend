@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Model, ObjectId } from "mongoose";
+import mongoose, { Model, ObjectId } from "mongoose";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import {
   ILocation,
@@ -37,7 +37,7 @@ export interface IUser {
 export type TUserRole = keyof typeof USER_ROLE;
 
 export interface UserModel extends Model<IUser> {
-  isUserExistById(id: ObjectId, fields?: string): Promise<IUser>;
+  isUserExistById(id: mongoose.Types.ObjectId, fields?: string): Promise<IUser>;
   isUserExistByEmail(email: string, fields?: string): Promise<IUser>;
   isJWTIssuedBeforePasswordChanged(
     passwordChangedTimestamp: Date,

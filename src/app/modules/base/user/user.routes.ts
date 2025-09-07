@@ -18,7 +18,7 @@ router.post(
 router.put(
   "/",
   upload.single("profileImage"),
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.HR, USER_ROLE.SUPPER_ADMIN),
   validateRequest(userValidator.updateUserValidationSchema),
   AwsUploadSingle("profileImage"),
   userController.updateMe
@@ -26,13 +26,26 @@ router.put(
 
 router.get(
   "/",
-  auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
+  auth(USER_ROLE.USER, USER_ROLE.HR, USER_ROLE.SUPPER_ADMIN),
   userController.getUser
 );
+
+router.get(
+  "/users-for-admin",
+  auth(USER_ROLE.SUPPER_ADMIN),
+  userController.usersForAdmin
+);
+
 router.get(
   "/get-me",
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.HR, USER_ROLE.SUPPER_ADMIN),
   userController.getMe
+);
+
+router.put(
+  "/block-user/:id",
+  auth(USER_ROLE.SUPPER_ADMIN),
+  userController.BlockUser
 );
 
 export const userRoute = router;

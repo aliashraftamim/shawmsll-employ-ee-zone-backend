@@ -12,7 +12,7 @@ const router = Router();
 
 router.get(
   "/get-user-chart",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
   overviewController.getUserChart
 );
 

@@ -55,7 +55,7 @@ const updateUserValidationSchema = z.object({
     .optional(),
   body: z
     .object({
-      profile: updateProfileSchema,
+      profile: updateProfileSchema.optional(),
     })
     .strict(),
 });

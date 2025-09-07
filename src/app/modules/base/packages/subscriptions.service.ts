@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import redis from "../../../common/utils/redis/redis";
 import AppError from "../../../core/error/AppError";
 import { User } from "../user/user.model";
@@ -14,6 +14,10 @@ const getSubscriptionKey = (id: mongoose.Types.ObjectId) =>
 const EXPIRE_TIME = 3600; // 1 hour
 
 const createSubscription = async (payload: ISubscription) => {
+  if (payload.isOneTime) {
+    payload.durationType = "oneTime";
+  }
+
   const result = await Subscription.create(payload);
 
   // Cache single item
@@ -68,6 +72,9 @@ const getSubscription = async () => {
   return result;
 };
 
+const getSubscriptionById = async (subId: mongoose.Types.ObjectId) => {
+  return await Subscription.findOne({ _id: subId, isDeleted: false });
+};
 const deleteSubscription = async (subId: mongoose.Types.ObjectId) => {
   const hunt = await Subscription.findOne({
     _id: subId,
@@ -95,8 +102,8 @@ const deleteSubscription = async (subId: mongoose.Types.ObjectId) => {
 };
 
 const paymentASubscription = async (
-  serviceId: ObjectId,
-  vendorId: ObjectId
+  serviceId: mongoose.Types.ObjectId,
+  vendorId: mongoose.Types.ObjectId
 ) => {
   if (!serviceId) {
     throw new AppError(
@@ -166,7 +173,9 @@ const paymentSuccessStripe = async (payload: any) => {
     await User.findByIdAndUpdate(userId, {
       $set: {
         "payment.status": "paid",
-        "payment.amount": session.amount_total ?? 0,
+        "payment.amount": session?.amount_total
+          ? session.amount_total / 100
+          : 0,
         "payment.deadline": deadline || 0,
         "payment.deadlineType": session.metadata!.deadlineType || null,
         "payment.issuedAt": session.metadata!.issuedAt || new Date(),
@@ -218,6 +227,7 @@ export const subscriptionsService = {
   createSubscription,
   updateSubscription,
   getSubscription,
+  getSubscriptionById,
   deleteSubscription,
   paymentASubscription,
   paymentSuccessStripe,

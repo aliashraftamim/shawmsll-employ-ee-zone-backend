@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import { ObjectId, startSession } from "mongoose";
+import mongoose, { startSession } from "mongoose";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
@@ -72,7 +72,7 @@ const getUserInfo = async (query: Record<string, any>) => {
   return { meta, data };
 };
 
-const deleteUser = async (userId: ObjectId) => {
+const deleteUser = async (userId: mongoose.Types.ObjectId) => {
   //   if (config.node_env === "development") {
   //     throw new AppError(
   //       httpStatus.FORBIDDEN,
