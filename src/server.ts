@@ -7,6 +7,7 @@ import app from "./app";
 import { CONFIG } from "./app/core/config";
 
 import { defaultJob } from "./app/common/helpers/DEFAULT_JOBS/main";
+import { sendNotification } from "./app/modules/base/notification/notification.utils";
 import { server as socketServer } from "./socket/socket.server";
 
 let server: Server;
@@ -39,10 +40,18 @@ async function main() {
       }
     );
 
-    /* The line `console.log(typeof hrAdmin_service);` is logging the data type of the variable
-    `hrAdmin_service` to the console. The `typeof` operator in JavaScript returns the data type of a
-    variable or expression. */
-    // console.log(typeof hrAdmin_service);
+    await sendNotification(
+      [
+        "f_brBuy4Szqo5HXyVortEu:APA91bGzD2MpPMp1ezf-MNGAW-5d6DQX5X0RZQ9ra8XS0bwMtYnGI5lGulXwep4YWLD65wZffQJ_l1qw1y6TtKeqvPuPhOcHbG_LVV01HBvmNxehqppaWcE",
+      ],
+      {
+        title: "Server is up and running",
+        message: `Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `,
+        receiverRole: "admin",
+        receiverEmail: "mehidihasan01201@gmail.com",
+        receiver: new mongoose.Types.ObjectId("68bbfc7d922c4bfd9abd95f2"),
+      }
+    );
 
     // * Default data creation
     await defaultJob();

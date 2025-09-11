@@ -5,11 +5,12 @@ import { monthNames } from "../../../common/helpers/query.halpers";
 import AppError from "../../../core/error/AppError";
 import { User } from "../../base/user/user.model";
 
-const getUserChart = async (year: string = "2025") => {
+const getUserChart = async (
+  year: string = new Date().getFullYear().toString()
+) => {
   const allMonths = Array.from({ length: 12 }, (_, i) => ({
     month: i + 1,
-    buyers: 0,
-    sellers: 0,
+    count: 0,
   }));
 
   const userStats = await User.aggregate([
@@ -23,40 +24,18 @@ const getUserChart = async (year: string = "2025") => {
     },
     {
       $group: {
-        _id: {
-          month: { $month: "$createdAt" },
-          role: "$role",
-        },
+        _id: { month: { $month: "$createdAt" } },
         count: { $sum: 1 },
       },
     },
-    {
-      $group: {
-        _id: "$_id.month",
-        buyers: {
-          $sum: {
-            $cond: [{ $eq: ["$_id.role", "buyer"] }, "$count", 0],
-          },
-        },
-        sellers: {
-          $sum: {
-            $cond: [{ $eq: ["$_id.role", "seller"] }, "$count", 0],
-          },
-        },
-      },
-    },
-    {
-      $sort: { _id: 1 },
-    },
+    { $sort: { "_id.month": 1 } },
   ]);
 
-  // Merge aggregated data with the allMonths array
   const chartData = allMonths.map((monthData) => {
-    const found = userStats.find((stat) => stat._id === monthData.month);
+    const found = userStats.find((stat) => stat._id.month === monthData.month);
     return {
       month: monthNames[monthData.month - 1],
-      buyers: found ? found.buyers : 0,
-      sellers: found ? found.sellers : 0,
+      count: found ? found.count : 0,
     };
   });
 
