@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import { CONFIG } from "../../../core/config";
 import { User } from "../user/user.model";
 import { sendNotification } from "./notification.utils";
 
 export interface IAdminSendNotificationPayload {
-  sender: ObjectId;
+  sender: mongoose.Types.ObjectId | undefined;
   type?: "hireRequest" | "accept" | "reject" | "cancelled" | "payment";
   title: string;
   message: string;

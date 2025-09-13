@@ -2,9 +2,9 @@
 import httpStatus from "http-status";
 import { JwtPayload } from "jsonwebtoken";
 import { Server } from "socket.io";
-import { getUserFromToken } from "../app/common/utils/getUserFromToken";
 import AppError from "../app/core/error/AppError";
 import { User } from "../app/modules/base/user/user.model";
+import { getUserFromToken } from "../app/toolkit/utils/getUserFromToken";
 
 const setUserOnline = async (
   token: string,

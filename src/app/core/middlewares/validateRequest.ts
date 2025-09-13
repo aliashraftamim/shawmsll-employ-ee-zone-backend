@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject } from "zod";
-import catchAsync from "../../common/utils/catchAsync";
+import catchAsync from "../../toolkit/utils/catchAsync";
 const validateRequest = (schema: AnyZodObject) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     if (typeof req.body.data === "string") {

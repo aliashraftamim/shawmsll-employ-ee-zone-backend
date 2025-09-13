@@ -6,7 +6,7 @@ import multer from "multer";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid"; // 🔹 Import UUID
 import { s3Client } from "../!awsUploader/awsS3Client";
-import catchAsync from "../../../common/utils/catchAsync";
+import catchAsync from "../../../toolkit/utils/catchAsync";
 import { CONFIG } from "../../config";
 import AppError from "../../error/AppError";
 

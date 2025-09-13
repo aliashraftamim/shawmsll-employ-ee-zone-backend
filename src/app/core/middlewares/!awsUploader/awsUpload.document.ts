@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
-import catchAsync from "../../../common/utils/catchAsync";
+import catchAsync from "../../../toolkit/utils/catchAsync";
 import { CONFIG } from "../../config";
 import { s3Client } from "./awsS3Client";
 

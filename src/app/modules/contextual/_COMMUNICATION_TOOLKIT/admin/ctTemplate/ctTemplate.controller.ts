@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import httpStatus from "http-status";
-import catchAsync from "../../../../../common/utils/catchAsync";
-import sendResponse from "../../../../../common/utils/sendResponse";
+import catchAsync from "../../../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../../../toolkit/utils/sendResponse";
 import { ctTemplate_service } from "./ctTemplate.service";
 
 const createCtTemplate = catchAsync(async (req: Request, res: Response) => {

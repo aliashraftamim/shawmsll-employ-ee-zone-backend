@@ -15,14 +15,3 @@ export interface INotification {
   isRead?: boolean;
   link?: string;
 }
-
-// export interface ISendNotification {
-//   sender: string | undefined;
-//   receiver: string | undefined;
-//   receiverEmail: string | undefined;
-//   receiverRole: string | undefined;
-//   title: string;
-//   link: string | null;
-//   message: string;
-//   type?: "hireRequest" | "accept" | "reject" | "cancelled" | "payment";
-// }

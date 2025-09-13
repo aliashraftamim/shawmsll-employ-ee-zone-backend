@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
+import catchAsync from "../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../toolkit/utils/sendResponse";
 import { patService } from "./pat.service";
 
 const createPrivacy = catchAsync(async (req, res) => {

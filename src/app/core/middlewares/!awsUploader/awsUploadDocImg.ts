@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import { NextFunction, Request, Response } from "express";
-import type { Express } from "express";
 import sharp from "sharp";
-import { s3Client } from "./awsS3Client";
+import catchAsync from "../../../toolkit/utils/catchAsync";
 import { CONFIG } from "../../config";
-import catchAsync from "../../../common/utils/catchAsync";
+import { s3Client } from "./awsS3Client";
 
 type TUploadConfig = {
   fieldName: string;
@@ -17,7 +16,6 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
     const allFiles = req.files as {
       [fieldname: string]: Express.Multer.File[] | Express.Multer.File;
     };
-
 
     for (const field of fields) {
       const fieldFiles = allFiles?.[field.fieldName];
@@ -36,7 +34,9 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
       for (const file of files) {
         // ❗ Validate file before using
         if (!file?.originalname) {
-          console.error(`❌ File for field "${field.fieldName}" is missing or malformed.`);
+          console.error(
+            `❌ File for field "${field.fieldName}" is missing or malformed.`
+          );
           return res.status(400).json({
             message: `Missing or malformed file for ${field.fieldName}`,
           });
@@ -44,10 +44,14 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
 
         const originalName =
           req.body[`${field.fieldName}Name`] ||
-          (file.originalname ? file.originalname.split(".")[0] : `file-${Date.now()}`);
+          (file.originalname
+            ? file.originalname.split(".")[0]
+            : `file-${Date.now()}`);
 
         const sanitizedName = originalName.replace(/\s+/g, "_").toLowerCase();
-        const fileExt = field.isImage ? "webp" : file.originalname.split(".").pop();
+        const fileExt = field.isImage
+          ? "webp"
+          : file.originalname.split(".").pop();
         const uniqueFileName = `${sanitizedName}-${Date.now()}.${fileExt}`;
         const Key = field.isImage
           ? `images/${uniqueFileName}`
@@ -73,7 +77,10 @@ export const AwsUploadDocImg = (...fields: TUploadConfig[]) => {
           console.info(`✅ Uploaded to S3: ${uploaded.Location}`);
           uploadedUrls.push(uploaded.Location);
         } catch (err) {
-          console.error(`❌ Upload failed for field "${field.fieldName}":`, err);
+          console.error(
+            `❌ Upload failed for field "${field.fieldName}":`,
+            err
+          );
           return res.status(500).json({
             message: `Upload failed for ${field.fieldName}`,
             error: err,

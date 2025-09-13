@@ -2,9 +2,9 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
 import AppError from "../../../core/error/AppError";
+import catchAsync from "../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../toolkit/utils/sendResponse";
 import { User } from "../user/user.model";
 import Notification from "./notification.model";
 import { notificationServices } from "./notification.service";

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
+import catchAsync from "../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../toolkit/utils/sendResponse";
 import { support_service } from "./support.service";
 
 const createSupport = catchAsync(async (req, res) => {

@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 import mongoose from "mongoose";
-import { ArrayFieldUpdater } from "../../../../common/helpers/ArrayFieldUpdater";
 import QueryBuilder from "../../../../core/builders/QueryBuilder";
 import AppError from "../../../../core/error/AppError";
+import { ArrayFieldUpdater } from "../../../../toolkit/helpers/ArrayFieldUpdater";
 import { User } from "../../../base/user/user.model";
 import { ICategory } from "./category.interface";
 import { Category } from "./category.model";

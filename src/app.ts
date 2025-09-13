@@ -4,9 +4,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Express, Request, Response } from "express";
 
-import { generateRouteHTML } from "./app/common/utils/home";
 import globalErrorHandler from "./app/core/middlewares/globalErrorHandler";
 import notFound from "./app/core/middlewares/notFound";
+import { generateRouteHTML } from "./app/toolkit/utils/home";
 import router from "./routes";
 
 const app: Express = express();

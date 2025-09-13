@@ -3,7 +3,7 @@
 /* eslint-disable no-undef */
 import { NextFunction, Request, Response } from "express";
 import sharp from "sharp";
-import catchAsync from "../../../common/utils/catchAsync";
+import catchAsync from "../../../toolkit/utils/catchAsync";
 import { CONFIG } from "../../config";
 import { s3Client } from "./awsS3Client";
 

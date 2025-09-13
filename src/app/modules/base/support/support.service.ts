@@ -1,5 +1,5 @@
-import { sendEmail } from "../../../common/utils/sendEmail/sendEmail";
 import { CONFIG } from "../../../core/config";
+import { sendEmail } from "../../../toolkit/utils/sendEmail/sendEmail";
 import { User } from "../user/user.model";
 import { ISupport } from "./support.interface";
 import Support from "./support.model";

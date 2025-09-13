@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
-import redis from "../../../common/utils/redis/redis";
 import AppError from "../../../core/error/AppError";
+import redis from "../../../toolkit/utils/redis/redis";
 import { IPayment } from "../payment/payment.interface";
 import { Payment } from "../payment/payment.model";
 import { User } from "../user/user.model";
@@ -146,8 +146,7 @@ const paymentASubscription = async (
     subscriptionId: serviceId,
   };
 
-  const createPayment = await Payment.create(paymentPayload);
-  console.log("🚀 ~ paymentASubscription ~ createPayment:", createPayment);
+  await Payment.create(paymentPayload);
 
   return await subscription_payment.createStripeSubscriptionSession(
     amount,

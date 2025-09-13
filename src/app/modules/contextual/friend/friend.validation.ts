@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { objectId } from "../../../common/helpers/zod.helper";
+import { objectId } from "../../../toolkit/helpers/zod.helper";
 
 const createFriendValidation = z.object({
   body: z

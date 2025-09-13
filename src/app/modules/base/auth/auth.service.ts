@@ -4,12 +4,12 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import mongoose from "mongoose";
 
-import { generateOTP } from "../../../common/utils/generate.otp";
-import { otpMailTemplate } from "../../../common/utils/sendEmail/mail.template";
-import { sendEmail } from "../../../common/utils/sendEmail/sendEmail";
-import { sendEmailWithLink } from "../../../common/utils/sendEmail/sendEmailWithLink";
 import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
+import { generateOTP } from "../../../toolkit/utils/generate.otp";
+import { otpMailTemplate } from "../../../toolkit/utils/sendEmail/mail.template";
+import { sendEmail } from "../../../toolkit/utils/sendEmail/sendEmail";
+import { sendEmailWithLink } from "../../../toolkit/utils/sendEmail/sendEmailWithLink";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import AppError from "../../../../core/error/AppError";
 import { ICategory } from "../category/category.interface";
@@ -25,8 +26,20 @@ const createGuidance = async (payload: IGuidance) => {
   return await Guidance.create(payload);
 };
 
-const getAllGuidance = async () => {
-  return await Guidance.find({ isDeleted: false }).populate("category");
+const getAllGuidance = async (query: Record<string, any>) => {
+  const filter: Record<string, any> = { isDeleted: false };
+
+  if (query?.date) {
+    const start = new Date(query.date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(query.date);
+    end.setHours(23, 59, 59, 999);
+
+    filter.createdAt = { $gte: start, $lte: end };
+  }
+
+  return await Guidance.find(filter).populate("category");
 };
 
 const getSingleGuidance = async (id: string) => {

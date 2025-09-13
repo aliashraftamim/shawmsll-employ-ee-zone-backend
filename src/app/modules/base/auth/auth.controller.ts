@@ -1,8 +1,8 @@
 import httpStatus from "http-status";
 
-import catchAsync from "../../../common/utils/catchAsync";
-import sendResponse from "../../../common/utils/sendResponse";
 import { CONFIG } from "../../../core/config";
+import catchAsync from "../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../toolkit/utils/sendResponse";
 import { authService } from "./auth.service";
 
 const loginUser = catchAsync(async (req, res) => {

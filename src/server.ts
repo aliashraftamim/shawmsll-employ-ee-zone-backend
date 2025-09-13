@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
 
-import { defaultJob } from "./app/common/helpers/DEFAULT_JOBS/main";
 import { sendNotification } from "./app/modules/base/notification/notification.utils";
+import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
 
 let server: Server;

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
-import { BaseController } from "../../../common/BaseClasses/BaseController";
+import { BaseController } from "../../../toolkit/classes/root.controller";
 import { hrAdmin_service } from "./hr-admin.service";
 
 export class HrAdminController extends BaseController<typeof hrAdmin_service> {
@@ -34,7 +34,6 @@ export class HrAdminController extends BaseController<typeof hrAdmin_service> {
 
   async getHrAdminById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
-    console.log("🚀 ~ HrAdminController ~ getHrAdminById ~ id:", id);
     const result = await this.service.getHrAdminById(id);
     if (!result) {
       return this.handleResponse(
@@ -55,7 +54,6 @@ export class HrAdminController extends BaseController<typeof hrAdmin_service> {
 
   async updateHrAdmin(req: Request, res: Response, next: NextFunction) {
     const { id } = req.user;
-    console.log("🚀 ~ HrAdminController ~ updateHrAdmin ~ id:", id);
     const result = await this.service.updateHrAdmin(id, req.body);
 
     this.handleResponse(

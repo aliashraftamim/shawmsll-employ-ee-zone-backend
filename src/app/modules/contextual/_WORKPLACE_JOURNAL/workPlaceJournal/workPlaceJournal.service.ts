@@ -10,11 +10,26 @@ const createWorksJournal = async (payload: IWorkPlaceJournal) => {
 
 // ✅ Get (with filter, pagination, etc.)
 const getWorkplaceJournal = async (query: Record<string, unknown>) => {
+  const filter: Record<string, unknown> = { isDeleted: false };
+  const modifiedQuery = { ...query };
+
+  // Date filter handle
+  if (query?.date) {
+    const start = new Date(query.date as string);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(query.date as string);
+    end.setHours(23, 59, 59, 999);
+
+    filter.createdAt = { $gte: start, $lte: end };
+    delete modifiedQuery.date; // raw date field DB filter এ না যাক
+  }
+
   const workplaceQuery = new QueryBuilder(
-    WorkPlaceJournal.find({ isDeleted: false }),
-    query
+    WorkPlaceJournal.find(filter),
+    modifiedQuery
   )
-    .search([]) // add searchable fields here if needed
+    .search([]) // 👉 চাইলে এখানে ["title", "description"] দাও
     .filter()
     .sort()
     .paginate()
@@ -23,10 +38,7 @@ const getWorkplaceJournal = async (query: Record<string, unknown>) => {
   const meta = await workplaceQuery.countTotal();
   const data = await workplaceQuery.modelQuery;
 
-  return {
-    meta,
-    data,
-  };
+  return { meta, data };
 };
 
 // ✅ Get Single

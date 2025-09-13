@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
-import catchAsync from "../../../../common/utils/catchAsync";
-import sendResponse from "../../../../common/utils/sendResponse";
+import catchAsync from "../../../../toolkit/utils/catchAsync";
+import sendResponse from "../../../../toolkit/utils/sendResponse";
 import { guidance_service } from "./guidance.service";
 
 const createGuidance = catchAsync(async (req, res) => {
@@ -15,7 +15,7 @@ const createGuidance = catchAsync(async (req, res) => {
 });
 
 const getAllGuidance = catchAsync(async (req, res) => {
-  const result = await guidance_service.getAllGuidance();
+  const result = await guidance_service.getAllGuidance(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
