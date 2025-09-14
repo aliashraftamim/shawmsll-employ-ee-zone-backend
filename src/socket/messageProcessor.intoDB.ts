@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cron from "node-cron";
 import { Chat } from "../app/modules/contextual/chat/chat.model";

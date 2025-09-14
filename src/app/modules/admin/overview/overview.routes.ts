@@ -16,6 +16,24 @@ router.get(
   overviewController.getUserChart
 );
 
+router.get(
+  "/get-earning-chart",
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  overviewController.getEarningsChart
+);
+
+router.get(
+  "/total-user-and-earnings",
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  overviewController.totalUserAndEarnings
+);
+
+router.get(
+  "/earning-history",
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  overviewController.earningHistory
+);
+
 router.put(
   "/update-admin",
   upload.single("profileImage"),

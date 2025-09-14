@@ -21,8 +21,9 @@ const createCommunicationToolkit = catchAsync(
 
 const getAllCommunicationToolkit = catchAsync(
   async (req: Request, res: Response) => {
-    const result =
-      await communicationToolkitService.getAllCommunicationToolkit();
+    const result = await communicationToolkitService.getAllCommunicationToolkit(
+      req.query
+    );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

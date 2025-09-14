@@ -15,6 +15,36 @@ const getUserChart = catchAsync(async (req, res) => {
   });
 });
 
+const getEarningsChart = catchAsync(async (req, res) => {
+  const result = await overviewService.getEarningsChart(req.query.year as any);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Earning chart retrieved successful!",
+    data: result,
+  });
+});
+
+const totalUserAndEarnings = catchAsync(async (req, res) => {
+  const result = await overviewService.totalUserAndEarnings();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Earning chart retrieved successful!",
+    data: result,
+  });
+});
+
+const earningHistory = catchAsync(async (req, res) => {
+  const result = await overviewService.earningHistory(req.query);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Earning chart retrieved successful!",
+    data: result,
+  });
+});
+
 const updateAdmin = catchAsync(async (req, res) => {
   const result = await overviewService.updateAdmin(
     req.user.id as any,
@@ -28,4 +58,10 @@ const updateAdmin = catchAsync(async (req, res) => {
   });
 });
 
-export const overviewController = { getUserChart, updateAdmin };
+export const overviewController = {
+  getUserChart,
+  updateAdmin,
+  getEarningsChart,
+  totalUserAndEarnings,
+  earningHistory,
+};

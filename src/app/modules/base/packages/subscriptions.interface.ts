@@ -11,6 +11,7 @@ export interface ISubscription {
   duration: number;
   isOneTime: boolean;
   durationType: "monthly" | "free" | "oneTime";
+  currency: "usd" | "eur";
   services: string[];
   type: "basic" | "premium" | "advanced";
   status: "active" | "closed";

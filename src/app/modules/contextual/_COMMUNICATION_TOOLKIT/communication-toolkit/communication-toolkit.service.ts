@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import { ICommunicationToolkit } from "./communication-toolkit.interface";
 import { CommunicationToolkit } from "./communication-toolkit.model";
@@ -6,8 +7,20 @@ const createCommunicationToolkit = async (payload: ICommunicationToolkit) => {
   return await CommunicationToolkit.create(payload);
 };
 
-const getAllCommunicationToolkit = async () => {
-  return await CommunicationToolkit.find({ isDeleted: { $ne: true } });
+const getAllCommunicationToolkit = async (query: Record<string, any>) => {
+  const filter: Record<string, any> = { isDeleted: false };
+
+  if (query?.date) {
+    const start = new Date(query.date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(query.date);
+    end.setHours(23, 59, 59, 999);
+
+    filter.createdAt = { $gte: start, $lte: end };
+  }
+
+  return await CommunicationToolkit.find(filter);
 };
 
 const getCommunicationToolkitById = async (id: string) => {

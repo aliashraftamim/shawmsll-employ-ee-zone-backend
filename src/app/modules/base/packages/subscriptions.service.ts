@@ -2,11 +2,12 @@
 import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../../core/error/AppError";
+import { StripePaymentHandler } from "../../../toolkit/classes/stripe/stripe.paymentHandle";
+import { stripe } from "../../../toolkit/shared/payment/stripe";
 import redis from "../../../toolkit/utils/redis/redis";
 import { IPayment } from "../payment/payment.interface";
 import { Payment } from "../payment/payment.model";
 import { User } from "../user/user.model";
-import { stripe, subscription_payment } from "./subscription.payment";
 import { ISubscription } from "./subscriptions.interface";
 import { Subscription } from "./subscriptions.model";
 
@@ -105,20 +106,21 @@ const deleteSubscription = async (subId: mongoose.Types.ObjectId) => {
 };
 
 const paymentASubscription = async (
-  serviceId: mongoose.Types.ObjectId,
+  subsId: mongoose.Types.ObjectId,
   vendorId: mongoose.Types.ObjectId
 ) => {
-  if (!serviceId) {
+  if (!subsId) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Service ID is required in params"
     );
   }
 
-  const subscription: ISubscription | any = await Subscription.findOne({
-    _id: serviceId,
-    status: "active",
-  });
+  const subscription: Partial<ISubscription | null> =
+    await Subscription.findOne({
+      _id: subsId,
+      status: "active",
+    });
 
   if (!subscription) {
     throw new AppError(httpStatus.NOT_FOUND, "Subscription not found");
@@ -138,29 +140,45 @@ const paymentASubscription = async (
   // }
 
   const paymentPayload: IPayment = {
+    userId: user._id,
+
     paymentId: "",
     sessionId: "",
     amount: user.payment.amount,
     currency: currency || "usd",
     status: "pending",
-    subscriptionId: serviceId,
+    subscriptionId: subsId,
   };
 
   await Payment.create(paymentPayload);
 
-  return await subscription_payment.createStripeSubscriptionSession(
-    amount,
-    {
-      id: vendorId as any,
-      subscriptionID: serviceId as any,
-      deadline: subscription.duration.count,
-      deadlineType: subscription.duration.durationType,
-      issuedAt: new Date(),
-      email: user.email,
-      name: user.name,
-    },
-    currency || "usd"
-  );
+  const paymentHandler = new StripePaymentHandler();
+
+  return await paymentHandler.paySubscription({
+    lineItems: [
+      {
+        name: subscription?.title || "Subscription",
+        amount: Number(amount),
+        quantity: 1,
+      },
+    ],
+    customerEmail: user.email,
+    userId: user._id.toString(),
+  });
+
+  // return await subscription_payment.createStripeSubscriptionSession(
+  //   amount,
+  //   {
+  //     id: vendorId as any,
+  //     subscriptionID: subsId as any,
+  //     deadline: subscription.duration.count,
+  //     deadlineType: subscription.duration.durationType,
+  //     issuedAt: new Date(),
+  //     email: user.email,
+  //     name: user.name,
+  //   },
+  //   currency || "usd"
+  // );
 };
 
 const paymentSuccessStripe = async (payload: any) => {

@@ -7,6 +7,7 @@ import { Chat } from "./chat.model";
 export default class ChatService {
   model = Chat;
   async getChat(payload: { myId: ObjectId; partnerId: ObjectId }) {
+    console.log("🚀 ~ ChatService ~ getChat ~ payload:", payload);
     if (!payload.partnerId) {
       throw new AppError(httpStatus.NOT_FOUND, "Partner ID is required");
     }
@@ -34,6 +35,45 @@ export default class ChatService {
 
     return result;
   }
+  // async getMyPartners(myId: ObjectId) {
+  //   const partners = await Chat.aggregate([
+  //     { $match: { sender: new mongoose.Types.ObjectId(myId as any) } },
+  //     { $sort: { createdAt: -1 } },
+  //     {
+  //       $group: {
+  //         _id: "$receiver",
+  //         latestChat: { $first: "$$ROOT" },
+  //       },
+  //     },
+  //     {
+  //       $lookup: {
+  //         from: "users",
+  //         localField: "_id",
+  //         foreignField: "_id",
+  //         as: "receiverData",
+  //       },
+  //     },
+  //     {
+  //       $unwind: "$receiverData",
+  //     },
+  //     {
+  //       $project: {
+  //         _id: 0,
+  //         receiver: "$receiverData._id",
+  //         firstName: "$receiverData.firstName",
+  //         surName: "$receiverData.surName",
+  //         email: "$receiverData.email",
+  //         profileImage: "$receiverData.profileImage",
+  //         isOnline: "$receiverData.isOnline",
+  //         createdAt: "$latestChat.createdAt",
+  //         updatedAt: "$latestChat.updatedAt",
+  //       },
+  //     },
+  //     { $sort: { createdAt: -1 } },
+  //   ]);
+
+  //   return partners;
+  // }
 
   async getMyPartners(myId: ObjectId) {
     const partners = await Chat.aggregate([
@@ -53,18 +93,16 @@ export default class ChatService {
           as: "receiverData",
         },
       },
-      {
-        $unwind: "$receiverData",
-      },
+      { $unwind: "$receiverData" },
       {
         $project: {
           _id: 0,
           receiver: "$receiverData._id",
-          firstName: "$receiverData.firstName",
-          surName: "$receiverData.surName",
+          name: "$receiverData.profile.firstName",
           email: "$receiverData.email",
-          profileImage: "$receiverData.profileImage",
+          profileImage: "$receiverData.profile.profileImage",
           isOnline: "$receiverData.isOnline",
+          lastMessage: "$latestChat.content",
           createdAt: "$latestChat.createdAt",
           updatedAt: "$latestChat.updatedAt",
         },
