@@ -3,7 +3,6 @@ import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../../core/error/AppError";
 import { StripePaymentHandler } from "../../../toolkit/classes/stripe/stripe.paymentHandle";
-import { stripe } from "../../../toolkit/shared/payment/stripe";
 import redis from "../../../toolkit/utils/redis/redis";
 import { IPayment } from "../payment/payment.interface";
 import { Payment } from "../payment/payment.model";
@@ -14,7 +13,7 @@ import { Subscription } from "./subscriptions.model";
 const cacheKey = "subscriptions:active";
 const getSubscriptionKey = (id: mongoose.Types.ObjectId) =>
   `subscription:${id.toString()}`;
-const EXPIRE_TIME = 3600; // 1 hour
+const EXPIRE_TIME = 3600;
 
 const createSubscription = async (payload: ISubscription) => {
   if (payload.isOneTime) {
@@ -186,73 +185,15 @@ const paymentSuccessStripe = async (payload: any) => {
     throw new AppError(httpStatus.BAD_REQUEST, "session_id is required");
   }
 
-  const session = await stripe.checkout.sessions.retrieve(payload.session_id, {
-    expand: ["line_items", "customer"],
-  });
+  const paymentHandler = new StripePaymentHandler();
+  const successSession = paymentHandler.subscriptionSuccess(payload);
 
-  const subscriptionID = session.metadata?.subscriptionID || null;
-
-  if (session.client_reference_id) {
-    const userId = session.client_reference_id as string;
-    const deadline = Number(session.metadata!.deadline);
-
-    const user = await User.isUserExistById(userId as any);
-
-    if (user?.payment?.status === "paid") {
-      throw new AppError(httpStatus.BAD_REQUEST, "User is already paid");
-    }
-
-    await User.findByIdAndUpdate(userId, {
-      $set: {
-        "payment.status": "paid",
-        "payment.amount": session?.amount_total
-          ? session.amount_total / 100
-          : 0,
-        "payment.deadline": deadline || 0,
-        "payment.deadlineType": session.metadata!.deadlineType || null,
-        "payment.issuedAt": session.metadata!.issuedAt || new Date(),
-        "payment.subscription": subscriptionID,
-      },
-    });
-  }
-
-  return session;
+  return successSession;
 };
 
 const paymentCancelStripe = async (payload: any) => {
-  if (!payload.session_id) {
-    throw new AppError(httpStatus.BAD_REQUEST, "session_id is required");
-  }
-
-  const session = await stripe.checkout.sessions.retrieve(payload.session_id, {
-    expand: ["line_items", "customer"],
-  });
-
-  const subscriptionID = session.metadata?.subscriptionID || null;
-
-  if (session.client_reference_id) {
-    const userId = session.client_reference_id as string;
-    const deadline = Number(session.metadata!.deadline);
-
-    const user = await User.isUserExistById(userId as any);
-
-    if (user?.payment?.status === "paid") {
-      throw new AppError(httpStatus.BAD_REQUEST, "User is already paid");
-    }
-
-    await User.findByIdAndUpdate(userId, {
-      $set: {
-        "payment.status": "paid",
-        "payment.amount": session.amount_total ?? 0,
-        "payment.deadline": deadline || 0,
-        "payment.deadlineType": session.metadata!.deadlineType || null,
-        "payment.issuedAt": session.metadata!.issuedAt || new Date(),
-        "payment.subscription": subscriptionID,
-      },
-    });
-  }
-
-  return session;
+  const stripeHandler = new StripePaymentHandler();
+  return await stripeHandler.cancelSubscription(payload);
 };
 
 export const subscriptionsService = {

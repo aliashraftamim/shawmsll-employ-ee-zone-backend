@@ -5,6 +5,16 @@ import catchAsync from "../../../toolkit/utils/catchAsync";
 import sendResponse from "../../../toolkit/utils/sendResponse";
 import { overviewService } from "./overview.service";
 
+const getUsers = catchAsync(async (req, res) => {
+  const result = await overviewService.getUsers(req.user.id, req.query as any);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User chart retrieved successful!",
+    data: result,
+  });
+});
+
 const getUserChart = catchAsync(async (req, res) => {
   const result = await overviewService.getUserChart(req.query.year as any);
   sendResponse(res, {
@@ -59,6 +69,7 @@ const updateAdmin = catchAsync(async (req, res) => {
 });
 
 export const overviewController = {
+  getUsers,
   getUserChart,
   updateAdmin,
   getEarningsChart,

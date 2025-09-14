@@ -2,16 +2,24 @@
 import mongoose from "mongoose";
 import Stripe from "stripe";
 import { rootStripe } from "./root.stripe";
- 
+
 export class WebhookService extends rootStripe {
+  /**
+   * Handle Webhook Events (Connect Account supported)
+   */
   async handleWebhookEvent(event: Stripe.Event) {
     try {
       const data = event.data.object as any;
-      const userId = data.metadata?.userId
+
+      // userId safely extract from metadata
+      const userId = data?.metadata?.userId
         ? new mongoose.Types.ObjectId(data.metadata.userId)
         : null;
 
-      if (!userId) return;
+      if (!userId) {
+        console.warn("⚠️ No userId found in metadata.");
+        return;
+      }
 
       switch (event.type) {
         case "checkout.session.completed":
@@ -22,6 +30,7 @@ export class WebhookService extends rootStripe {
             userId,
           });
           break;
+
         case "payment_intent.payment_failed":
           await this.notifyUserAndAdmin({
             subject: "Payment Failed",
@@ -30,6 +39,7 @@ export class WebhookService extends rootStripe {
             userId,
           });
           break;
+
         case "customer.subscription.deleted":
           await this.notifyUserAndAdmin({
             subject: "Subscription Canceled",
@@ -38,6 +48,7 @@ export class WebhookService extends rootStripe {
             userId,
           });
           break;
+
         default:
           console.info(`Unhandled event type: ${event.type}`);
       }

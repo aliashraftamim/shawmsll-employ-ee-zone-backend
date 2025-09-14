@@ -10,7 +10,7 @@ import { accountDetailsRoute } from "../app/modules/admin/accountDetails/account
 import { overviewRouter } from "../app/modules/admin/overview/overview.routes";
 import { hrAdmin_route } from "../app/modules/base/hr-admin/hr-admin.route";
 import { notificationRoute } from "../app/modules/base/notification/notification.routes";
-import { subscriptionsRouter } from "../app/modules/base/packages/subscriptions.routes";
+import { subscriptionsRouter } from "../app/modules/base/subscriptions/subscriptions.routes";
 import { patRouter } from "../app/modules/base/PrivacyAboutTerms/pat.routes";
 import { userRoute } from "../app/modules/base/user/user.routes";
 import { communicationToolkitRoute } from "../app/modules/contextual/_COMMUNICATION_TOOLKIT/communication-toolkit/communication-toolkit.route";

@@ -3,14 +3,17 @@ import { IContentForAdds } from "./contentForAdds.interface";
 
 const ContentForAddsSchema = new Schema<IContentForAdds>(
   {
-    title: { type: String, required: true },
-    image: { type: String, required: true },  
+    contentType: { type: String, required: true },
+    image: { type: String, default: null },
     content: { type: String, required: true },
-    status: {
-      type: String,
-      enum: ["active", "inactive", "archived", "pending"],
-      default: "active",
+    date: { type: String, default: null },
+    time: { type: String, default: null },
+    targetUsers: {
+      allUser: { type: Boolean, default: false },
+      freePlanUser: { type: Boolean, default: false },
+      premiumUser: { type: Boolean, default: false },
     },
+
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }

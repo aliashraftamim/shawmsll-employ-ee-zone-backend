@@ -31,7 +31,7 @@ export const PaymentSchema = new Schema<IPayment>(
   {
     status: {
       type: String,
-      enum: ["paid", "not-paid", "expired", "free"],
+      enum: ["paid", "not-paid", "expired", "free", "refunded", "canceled"],
       default: "free",
     },
     isOneTime: { type: Boolean, default: false },

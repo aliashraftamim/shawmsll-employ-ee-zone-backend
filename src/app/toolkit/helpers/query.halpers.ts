@@ -1,16 +1,16 @@
 export const monthNames = [
-  "january",
-  "february",
-  "march",
-  "april",
+  "jan",
+  "feb",
+  "mar",
+  "apr",
   "may",
-  "june",
-  "july",
-  "august",
-  "september",
-  "october",
-  "november",
-  "december",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
 ];
 
 export const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

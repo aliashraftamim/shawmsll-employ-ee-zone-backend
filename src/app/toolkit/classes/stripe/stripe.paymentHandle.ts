@@ -1,12 +1,15 @@
+import { WebhookService } from "./stripe.webhook";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CONFIG } from "../../../core/config";
 import { StripeService } from "./stripe.service";
 
 export class StripePaymentHandler {
   private stripeService: StripeService;
+  private webhook;
 
   constructor() {
     this.stripeService = new StripeService();
+    this.webhook = new WebhookService();
   }
 
   // --------------------------------------------------
@@ -68,9 +71,10 @@ export class StripePaymentHandler {
         mode: "subscription",
         successUrl:
           params.successUrl ||
-          `${CONFIG.CORE.backend_url}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+          `${CONFIG.CORE.backend_url}/subscription/success-api-stripe/success?session_id={CHECKOUT_SESSION_ID}`,
         cancelUrl:
-          params.cancelUrl || `${CONFIG.CORE.backend_url}/subscription/cancel`,
+          params.cancelUrl ||
+          `${CONFIG.CORE.backend_url}/subscription/success-api-stripe/cancel?session_id={CHECKOUT_SESSION_ID}`,
         customerEmail: params.customerEmail,
         metadata,
       },
@@ -78,6 +82,12 @@ export class StripePaymentHandler {
     );
 
     return { url: checkoutSession.url };
+  }
+
+  // --------------------------------------------------
+  // Cancel Payment
+  async subscriptionSuccess(params: { session_id: string }) {
+    return this.stripeService.subscriptionSuccess(params.session_id);
   }
 
   // --------------------------------------------------
@@ -99,17 +109,19 @@ export class StripePaymentHandler {
   async cancelSubscription(params: {
     subscriptionId: string;
     stripeAccount?: string;
+    session_id: string;
   }) {
     return this.stripeService.cancelSubscription(
       params.subscriptionId,
-      params.stripeAccount
+      params.stripeAccount as string,
+      params.session_id
     );
   }
 
   // --------------------------------------------------
   // Handle Webhook Event (Payment Success / Failed / Subscription Deleted)
   async handleWebhook(event: any) {
-    return this.stripeService.handleWebhookEvent(event);
+    return this.webhook.handleWebhookEvent(event);
   }
 
   // --------------------------------------------------

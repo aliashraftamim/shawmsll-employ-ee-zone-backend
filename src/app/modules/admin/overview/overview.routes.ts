@@ -11,6 +11,12 @@ import { overviewValidator } from "./overview.validation";
 const router = Router();
 
 router.get(
+  "/users",
+  auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
+  overviewController.getUsers
+);
+
+router.get(
   "/get-user-chart",
   auth(USER_ROLE.SUPPER_ADMIN, USER_ROLE.ADMIN),
   overviewController.getUserChart

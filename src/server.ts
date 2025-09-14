@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
 
+import { USER_ROLE } from "./app/core/constants/global.constants";
 import { sendNotification } from "./app/modules/base/notification/notification.utils";
 import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
@@ -47,7 +48,7 @@ async function main() {
       {
         title: "Server is up and running",
         message: `Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `,
-        receiverRole: "admin",
+        receiverRole: USER_ROLE.SUPPER_ADMIN,
         receiverEmail: "mehidihasan01201@gmail.com",
         receiver: new mongoose.Types.ObjectId("68bbfc7d922c4bfd9abd95f2"),
       }

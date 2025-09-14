@@ -25,7 +25,7 @@ const updateSubscription = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Subscription created successfully!!",
+    message: "Subscription updated successfully!!",
     data: result,
   });
 });
@@ -87,22 +87,22 @@ const paymentSuccessStripe = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Payment link created successfully",
+    message: "Payment successful",
     data: result,
   });
 });
 
-// const paymentCancelStripe = catchAsync(async (req, res) => {
-//   const result = await subscriptionsService.paymentSuccessStripe(
-//     req.query as any
-//   );
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Payment link created successfully",
-//     data: result,
-//   });
-// });
+const paymentCancelStripe = catchAsync(async (req, res) => {
+  const result = await subscriptionsService.paymentSuccessStripe(
+    req.query as any
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment link created successfully",
+    data: result,
+  });
+});
 
 export const subscriptionsController = {
   createSubscription,
@@ -112,4 +112,5 @@ export const subscriptionsController = {
   deleteSubscription,
   paymentASubscription,
   paymentSuccessStripe,
+  paymentCancelStripe,
 };
