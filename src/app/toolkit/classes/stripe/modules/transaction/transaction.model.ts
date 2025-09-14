@@ -4,9 +4,10 @@ import { ITransaction } from "./transaction.interface";
 const TransactionSchema = new Schema<ITransaction>(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
-    stripeSessionId: { type: String, required: true },
-    stripePaymentIntent: { type: String, required: true },
-    subscriptionId: { type: String, required: true },
+    stripeSessionId: { type: String, default: null },
+    stripePaymentIntent: { type: String, default: null },
+    stripeSubId: { type: String, default: null },
+    subscriptionId: { type: Schema.Types.ObjectId, default: null },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
     status: {

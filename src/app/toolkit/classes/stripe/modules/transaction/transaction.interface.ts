@@ -12,7 +12,8 @@ export interface ITransaction {
   userId: mongoose.Types.ObjectId;
   stripeSessionId: string;
   stripePaymentIntent: string;
-  subscriptionId: string;
+  stripeSubId: string;
+  subscriptionId: mongoose.Types.ObjectId;
   amount: number;
   currency: string;
   status: TRANSACTION_STATUS;

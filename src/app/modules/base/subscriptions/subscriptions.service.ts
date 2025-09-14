@@ -164,20 +164,6 @@ const paymentASubscription = async (
     customerEmail: user.email,
     userId: user._id.toString(),
   });
-
-  // return await subscription_payment.createStripeSubscriptionSession(
-  //   amount,
-  //   {
-  //     id: vendorId as any,
-  //     subscriptionID: subsId as any,
-  //     deadline: subscription.duration.count,
-  //     deadlineType: subscription.duration.durationType,
-  //     issuedAt: new Date(),
-  //     email: user.email,
-  //     name: user.name,
-  //   },
-  //   currency || "usd"
-  // );
 };
 
 const paymentSuccessStripe = async (payload: any) => {

@@ -22,7 +22,7 @@ export class StripePaymentHandler {
     userId?: string;
     stripeAccount?: string;
   }) {
-    const metadata = params.userId ? { userId: params.userId } : undefined;
+    const metadata: Record<string, string> = params.userId ? { userId: params.userId } : {};
 
     return this.stripeService.createCheckoutSession(
       {
@@ -53,7 +53,7 @@ export class StripePaymentHandler {
     userId?: string;
     stripeAccount?: string;
   }) {
-    const metadata = params.userId ? { userId: params.userId } : undefined;
+    const metadata: Record<string, string> = params.userId ? { userId: params.userId } : {};
 
     const stripeLineItems = params.lineItems.map((item) => ({
       price_data: {

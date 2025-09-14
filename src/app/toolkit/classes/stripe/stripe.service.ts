@@ -12,60 +12,52 @@ export class StripeService extends rootStripe {
     super();
   }
 
-  /**
-   * Create Checkout Session (Connect Account supported)
-   */
+  // ----------------------------
+  // Create Checkout Session
+  // ----------------------------
   async createCheckoutSession(
     params: {
       lineItems: Stripe.Checkout.SessionCreateParams.LineItem[];
       mode: "payment" | "subscription";
       successUrl: string;
       cancelUrl: string;
-      metadata?: Record<string, string>;
+      metadata: Record<string, string>;
       customerEmail?: string;
     },
     stripeAccount?: string
   ) {
-    try {
-      const options = stripeAccount ? { stripeAccount } : undefined;
-
-      return await this.stripe.checkout.sessions.create(
-        {
-          payment_method_types: ["card"],
-          line_items: params.lineItems,
-          mode: params.mode,
-          success_url: params.successUrl,
-          cancel_url: params.cancelUrl,
-          metadata: params.metadata,
-          customer_email: params.customerEmail,
-        },
-        options
-      );
-    } catch (err) {
-      this.handleStripeError(err, "Checkout Session Creation Failed");
-      throw err;
-    }
-  }
-
-  // --------------------------------------------------
-
-  /**
-   * Retrieve Session (Connect Account supported)
-   */
-  async getSession(sessionId: string, stripeAccount?: string) {
     const options = stripeAccount ? { stripeAccount } : undefined;
-    return this.stripe.checkout.sessions.retrieve(
-      sessionId,
-      { expand: ["line_items", "customer"] },
+
+    return await this.stripe.checkout.sessions.create(
+      {
+        payment_method_types: ["card"],
+        line_items: params.lineItems,
+        mode: params.mode,
+        success_url: params.successUrl,
+        cancel_url: params.cancelUrl,
+        metadata: params.metadata,
+        customer_email: params.customerEmail,
+        client_reference_id: params.metadata.userId,
+      },
       options
     );
   }
 
-  // --------------------------------------------------
+  // ----------------------------
+  // Retrieve Session
+  // ----------------------------
+  async getSession(sessionId: string, stripeAccount?: string) {
+    const options = stripeAccount ? { stripeAccount } : undefined;
+    return this.stripe.checkout.sessions.retrieve(
+      sessionId,
+      { expand: ["subscription.latest_invoice.payment_intent", "customer"] },
+      options
+    );
+  }
 
-  /**
-   * Refund Payment (Connect Account supported)
-   */
+  // ----------------------------
+  // Refund Payment
+  // ----------------------------
   async refundPayment(
     paymentIntentId: string,
     reason:
@@ -81,7 +73,7 @@ export class StripeService extends rootStripe {
       options
     );
 
-    // Update transaction status to refunded
+    // Update transaction status
     await Transaction.findOneAndUpdate(
       { stripePaymentIntent: paymentIntentId },
       { $set: { status: "refunded" } }
@@ -90,11 +82,9 @@ export class StripeService extends rootStripe {
     return refund;
   }
 
-  // --------------------------------------------------
-
-  /**
-   * Create Product + Price (Connect Account supported)
-   */
+  // ----------------------------
+  // Create Product + Price
+  // ----------------------------
   async createProductWithPrice(
     params: {
       name: string;
@@ -108,10 +98,7 @@ export class StripeService extends rootStripe {
     const options = stripeAccount ? { stripeAccount } : undefined;
 
     const product = await this.stripe.products.create(
-      {
-        name: params.name,
-        description: params.description,
-      },
+      { name: params.name, description: params.description },
       options
     );
 
@@ -130,34 +117,44 @@ export class StripeService extends rootStripe {
     return { product, price };
   }
 
-  // --------------------------------------------------
-
-  /**
-   * Subscription Success Handler
-   * → Uses MongoDB transaction + rollback + automatic refund
-   */
+  // ----------------------------
+  // Subscription / Payment Success
+  // ----------------------------
   async subscriptionSuccess(session_id: string) {
     if (!session_id) {
       throw new AppError(httpStatus.BAD_REQUEST, "session_id is required");
     }
 
+    // Fetch session with expanded subscription invoice paymentIntent
     const session = await this.getSession(session_id);
 
-    const subscriptionID = session.metadata?.subscriptionID ?? null;
-    const deadline = session.metadata?.deadline
-      ? Number(session.metadata.deadline)
-      : 0;
-    const deadlineType = session.metadata?.deadlineType ?? null;
-    const issuedAt = session.metadata?.issuedAt ?? new Date();
-
-    if (!session.client_reference_id) {
+    const userId = session.client_reference_id;
+    if (!userId) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
         "client_reference_id missing in session"
       );
     }
 
-    const userId = session.client_reference_id;
+    // Determine subscription ID
+    const subscriptionID = session.subscription
+      ? (session.subscription as Stripe.Subscription).id
+      : (session.metadata?.subscriptionID ?? null);
+
+    const deadline = session.metadata?.deadline
+      ? Number(session.metadata.deadline)
+      : 0;
+
+    const deadlineType = session.metadata?.deadlineType ?? "month";
+    const issuedAt = session.metadata?.issuedAt ?? new Date();
+
+    console.log({
+      userId,
+      subscriptionID,
+      deadline,
+      deadlineType,
+      issuedAt,
+    });
 
     // Start MongoDB transaction
     const mongoSession = await mongoose.startSession();
@@ -167,14 +164,10 @@ export class StripeService extends rootStripe {
       const user = await User.isUserExistById(
         new mongoose.Types.ObjectId(userId)
       );
-      if (user?.payment?.status === "paid") {
-        await mongoSession.abortTransaction();
-        mongoSession.endSession();
-        return session; // Idempotent → already paid
-      }
+      if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
 
       // Update User payment
-      await User.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         userId,
         {
           $set: {
@@ -185,20 +178,24 @@ export class StripeService extends rootStripe {
             "payment.deadline": deadline,
             "payment.deadlineType": deadlineType,
             "payment.issuedAt": issuedAt,
-            "payment.subscription": subscriptionID,
+            "payment.subscription": session.metadata?.subscriptionID ?? null,
           },
         },
         { session: mongoSession, new: true }
       );
+      console.log(
+        "🚀 ~ StripeService ~ subscriptionSuccess ~ updatedUser:",
+        updatedUser
+      );
 
       // Save transaction
-      await Transaction.create(
+      const transaction = await Transaction.create(
         [
           {
             userId,
-            stripeSessionId: session.id,
-            stripePaymentIntent: session.payment_intent as string,
-            subscriptionId: subscriptionID || "",
+            stripeSessionId: session.id || "",
+            stripeSubId: subscriptionID || "",
+            subscriptionId: session.metadata?.subscriptionID || "",
             amount: session.amount_total ? session.amount_total / 100 : 0,
             currency: session.currency || "usd",
             status: "paid",
@@ -206,6 +203,19 @@ export class StripeService extends rootStripe {
         ],
         { session: mongoSession }
       );
+      console.log(
+        "🚀 ~ StripeService ~ subscriptionSuccess ~ transaction:",
+        transaction
+      );
+
+      console.log({
+        userId,
+        stripeSessionId: session.id || "",
+        subscriptionId: subscriptionID || "",
+        amount: session.amount_total ? session.amount_total / 100 : 0,
+        currency: session.currency || "usd",
+        status: "paid",
+      });
 
       // Commit transaction
       await mongoSession.commitTransaction();
@@ -213,28 +223,22 @@ export class StripeService extends rootStripe {
 
       return session;
     } catch (err) {
-      // Rollback
+      console.log("🚀 ~ StripeService ~ subscriptionSuccess ~ err:", err);
+      // Rollback only
       await mongoSession.abortTransaction();
       mongoSession.endSession();
 
-      // Refund Stripe payment
-      await this.refundPayment(
-        session.payment_intent as string,
-        "requested_by_customer"
-      );
-
+      // Throw backend failure error
       throw new AppError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        "Payment refunded due to backend failure"
+        "Payment could not be processed due to backend failure"
       );
     }
   }
 
-  // --------------------------------------------------
-
-  /**
-   * Cancel Subscription (Connect Account supported)
-   */
+  // ----------------------------
+  // Cancel Subscription
+  // ----------------------------
   async cancelSubscription(
     subscriptionId: string,
     session_id: string,
@@ -246,7 +250,9 @@ export class StripeService extends rootStripe {
 
     const session = await this.getSession(session_id);
 
-    const subscriptionID = session.metadata?.subscriptionID;
+    const subscriptionID = session.subscription
+      ? (session.subscription as Stripe.Subscription).id
+      : session.metadata?.subscriptionID;
     if (!subscriptionID) {
       throw new AppError(
         httpStatus.BAD_REQUEST,
@@ -255,10 +261,7 @@ export class StripeService extends rootStripe {
     }
 
     if (subscriptionId !== subscriptionID) {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        "Subscription ID mismatch between request and session metadata"
-      );
+      throw new AppError(httpStatus.BAD_REQUEST, "Subscription ID mismatch");
     }
 
     const deadline = session.metadata?.deadline
@@ -275,7 +278,6 @@ export class StripeService extends rootStripe {
       if (session.client_reference_id) {
         const userId = session.client_reference_id;
 
-        // Update user payment status
         await User.findByIdAndUpdate(
           userId,
           {
@@ -293,13 +295,11 @@ export class StripeService extends rootStripe {
           { session: mongoSession, new: true }
         );
 
-        // Save transaction for cancellation
         await Transaction.create(
           [
             {
               userId,
               stripeSessionId: session.id,
-              stripePaymentIntent: session.payment_intent as string,
               subscriptionId: subscriptionID,
               amount: session.amount_total ? session.amount_total / 100 : 0,
               currency: session.currency || "usd",
@@ -323,11 +323,8 @@ export class StripeService extends rootStripe {
       await mongoSession.abortTransaction();
       mongoSession.endSession();
 
-      // Optionally: trigger refund if needed
-      await this.refundPayment(
-        session.payment_intent as string,
-        "requested_by_customer"
-      );
+      // Refund if needed
+      await this.refundPayment(session_id, "requested_by_customer");
 
       throw new AppError(
         httpStatus.INTERNAL_SERVER_ERROR,
