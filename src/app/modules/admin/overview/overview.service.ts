@@ -4,10 +4,10 @@ import mongoose, { ObjectId, PipelineStage } from "mongoose";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
+import { Transaction } from "../../../toolkit/classes/stripe/modules/transaction/transaction.model";
 import { paginationHelper } from "../../../toolkit/helpers/pagination.helper";
 import { monthNames } from "../../../toolkit/helpers/query.halpers";
 import pickQuery from "../../../toolkit/utils/query.pick";
-import { Payment } from "../../base/payment/payment.model";
 import { User } from "../../base/user/user.model";
 
 const getUsers = async (
@@ -201,7 +201,7 @@ const getEarningsChart = async (year: number) => {
     { $sort: { month: 1 } },
   ];
 
-  const result = await Payment.aggregate(pipeline);
+  const result = await Transaction.aggregate(pipeline);
 
   let prevEarning = 0;
   const monthlyData = monthNames.map((name, idx) => {
@@ -231,7 +231,7 @@ const getEarningsChart = async (year: number) => {
   const yearlyTotal = monthlyData.reduce((sum, m) => sum + m.totalEarnings, 0);
 
   const prevYear = year - 1;
-  const prevYearResult = await Payment.aggregate([
+  const prevYearResult = await Transaction.aggregate([
     {
       $match: {
         isDeleted: false,
@@ -284,7 +284,7 @@ const totalUserAndEarnings = async () => {
       { $match: { isDeleted: false } },
       { $group: { _id: null, totalUsers: { $sum: 1 } } },
     ]),
-    Payment.aggregate([
+    Transaction.aggregate([
       { $match: { isDeleted: false, status: "paid" } },
       {
         $group: {
@@ -294,7 +294,7 @@ const totalUserAndEarnings = async () => {
         },
       },
     ]),
-    Payment.aggregate([
+    Transaction.aggregate([
       {
         $match: {
           isDeleted: false,
@@ -317,7 +317,7 @@ const totalUserAndEarnings = async () => {
 
 const earningHistory = async (query: Record<string, any>) => {
   const earningsQuery = new QueryBuilder(
-    Payment.find({
+    Transaction.find({
       isDeleted: false,
       status: "paid",
     }),

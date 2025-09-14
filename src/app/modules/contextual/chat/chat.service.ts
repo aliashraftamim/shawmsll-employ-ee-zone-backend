@@ -7,7 +7,6 @@ import { Chat } from "./chat.model";
 export default class ChatService {
   model = Chat;
   async getChat(payload: { myId: ObjectId; partnerId: ObjectId }) {
-    console.log("🚀 ~ ChatService ~ getChat ~ payload:", payload);
     if (!payload.partnerId) {
       throw new AppError(httpStatus.NOT_FOUND, "Partner ID is required");
     }

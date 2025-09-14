@@ -81,9 +81,12 @@ const paymentASubscription = catchAsync(async (req, res) => {
 });
 
 const paymentSuccessStripe = catchAsync(async (req, res) => {
-  const result = await subscriptionsService.paymentSuccessStripe(
+  const result: any = await subscriptionsService.paymentSuccessStripe(
     req.query as any
   );
+  if (result?.subscription?.latest_invoice?.hosted_invoice_url) {
+    return res.redirect(result.subscription.latest_invoice.hosted_invoice_url);
+  }
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

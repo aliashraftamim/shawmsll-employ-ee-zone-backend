@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
@@ -21,8 +22,7 @@ export class StripeService extends rootStripe {
       mode: "payment" | "subscription";
       successUrl: string;
       cancelUrl: string;
-      metadata: Record<string, string>;
-      customerEmail?: string;
+      metadata: Record<string, any>;
     },
     stripeAccount?: string
   ) {
@@ -36,7 +36,7 @@ export class StripeService extends rootStripe {
         success_url: params.successUrl,
         cancel_url: params.cancelUrl,
         metadata: params.metadata,
-        customer_email: params.customerEmail,
+        customer_email: params.metadata.customerEmail,
         client_reference_id: params.metadata.userId,
       },
       options
@@ -137,7 +137,7 @@ export class StripeService extends rootStripe {
     }
 
     // Determine subscription ID
-    const subscriptionID = session.subscription
+    const stripeSubscriptionID = session.subscription
       ? (session.subscription as Stripe.Subscription).id
       : (session.metadata?.subscriptionID ?? null);
 
@@ -147,14 +147,6 @@ export class StripeService extends rootStripe {
 
     const deadlineType = session.metadata?.deadlineType ?? "month";
     const issuedAt = session.metadata?.issuedAt ?? new Date();
-
-    console.log({
-      userId,
-      subscriptionID,
-      deadline,
-      deadlineType,
-      issuedAt,
-    });
 
     // Start MongoDB transaction
     const mongoSession = await mongoose.startSession();
@@ -167,7 +159,7 @@ export class StripeService extends rootStripe {
       if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
 
       // Update User payment
-      const updatedUser = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         userId,
         {
           $set: {
@@ -183,19 +175,15 @@ export class StripeService extends rootStripe {
         },
         { session: mongoSession, new: true }
       );
-      console.log(
-        "🚀 ~ StripeService ~ subscriptionSuccess ~ updatedUser:",
-        updatedUser
-      );
 
       // Save transaction
-      const transaction = await Transaction.create(
+      await Transaction.create(
         [
           {
             userId,
-            stripeSessionId: session.id || "",
-            stripeSubId: subscriptionID || "",
-            subscriptionId: session.metadata?.subscriptionID || "",
+            stripeSessionId: session.id,
+            stripeSubId: stripeSubscriptionID,
+            subscriptionId: session.metadata?.subscriptionId ?? null,
             amount: session.amount_total ? session.amount_total / 100 : 0,
             currency: session.currency || "usd",
             status: "paid",
@@ -203,19 +191,6 @@ export class StripeService extends rootStripe {
         ],
         { session: mongoSession }
       );
-      console.log(
-        "🚀 ~ StripeService ~ subscriptionSuccess ~ transaction:",
-        transaction
-      );
-
-      console.log({
-        userId,
-        stripeSessionId: session.id || "",
-        subscriptionId: subscriptionID || "",
-        amount: session.amount_total ? session.amount_total / 100 : 0,
-        currency: session.currency || "usd",
-        status: "paid",
-      });
 
       // Commit transaction
       await mongoSession.commitTransaction();
@@ -223,7 +198,7 @@ export class StripeService extends rootStripe {
 
       return session;
     } catch (err) {
-      console.log("🚀 ~ StripeService ~ subscriptionSuccess ~ err:", err);
+      console.error("🚀 ~ StripeService ~ subscriptionSuccess ~ err:", err);
       // Rollback only
       await mongoSession.abortTransaction();
       mongoSession.endSession();

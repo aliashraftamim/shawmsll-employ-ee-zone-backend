@@ -2,10 +2,10 @@
 import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../../core/error/AppError";
+import { ITransaction } from "../../../toolkit/classes/stripe/modules/transaction/transaction.interface";
+import { Transaction } from "../../../toolkit/classes/stripe/modules/transaction/transaction.model";
 import { StripePaymentHandler } from "../../../toolkit/classes/stripe/stripe.paymentHandle";
 import redis from "../../../toolkit/utils/redis/redis";
-import { IPayment } from "../payment/payment.interface";
-import { Payment } from "../payment/payment.model";
 import { User } from "../user/user.model";
 import { ISubscription } from "./subscriptions.interface";
 import { Subscription } from "./subscriptions.model";
@@ -106,7 +106,7 @@ const deleteSubscription = async (subId: mongoose.Types.ObjectId) => {
 
 const paymentASubscription = async (
   subsId: mongoose.Types.ObjectId,
-  vendorId: mongoose.Types.ObjectId
+  userId: mongoose.Types.ObjectId
 ) => {
   if (!subsId) {
     throw new AppError(
@@ -130,39 +130,44 @@ const paymentASubscription = async (
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid amount");
   }
 
-  await User.isUserExistById(vendorId);
-
-  const user: any = await User.findById(vendorId);
+  const user: any = await User.findById(userId);
 
   // if (user.payment.status === "paid") {
   //   throw new AppError(httpStatus.BAD_REQUEST, "User already paid");
   // }
 
-  const paymentPayload: IPayment = {
+  const paymentPayload: ITransaction = {
     userId: user._id,
 
-    paymentId: "",
-    sessionId: "",
     amount: user.payment.amount,
     currency: currency || "usd",
     status: "pending",
     subscriptionId: subsId,
+    stripeSessionId: "",
+    stripePaymentIntent: "",
+    stripeSubId: "",
   };
 
-  await Payment.create(paymentPayload);
+  await Transaction.create(paymentPayload);
 
   const paymentHandler = new StripePaymentHandler();
+
+  const metadata = {
+    subscriptionId: subsId.toString(),
+    customerEmail: user.email,
+    userId: user._id.toString(),
+  };
 
   return await paymentHandler.paySubscription({
     lineItems: [
       {
         name: subscription?.title || "Subscription",
+        currency: currency || "usd",
         amount: Number(amount),
         quantity: 1,
       },
     ],
-    customerEmail: user.email,
-    userId: user._id.toString(),
+    metadata,
   });
 };
 

@@ -22,7 +22,9 @@ export class StripePaymentHandler {
     userId?: string;
     stripeAccount?: string;
   }) {
-    const metadata: Record<string, string> = params.userId ? { userId: params.userId } : {};
+    const metadata: Record<string, string> = params.userId
+      ? { userId: params.userId }
+      : {};
 
     return this.stripeService.createCheckoutSession(
       {
@@ -30,15 +32,15 @@ export class StripePaymentHandler {
         mode: "payment",
         successUrl: params.successUrl,
         cancelUrl: params.cancelUrl,
-        customerEmail: params.customerEmail,
         metadata,
       },
       params.stripeAccount
     );
   }
 
-  // --------------------------------------------------
+  // * --------------------------------------------------
   // Pay for Subscription
+
   async paySubscription(params: {
     lineItems: {
       name: string;
@@ -49,18 +51,19 @@ export class StripePaymentHandler {
     }[];
     successUrl?: string;
     cancelUrl?: string;
-    customerEmail?: string;
-    userId?: string;
     stripeAccount?: string;
+    metadata: {
+      customerEmail: string;
+      userId: string;
+      subscriptionId: string;
+    };
   }) {
-    const metadata: Record<string, string> = params.userId ? { userId: params.userId } : {};
-
     const stripeLineItems = params.lineItems.map((item) => ({
       price_data: {
         currency: item.currency || "usd",
         product_data: { name: item.name },
-        unit_amount: Math.round(item.amount * 100), // amount in cents
-        recurring: { interval: item.interval || "month" }, // subscription interval
+        unit_amount: Math.round(item.amount * 100),
+        recurring: { interval: item.interval || "month" },
       },
       quantity: item.quantity,
     }));
@@ -75,8 +78,7 @@ export class StripePaymentHandler {
         cancelUrl:
           params.cancelUrl ||
           `${CONFIG.CORE.backend_url}/subscription/success-api-stripe/cancel?session_id={CHECKOUT_SESSION_ID}`,
-        customerEmail: params.customerEmail,
-        metadata,
+        metadata: params.metadata,
       },
       params.stripeAccount
     );

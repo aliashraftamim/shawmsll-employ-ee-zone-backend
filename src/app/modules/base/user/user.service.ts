@@ -310,7 +310,6 @@ const BlockUser = async (userId: mongoose.Types.ObjectId, blocked: boolean) => {
     throw new Error("User not found");
   }
 
-  console.log("🚀 User status updated:", updatedUser.status);
   return updatedUser;
 };
 

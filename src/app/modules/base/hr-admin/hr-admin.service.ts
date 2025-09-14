@@ -85,14 +85,9 @@ export default class HrAdminService {
           userUpdate["profile.phoneNumber"] = updateData.phoneNumber;
         }
 
-        console.log(
-          "🚀 ~ HrAdminService ~ updateHrAdmin ~ updateData:",
-          updateData
-        );
         const hrAdmin = await this.model
           .findById(new mongoose.Types.ObjectId(id))
           .session(session);
-        console.log("🚀 ~ HrAdminService ~ updateHrAdmin ~ hrAdmin:", hrAdmin);
         if (!hrAdmin) throw new Error("HR Admin not found");
 
         await this.userModel.findByIdAndUpdate(hrAdmin.user, userUpdate, {
