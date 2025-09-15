@@ -5,10 +5,10 @@ import httpStatus from "http-status";
 import multer from "multer";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid"; // 🔹 Import UUID
-import { s3Client } from "../!awsUploader/awsS3Client";
-import catchAsync from "../../../toolkit/utils/catchAsync";
-import { CONFIG } from "../../config";
-import AppError from "../../error/AppError";
+import { CONFIG } from "../../../core/config";
+import AppError from "../../../core/error/AppError";
+import { s3Client } from "../../../core/middlewares/!awsUploader/awsS3Client";
+import catchAsync from "../../utils/catchAsync";
 
 type TUploadConfig = {
   fieldName: string;

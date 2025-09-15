@@ -137,7 +137,7 @@ export default class HrAdminService {
       .fields();
 
     const meta = await hrAdminQuery.countTotal();
-    const data = await hrAdminQuery.modelQuery;
+    const data = await hrAdminQuery.modelQuery.select("+createdAt");
 
     return { meta, data };
   }

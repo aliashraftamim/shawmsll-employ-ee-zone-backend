@@ -11,7 +11,7 @@ const globalGroupMessages: any[] = [];
 const messageHandler = (io: Server, socket: Socket, user: any) => {
   socket.on("senderMsg", async (message) => {
     try {
-      socket.emit("io-error-t", "gdfgdf");
+      socket.emit("io-error-t", "io-error-t");
       // ✅ Input validation
       if (!message?.content || !message?.receiver) {
         return emitSocketError(

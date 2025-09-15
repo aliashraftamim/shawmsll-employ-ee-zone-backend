@@ -10,36 +10,36 @@ const router = Router();
 
 router.put(
   "/create-privacy",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   validateRequest(patValidator.patValidationSchema),
   patController.createPrivacy
 );
 router.put(
   "/create-about",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   validateRequest(patValidator.patValidationSchema),
   patController.createAbout
 );
 router.put(
   "/create-terms",
-  auth(USER_ROLE.ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   validateRequest(patValidator.patValidationSchema),
   patController.createTerms
 );
 
 router.get(
   "/privacy",
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN, USER_ROLE.HR),
   patController.getPrivacy
 );
 router.get(
   "/about",
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN, USER_ROLE.HR),
   patController.getAbout
 );
 router.get(
   "/terms",
-  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN, USER_ROLE.HR),
   patController.getTerms
 );
 

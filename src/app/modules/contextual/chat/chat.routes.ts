@@ -5,7 +5,7 @@ import { upload } from "../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../core/middlewares/auth";
 import validateRequest from "../../../core/middlewares/validateRequest";
 
-import { AwsUploadMultiple } from "../../../core/middlewares/!awsUploader/awsUpload.multiple";
+import { awsUpload } from "../../../toolkit/classes/AWS_UPLOAD_ANY_FILE/aws.upload";
 import { chatController } from "./chat.controller";
 import { chatValidator } from "./chat.validation";
 
@@ -29,7 +29,13 @@ router.post(
   auth(USER_ROLE.USER, USER_ROLE.USER),
   upload.fields([{ name: "images", maxCount: 5 }]),
   validateRequest(chatValidator.addImages),
-  AwsUploadMultiple("images"),
+  awsUpload.AwsUploader({
+    fieldName: "images",
+    isImage: true,
+    multiple: true,
+    required: true,
+    maxSizeMB: 50,
+  }),
   chatController.sendImages
 );
 

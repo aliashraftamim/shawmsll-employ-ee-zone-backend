@@ -328,10 +328,15 @@ const earningHistory = async (query: Record<string, any>) => {
     .paginate()
     .fields();
 
-  const result = await earningsQuery.modelQuery.populate(
-    "userId",
-    "email profile"
-  );
+  const result = await earningsQuery.modelQuery.populate([
+    {
+      path: "userId",
+      select: "email profile",
+    },
+    {
+      path: "subscriptionId",
+    },
+  ]);
 
   const meta = await earningsQuery.countTotal();
 
