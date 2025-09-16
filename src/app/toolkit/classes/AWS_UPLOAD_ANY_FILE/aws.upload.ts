@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import AWS from "aws-sdk";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import multer from "multer";
@@ -7,7 +8,6 @@ import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid"; // 🔹 Import UUID
 import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
-import { s3Client } from "../../../core/middlewares/!awsUploader/awsS3Client";
 import catchAsync from "../../utils/catchAsync";
 
 type TUploadConfig = {
@@ -19,6 +19,15 @@ type TUploadConfig = {
 };
 
 export class AwsUploadHandler {
+  protected s3Client;
+
+  constructor() {
+    this.s3Client = new AWS.S3({
+      accessKeyId: CONFIG.AWS.aws_access_key_id,
+      secretAccessKey: CONFIG.AWS.aws_secret_access_key,
+    });
+  }
+
   // Multer memory storage
   upload = multer();
 
@@ -49,7 +58,7 @@ export class AwsUploadHandler {
           .toBuffer()
       : file.buffer;
 
-    const uploaded = await s3Client
+    const uploaded = await this.s3Client
       .upload({ Bucket: CONFIG.AWS.aws_bucket!, Key, Body, ContentType })
       .promise();
 

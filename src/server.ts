@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
 
-import { USER_ROLE } from "./app/core/constants/global.constants";
-import { sendNotification } from "./app/modules/base/notification/notification.utils";
 import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
 
@@ -38,19 +36,6 @@ async function main() {
             `✅ Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `
           )
         );
-      }
-    );
-
-    await sendNotification(
-      [
-        "f_brBuy4Szqo5HXyVortEu:APA91bGzD2MpPMp1ezf-MNGAW-5d6DQX5X0RZQ9ra8XS0bwMtYnGI5lGulXwep4YWLD65wZffQJ_l1qw1y6TtKeqvPuPhOcHbG_LVV01HBvmNxehqppaWcE",
-      ],
-      {
-        title: "Server is up and running",
-        message: `Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `,
-        receiverRole: USER_ROLE.SUPPER_ADMIN,
-        receiverEmail: "mehidihasan01201@gmail.com",
-        receiver: new mongoose.Types.ObjectId("68bbfc7d922c4bfd9abd95f2"),
       }
     );
 

@@ -26,6 +26,7 @@ export default class HrAdminService {
         "profile.phoneNumber": payload.phoneNumber,
         "profile.firstName": payload.firstName || "HR Specialist",
         "profile.lastName": payload.lastName || "By Supper Admin",
+        "profile.profileImage": payload.profileImage,
         role: USER_ROLE.HR,
         agreeToTerms: true,
         verification: { verified: true },
@@ -120,15 +121,23 @@ export default class HrAdminService {
   }
 
   async getAllHrAdmin(query: Record<string, any>) {
+    const filter: Record<string, any> = {
+      isDeleted: { $ne: true },
+    };
+
+    if (query?.expertise) {
+      const expertiseArray = Array.isArray(query.expertise)
+        ? query.expertise
+        : query.expertise.split(",");
+
+      filter.expertise = { $in: expertiseArray };
+    }
+
     const hrAdminQuery = new QueryBuilder(
-      this.model
-        .find({
-          isDeleted: { $ne: true },
-        })
-        .populate({
-          path: "user",
-          select: "email profile",
-        }),
+      this.model.find(filter).populate({
+        path: "user",
+        select: "email profile",
+      }),
       query
     )
       .search([])

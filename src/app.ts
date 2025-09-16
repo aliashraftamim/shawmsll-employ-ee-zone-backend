@@ -6,6 +6,7 @@ import express, { Express, Request, Response } from "express";
 
 import globalErrorHandler from "./app/core/middlewares/globalErrorHandler";
 import notFound from "./app/core/middlewares/notFound";
+import { endpointDetector } from "./app/core/middlewares/route.endpointsDetectors";
 import { generateRouteHTML } from "./app/toolkit/utils/home";
 import router from "./routes";
 
@@ -40,6 +41,7 @@ app.use(
       console.info(chalk.bgYellowBright(` Hit detected at `), now);
       next();
     },
+    endpointDetector,
     router
   );
 
