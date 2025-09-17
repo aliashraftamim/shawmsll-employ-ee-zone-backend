@@ -273,19 +273,35 @@ const usersForAdmin = async (
 // const getSingleUser = async() => {};
 
 const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
+  const updateData: any = {};
+
+  // profileImage update করলে শুধু nested field use করো
   if (payload?.profileImage) {
-    payload.profile.profileImage = payload.profileImage;
+    updateData["profile.profileImage"] = payload.profileImage;
   }
+
+  // location update
   if (payload?.location?.coordinates) {
-    payload.location = {
+    updateData["location"] = {
       type: "Point",
-      coordinates: payload?.location?.coordinates,
+      coordinates: payload.location.coordinates,
     };
   }
 
-  return await User.findByIdAndUpdate(userId, payload, {
-    new: true,
-  });
+  // অন্য non-nested fields
+  for (const key of Object.keys(payload)) {
+    if (!["profileImage", "location", "profile"].includes(key)) {
+      updateData[key] = payload[key];
+    }
+  }
+
+  console.log("🚀 ~ updateMe ~ updateData:", updateData);
+
+  return await User.findByIdAndUpdate(
+    userId,
+    { $set: updateData },
+    { new: true }
+  );
 };
 
 const getMe = async (currentUser: ObjectId) => {

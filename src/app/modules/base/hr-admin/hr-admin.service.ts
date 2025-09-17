@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import mongoose, { startSession } from "mongoose";
-import QueryBuilder from "../../../core/builders/QueryBuilder";
 import { USER_ROLE } from "../../../core/constants/global.constants";
 import AppError from "../../../core/error/AppError";
 import { IUser } from "../user/user.interface";
@@ -37,6 +36,7 @@ export default class HrAdminService {
       const newHR = await new this.model({
         ...payload,
         user: newUser._id,
+        name: "HR Specialist",
         documents: payload.documents,
       }).save({ session });
 
@@ -52,6 +52,7 @@ export default class HrAdminService {
       await session.endSession();
     }
   }
+
   async updateHrAdmin(id: string, updateData: Partial<THrAdminPayload>) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("Invalid ID");
@@ -121,6 +122,8 @@ export default class HrAdminService {
   }
 
   async getAllHrAdmin(query: Record<string, any>) {
+    const { searchTerm } = query;
+
     const filter: Record<string, any> = {
       isDeleted: { $ne: true },
     };
@@ -133,22 +136,56 @@ export default class HrAdminService {
       filter.expertise = { $in: expertiseArray };
     }
 
-    const hrAdminQuery = new QueryBuilder(
-      this.model.find(filter).populate({
-        path: "user",
-        select: "email profile",
-      }),
-      query
-    )
-      .search([])
-      .sort()
-      .paginate()
-      .fields();
+    const pipeline: any[] = [
+      { $match: filter },
 
-    const meta = await hrAdminQuery.countTotal();
-    const data = await hrAdminQuery.modelQuery.select("+createdAt");
+      // user join
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
 
-    return { meta, data };
+      // search condition
+      ...(searchTerm
+        ? [
+            {
+              $match: {
+                $or: [
+                  {
+                    "user.profile.firstName": {
+                      $regex: searchTerm,
+                      $options: "i",
+                    },
+                  },
+                  { "user.email": { $regex: searchTerm, $options: "i" } },
+                ],
+              },
+            },
+          ]
+        : []),
+
+      {
+        $project: {
+          expertise: 1,
+          qualification: 1,
+          availableTime: 1,
+          howHelp: 1,
+          description: 1,
+          createdAt: 1,
+          "user.email": 1,
+          "user.profile": 1,
+        },
+      },
+    ];
+
+    const data = await this.model.aggregate(pipeline);
+
+    return { meta: { total: (await this.model.find(filter)).length }, data };
   }
 
   async getHrAdminById(id: string) {

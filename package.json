@@ -22,6 +22,7 @@
     "aws-sdk": "^2.1692.0",
     "axios": "^1.10.0",
     "bcrypt": "^5.1.1",
+    "bullmq": "^5.58.5",
     "chalk": "4",
     "cloudinary": "^1.41.3",
     "colors": "^1.4.0",

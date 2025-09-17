@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
+import mongoose from "mongoose";
 import AppError from "../../../../core/error/AppError";
+import { recentActivity_service } from "../../recent-activity/recent-activity.service";
 import { ICategory } from "../category/category.interface";
 import { Category } from "../category/category.model";
 import { IGuidance } from "./guidance.interface";
 import { Guidance } from "./guidance.model";
 
-const createGuidance = async (payload: IGuidance) => {
+const createGuidance = async (user: string, payload: IGuidance) => {
   const isGCatExist: ICategory | null = await Category.findById(
     payload.category
   );
@@ -23,7 +25,18 @@ const createGuidance = async (payload: IGuidance) => {
 
   payload.categoryName = isGCatExist.name;
 
-  return await Guidance.create(payload);
+  const result = await Guidance.create(payload);
+
+  if (!result) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Failed to create guidance!");
+  }
+
+  await recentActivity_service.createRecentActivity({
+    text: "Create a new Guidance",
+    user: new mongoose.Types.ObjectId(user),
+  });
+
+  return result;
 };
 
 const getAllGuidance = async (query: Record<string, any>) => {

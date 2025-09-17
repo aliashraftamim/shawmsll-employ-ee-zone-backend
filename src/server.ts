@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import { CONFIG } from "./app/core/config";
 
+import { startWorker } from "./app/core/background-worker/worker/worker";
 import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
 
@@ -38,6 +39,8 @@ async function main() {
         );
       }
     );
+
+    startWorker();
 
     // * Default data creation
     await defaultJob();

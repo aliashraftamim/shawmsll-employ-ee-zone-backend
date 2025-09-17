@@ -8,6 +8,7 @@ const ContentForAddsSchema = new Schema<IContentForAdds>(
     content: { type: String, required: true },
     date: { type: String, default: null },
     time: { type: String, default: null },
+    isSent: { type: Boolean, default: false },
     targetUsers: {
       allUser: { type: Boolean, default: false },
       freePlanUser: { type: Boolean, default: false },

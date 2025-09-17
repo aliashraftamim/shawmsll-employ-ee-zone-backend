@@ -20,6 +20,7 @@ import { guidance_routes } from "../app/modules/contextual/_GUIDANCE/guidance/gu
 import { jobSearchCategoryRoute } from "../app/modules/contextual/_JOB/jobSearchCategory/jobSearchCategory.route";
 import { jobSearchTracker_route } from "../app/modules/contextual/_JOB/jobSearchTracker/jobSearchTracker.route";
 
+import { contentForAdds_route } from "../app/modules/admin/contentForAdds/contentForAdds.route";
 import { jobSearchHelp_route } from "../app/modules/contextual/_JOB/job_search_help/job_search_help.route";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
@@ -151,6 +152,11 @@ const moduleRoutes = [
   {
     path: "/top-used-tools",
     route: topUsedTools_route,
+  },
+
+  {
+    path: "/content-for-adds",
+    route: contentForAdds_route,
   },
 ];
 

@@ -1,11 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
+import { IUser } from "../../base/user/user.interface";
+import { User } from "../../base/user/user.model";
+import { ContentForAddsSchedule } from "./contentForAdds.const";
 import { IContentForAdds } from "./contentForAdds.interface";
 import { ContentForAdds } from "./contentForAdds.model";
 
-const createContentForAdds = async (payload: IContentForAdds) => {
-  return await ContentForAdds.create(payload);
+const createContentForAdds = async (payload: IContentForAdds | any) => {
+  const result = await ContentForAdds.create(payload);
+
+  const filter: Partial<IUser> | any = { isDeleted: false };
+
+  if (!payload.targetUsers.premiumUser && payload.targetUsers.freePlanUser) {
+    filter["payment.status"] = { $ne: "paid" };
+  }
+  if (!payload.targetUsers.freePlanUser && payload.targetUsers.premiumUser) {
+    filter["payment.status"] = "paid";
+  }
+
+  const targetedUsers: any[] = await User.find(filter).select(
+    "payment.status fcmToken email"
+  );
+  const fcmTokens: string[] = targetedUsers
+    .map((user) => user.fcmToken)
+    .filter((token): token is string => token !== undefined);
+
+  payload.fcmTokens = fcmTokens;
+  ContentForAddsSchedule(payload);
+
+  return await User.find(filter).select("payment.status fcmToken email");
+  return result;
 };
 
 const getAllContentForAdds = async (query: Record<string, any>) => {

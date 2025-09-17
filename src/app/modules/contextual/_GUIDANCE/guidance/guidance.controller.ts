@@ -5,7 +5,7 @@ import sendResponse from "../../../../toolkit/utils/sendResponse";
 import { guidance_service } from "./guidance.service";
 
 const createGuidance = catchAsync(async (req, res) => {
-  const result = await guidance_service.createGuidance(req.body);
+  const result = await guidance_service.createGuidance(req.user.id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

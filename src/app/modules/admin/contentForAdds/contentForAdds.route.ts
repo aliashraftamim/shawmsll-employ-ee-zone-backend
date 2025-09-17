@@ -11,7 +11,7 @@ const router = Router();
 
 router.post(
   "/",
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(contentForAdds_validation.createContentForAdds),
   AwsUploadSingle("image"),
@@ -20,25 +20,29 @@ router.post(
 
 router.get(
   "/",
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   contentForAdds_controller.getAllContentForAdds
 );
 
 router.get(
   "/:id",
-  auth(USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   contentForAdds_controller.getContentForAddsById
 );
 
 router.put(
   "/:id",
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(contentForAdds_validation.updateContentForAdds),
   AwsUploadSingle("image"),
   contentForAdds_controller.updateContentForAdds
 );
 
-router.delete("/:id", contentForAdds_controller.softDeleteContentForAdds);
+router.delete(
+  "/:id",
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
+  contentForAdds_controller.softDeleteContentForAdds
+);
 
 export const contentForAdds_route = router;

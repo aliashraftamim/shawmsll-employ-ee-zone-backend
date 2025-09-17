@@ -9,6 +9,7 @@ export interface IAvailableTime {
 
 export interface IHrAdmin {
   user: mongoose.Types.ObjectId;
+  name: string;
   qualification: string;
   expertise: string[];
   documents: string;

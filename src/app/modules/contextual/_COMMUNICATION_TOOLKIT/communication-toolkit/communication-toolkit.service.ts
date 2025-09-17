@@ -1,10 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
+import { recentActivity_service } from "../../recent-activity/recent-activity.service";
 import { ICommunicationToolkit } from "./communication-toolkit.interface";
 import { CommunicationToolkit } from "./communication-toolkit.model";
 
-const createCommunicationToolkit = async (payload: ICommunicationToolkit) => {
-  return await CommunicationToolkit.create(payload);
+const createCommunicationToolkit = async (
+  user: string,
+  payload: ICommunicationToolkit
+) => {
+  const result = await CommunicationToolkit.create(payload);
+
+  if (!result) {
+    throw new Error("Failed to create CommunicationToolkit");
+  }
+
+  await recentActivity_service.createRecentActivity({
+    text: "Create a new CommunicationToolkit",
+    user: new mongoose.Types.ObjectId(user),
+  });
+
+  return result;
 };
 
 const getAllCommunicationToolkit = async (query: Record<string, any>) => {

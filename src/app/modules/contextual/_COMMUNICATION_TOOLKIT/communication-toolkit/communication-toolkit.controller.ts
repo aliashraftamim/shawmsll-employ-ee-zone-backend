@@ -8,6 +8,7 @@ import { communicationToolkitService } from "./communication-toolkit.service";
 const createCommunicationToolkit = catchAsync(
   async (req: Request, res: Response) => {
     const result = await communicationToolkitService.createCommunicationToolkit(
+      req.user.id,
       req.body
     );
     sendResponse(res, {

@@ -11,6 +11,7 @@ const availableTimeSchema = new Schema<IAvailableTime>({
 const hrAdminSchema = new Schema<IHrAdmin>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name: { type: String, required: true },
     qualification: { type: String, required: true },
     expertise: [{ type: String, required: true }],
     documents: { type: String, required: true },
