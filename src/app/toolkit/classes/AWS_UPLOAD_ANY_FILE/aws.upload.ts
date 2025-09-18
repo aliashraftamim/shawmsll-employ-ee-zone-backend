@@ -5,10 +5,37 @@ import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import multer from "multer";
 import sharp from "sharp";
-import { v4 as uuidv4 } from "uuid"; // 🔹 Import UUID
+import { v4 as uuidv4 } from "uuid";
 import { CONFIG } from "../../../core/config";
 import AppError from "../../../core/error/AppError";
 import catchAsync from "../../utils/catchAsync";
+
+// ✅ Multer memory storage with filter
+const storage = multer.memoryStorage();
+
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
+
+const fileFilter = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) => {
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Unsupported file type"));
+  }
+};
+
+const limits = {
+  fileSize: 5 * 1024 * 1024, // 5MB
+};
 
 type TUploadConfig = {
   fieldName: string;
@@ -28,10 +55,10 @@ export class AwsUploadHandler {
     });
   }
 
-  // Multer memory storage
-  upload = multer();
+  // ✅ Multer instance (use .fields([...]) in route)
+  upload = multer({ storage, fileFilter, limits });
 
-  // 🔹 Common S3 uploader with UUID for unique filenames
+  // 🔹 Upload file to S3
   private async uploadToS3(
     file: Express.Multer.File,
     isImage: boolean,
@@ -41,8 +68,7 @@ export class AwsUploadHandler {
       .replace(/\.[^/.]+$/, "")
       .replace(/\s+/g, "_");
 
-    const uniqueId = uuidv4(); // 🔹 ensure global uniqueness
-
+    const uniqueId = uuidv4();
     const fileExt = isImage
       ? "webp"
       : file.originalname.split(".").pop() || "bin";
@@ -65,12 +91,17 @@ export class AwsUploadHandler {
     return uploaded.Location;
   }
 
-  // 🔹 Unified handler for images/docs, single/multiple, required & max size
+  // 🔹 Unified uploader
   AwsUploader = (...fields: TUploadConfig[]) =>
     catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-      const allFiles = req.files as {
-        [field: string]: Express.Multer.File[] | Express.Multer.File;
-      };
+      // ✅ Safe fallback: merge req.file → req.files
+      let allFiles: Record<
+        string,
+        Express.Multer.File[] | Express.Multer.File
+      > = (req.files as any) || {};
+      if (req.file) {
+        allFiles = { ...allFiles, [req.file.fieldname]: req.file };
+      }
 
       for (const field of fields) {
         let files: Express.Multer.File[] = [];

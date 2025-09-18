@@ -35,6 +35,10 @@ const updateCategory = async (categoryId: string, payload: ICategory) => {
   return result;
 };
 
+const getSingleCategory = async (categoryId: string) => {
+  return await Category.findById(categoryId);
+};
+
 export const updateScenarioInCategory = async (
   categoryId: string,
   oldScenario: string,
@@ -100,6 +104,7 @@ const getCategory = async (query: Record<string, unknown>) => {
 export const categoryService = {
   createCategory,
   updateCategory,
+  getSingleCategory,
   getCategory,
   updateScenarioInCategory,
   deleteCategory,

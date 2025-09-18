@@ -28,6 +28,19 @@ const updateCategory = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleCategory = catchAsync(async (req, res) => {
+  const result = await categoryService.getSingleCategory(
+    req?.params.categoryId
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "category retrieved successfully",
+    data: result,
+  });
+});
+
 const updateScenarioInCategory = catchAsync(async (req, res) => {
   const { categoryId } = req.params;
   const { from, to } = req.body;
@@ -72,6 +85,7 @@ const getCategory = catchAsync(async (req, res) => {
 export const categoryController = {
   createCategory,
   updateCategory,
+  getSingleCategory,
   updateScenarioInCategory,
   getCategory,
   deleteCategory,
