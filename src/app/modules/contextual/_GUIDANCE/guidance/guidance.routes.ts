@@ -18,7 +18,7 @@ router.get("/", auth(USER_ROLE.USER), guidance_controller.getAllGuidance);
 
 router.get("/:id", auth(USER_ROLE.USER), guidance_controller.getSingleGuidance);
 
-router.patch(
+router.put(
   "/:id",
   auth(USER_ROLE.USER),
   validateRequest(guidance_validation.updateGuidance),

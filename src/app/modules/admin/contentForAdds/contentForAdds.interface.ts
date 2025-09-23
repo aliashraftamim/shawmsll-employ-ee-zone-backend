@@ -11,5 +11,8 @@ export interface IContentForAdds {
     freePlanUser: boolean;
     premiumUser: boolean;
   };
+
+  status: "active" | "inactive" | "archived" | "pending";
+
   isDeleted?: boolean;
 }

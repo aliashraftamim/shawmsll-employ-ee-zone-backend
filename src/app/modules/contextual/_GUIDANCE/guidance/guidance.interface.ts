@@ -4,7 +4,8 @@ export interface IGuidance {
   categoryName: string;
   category: ObjectId;
   scenario: string;
-  content: string;
+  guidance: string;
   tips: string[];
+  suggestedScript: string;
   isDeleted: boolean;
 }

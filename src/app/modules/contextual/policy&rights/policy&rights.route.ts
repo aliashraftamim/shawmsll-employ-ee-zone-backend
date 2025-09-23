@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../core/constants/global.constants";
-import { AwsUploadSingle } from "../../../core/middlewares/!awsUploader/awsUpload.single";
 import { upload } from "../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../core/middlewares/auth";
 import validateRequest from "../../../core/middlewares/validateRequest";
+import { awsUpload } from "../../../toolkit/classes/AWS_UPLOAD_ANY_FILE/aws.upload";
 import { PolicyRights_controller } from "./policy&rights.controller";
 import { PolicyRightsValidation } from "./policy&rights.validation";
 
@@ -14,7 +14,13 @@ router.post(
   auth(USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(PolicyRightsValidation.createPolicyRights),
-  AwsUploadSingle("image"),
+  awsUpload.AwsUploader({
+    fieldName: "image",
+    isImage: true,
+    multiple: false,
+    required: false,
+    maxSizeMB: 100,
+  }),
   PolicyRights_controller.createPolicyRights
 );
 
@@ -35,7 +41,13 @@ router.put(
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
   upload.single("image"),
   validateRequest(PolicyRightsValidation.updatePolicyRights),
-  AwsUploadSingle("image"),
+  awsUpload.AwsUploader({
+    fieldName: "image",
+    isImage: true,
+    multiple: false,
+    required: false,
+    maxSizeMB: 10,
+  }),
   PolicyRights_controller.updatePolicyRights
 );
 

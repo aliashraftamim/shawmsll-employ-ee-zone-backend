@@ -42,7 +42,7 @@ router.put(
 router.delete(
   "/:id",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  contentForAdds_controller.softDeleteContentForAdds
+  contentForAdds_controller.deleteContentForAdds
 );
 
 export const contentForAdds_route = router;

@@ -30,7 +30,7 @@ const fileFilter = (
 
 // File size limit (optional)
 const limits = {
-  fileSize: 5 * 1024 * 1024, // 5 MB
+  fileSize: 50 * 1024 * 1024, // 5 MB
 };
 
 // Multer configuration export

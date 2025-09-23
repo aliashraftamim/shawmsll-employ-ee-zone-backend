@@ -36,6 +36,7 @@ export const sendNotification = async (
         },
       },
     });
+    console.log("🚀 ~ sendNotification ~ response:", response);
 
     // If notifications were successfully sent, log them in the database
     if (response?.successCount > 0) {

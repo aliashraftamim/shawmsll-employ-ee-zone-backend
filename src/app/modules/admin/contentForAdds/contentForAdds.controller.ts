@@ -69,31 +69,29 @@ const updateContentForAdds = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const softDeleteContentForAdds = catchAsync(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await contentForAdds_service.softDeleteContentForAdds(id);
-    if (!result) {
-      return sendResponse(res, {
-        statusCode: httpStatus.NOT_FOUND,
-        success: false,
-        message: "ContentForAdds not found to delete",
-        data: undefined,
-      });
-    }
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "ContentForAdds deleted successfully",
-      data: result,
+const deleteContentForAdds = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await contentForAdds_service.deleteContentForAdds(id);
+  if (!result) {
+    return sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: "ContentForAdds not found to delete",
+      data: undefined,
     });
   }
-);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "ContentForAdds deleted successfully",
+    data: result,
+  });
+});
 
 export const contentForAdds_controller = {
   createContentForAdds,
   getAllContentForAdds,
   getContentForAddsById,
   updateContentForAdds,
-  softDeleteContentForAdds,
+  deleteContentForAdds,
 };

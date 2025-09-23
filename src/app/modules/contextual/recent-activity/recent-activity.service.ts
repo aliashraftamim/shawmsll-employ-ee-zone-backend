@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import httpStatus from "http-status";
 import mongoose from "mongoose";
 import QueryBuilder from "../../../core/builders/QueryBuilder";
+import AppError from "../../../core/error/AppError";
 import { IRecentActivity } from "./recent-activity.interface";
 import { RecentActivity } from "./recent-activity.model";
 
@@ -9,6 +11,12 @@ const createRecentActivity = async (payload: IRecentActivity) => {
 };
 
 const getAllRecentActivity = async (query: Record<string, any>) => {
+  if (query.user) {
+    if (!mongoose.Types.ObjectId.isValid(query.user)) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Invalid User ID");
+    }
+  }
+
   const recentActivityQuery = new QueryBuilder(
     RecentActivity.find({
       isDeleted: { $ne: true },
@@ -16,6 +24,7 @@ const getAllRecentActivity = async (query: Record<string, any>) => {
     query
   )
     .search([])
+    .filter()
     .sort()
     .paginate()
     .fields();

@@ -15,6 +15,7 @@ export default class HrAdminService {
   userModel = User;
 
   async createHrAdmin(payload: Partial<THrAdminPayload>) {
+    // return payload;
     const session = await startSession();
     session.startTransaction();
     try {

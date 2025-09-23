@@ -5,6 +5,7 @@ import { USER_ROLE } from "../../../core/constants/global.constants";
 import { paginationHelper } from "../../../toolkit/helpers/pagination.helper";
 import pickQuery from "../../../toolkit/utils/query.pick";
 import { authService } from "../auth/auth.service";
+import { sendAdminNotifications } from "../notification/notification.send.admin";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 
@@ -315,6 +316,11 @@ const BlockUser = async (userId: mongoose.Types.ObjectId, blocked: boolean) => {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new Error("Invalid userId");
   }
+
+  sendAdminNotifications({
+    title: "Server Restarted",
+    message: "The server has been restarted successfully.",
+  });
 
   const updatedUser = await User.findByIdAndUpdate(
     userId,

@@ -11,7 +11,9 @@ import { notificationServices } from "./notification.service";
 
 const getAllNotification = catchAsync(async (req: Request, res: Response) => {
   const query = { ...req.query };
+  query.limit = query.limit ? query.limit : "50";
   query["receiver"] = req.user.id;
+
   const result = await notificationServices.getNotificationFromDb(query);
   sendResponse(res, {
     statusCode: 200,
@@ -49,7 +51,35 @@ const makeRead = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteNotification = catchAsync(async (req: Request, res: Response) => {
+  const result = await notificationServices.deleteNotification(
+    req.params.id as any
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Notifications Deleted successfully",
+    data: result,
+  });
+});
+
+const markAllMyNotificationRead = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await notificationServices.markAllMyNotificationRead(
+      req.user.id as any
+    );
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Make my all notifications read successfully",
+      data: result,
+    });
+  }
+);
+
 export const notificationController = {
   getAllNotification,
   makeRead,
+  markAllMyNotificationRead,
+  deleteNotification,
 };

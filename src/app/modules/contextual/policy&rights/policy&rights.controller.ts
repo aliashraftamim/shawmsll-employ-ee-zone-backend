@@ -16,7 +16,7 @@ const createPolicyRights = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllPolicyRights = catchAsync(async (req: Request, res: Response) => {
-  const result = await PolicyRightsService.getAllPolicyRights();
+  const result = await PolicyRightsService.getAllPolicyRights(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

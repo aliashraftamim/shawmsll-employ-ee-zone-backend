@@ -29,7 +29,7 @@ const getWorkplaceJournal = async (query: Record<string, unknown>) => {
     WorkPlaceJournal.find(filter),
     modifiedQuery
   )
-    .search([]) 
+    .search([])
     .filter()
     .sort()
     .paginate()

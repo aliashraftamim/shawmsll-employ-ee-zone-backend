@@ -29,6 +29,7 @@ const updateCategoryValidationSchema = z.object({
       name: z.string().min(2).max(50).optional(),
       image: z.string().min(5).optional(),
       description: z.string().min(10).max(1000).optional(),
+      scenario: z.string().array().nonempty().optional(),
     })
     .strict(),
 });

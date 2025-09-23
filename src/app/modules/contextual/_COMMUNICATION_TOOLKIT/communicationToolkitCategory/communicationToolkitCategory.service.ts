@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
+import QueryBuilder from "../../../../core/builders/QueryBuilder";
 import { ICommunicationToolkitCategory } from "./communicationToolkitCategory.interface";
 import { CommunicationToolkitCategory } from "./communicationToolkitCategory.model";
 
@@ -8,8 +10,22 @@ const createCommunicationToolkitCategory = async (
   return await CommunicationToolkitCategory.create(payload);
 };
 
-const getAllCommunicationToolkitCategory = async () => {
-  return await CommunicationToolkitCategory.find({ isDeleted: { $ne: true } });
+const getAllCommunicationToolkitCategory = async (
+  Query: Record<string, any>
+) => {
+  const ctCategoryQuery = new QueryBuilder(
+    CommunicationToolkitCategory.find({ isDeleted: { $ne: true } }),
+    Query
+  )
+    .search(["title"])
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await ctCategoryQuery.countTotal();
+  const data = await ctCategoryQuery.modelQuery;
+
+  return { meta, data };
 };
 
 const getCommunicationToolkitCategoryById = async (id: string) => {

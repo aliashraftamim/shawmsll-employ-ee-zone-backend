@@ -10,6 +10,8 @@ import { generateOTP } from "../../../toolkit/utils/generate.otp";
 import { otpMailTemplate } from "../../../toolkit/utils/sendEmail/mail.template";
 import { sendEmail } from "../../../toolkit/utils/sendEmail/sendEmail";
 import { sendEmailWithLink } from "../../../toolkit/utils/sendEmail/sendEmailWithLink";
+import { recentActivity_service } from "../../contextual/recent-activity/recent-activity.service";
+import { sendNotification } from "../notification/notification.utils";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import {
@@ -25,6 +27,19 @@ const loginUser = async (payload: IUserLogin) => {
   const user: IUser | any = await User.findOne({
     email: payload?.email,
   }).select("+password");
+
+  await recentActivity_service.createRecentActivity({
+    text: "User logged in successfully",
+    user: user._id,
+  });
+
+  sendNotification([user.fcmToken], {
+    title: "Login Alert",
+    message: "You have successfully logged in.",
+    receiver: user._id,
+    receiverEmail: user.email,
+    receiverRole: user.role,
+  });
 
   // If user not found
   if (!user) {

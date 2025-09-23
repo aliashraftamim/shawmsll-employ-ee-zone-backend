@@ -15,7 +15,7 @@ const getAllScheduleType = async (query: Record<string, any>) => {
     }),
     query
   )
-    .search([])
+    .search(["name"])
     .sort()
     .paginate()
     .fields();

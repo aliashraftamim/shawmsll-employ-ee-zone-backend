@@ -23,7 +23,9 @@ const createCommunicationToolkitCategory = catchAsync(
 const getAllCommunicationToolkitCategory = catchAsync(
   async (req: Request, res: Response) => {
     const result =
-      await communicationToolkitCategoryService.getAllCommunicationToolkitCategory();
+      await communicationToolkitCategoryService.getAllCommunicationToolkitCategory(
+        req.query
+      );
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

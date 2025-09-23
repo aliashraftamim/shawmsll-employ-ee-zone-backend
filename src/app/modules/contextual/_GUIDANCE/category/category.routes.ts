@@ -20,7 +20,7 @@ router.post(
     isImage: true,
     multiple: false,
     required: true,
-    maxSizeMB: 1,
+    maxSizeMB: 10,
   }),
   categoryController.createCategory
 );
@@ -41,8 +41,8 @@ router.put(
     fieldName: "image",
     isImage: true,
     multiple: false,
-    required: true,
-    maxSizeMB: 1,
+    required: false,
+    maxSizeMB: 10,
   }),
   categoryController.updateCategory
 );

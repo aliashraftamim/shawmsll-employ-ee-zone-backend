@@ -8,7 +8,7 @@ const createContentForAdds = z.object({
       content: z.string(),
       date: z.string().nullable().optional(),
       time: z.string().nullable().optional(),
-      isSent: z.boolean(),
+      isSent: z.boolean().optional(),
       targetUsers: z.object({
         allUser: z.boolean(),
         freePlanUser: z.boolean(),
@@ -21,17 +21,19 @@ const createContentForAdds = z.object({
 const updateContentForAdds = z.object({
   body: z
     .object({
-      contentType: z.string(),
+      contentType: z.string().optional(),
       image: z.string().url().nullable().optional(),
-      content: z.string(),
+      content: z.string().optional(),
       date: z.string().nullable().optional(),
       time: z.string().nullable().optional(),
-      isSent: z.boolean(),
-      targetUsers: z.object({
-        allUser: z.boolean(),
-        freePlanUser: z.boolean(),
-        premiumUser: z.boolean(),
-      }),
+      isSent: z.boolean().optional(),
+      targetUsers: z
+        .object({
+          allUser: z.boolean().optional(),
+          freePlanUser: z.boolean().optional(),
+          premiumUser: z.boolean().optional(),
+        })
+        .optional(),
     })
     .strict(),
 });

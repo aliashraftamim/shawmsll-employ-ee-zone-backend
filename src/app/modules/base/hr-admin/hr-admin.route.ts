@@ -4,6 +4,7 @@ import { AwsUploadDocImg } from "../../../core/middlewares/!awsUploader/awsUploa
 import { upload } from "../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../core/middlewares/auth";
 import validateRequest from "../../../core/middlewares/validateRequest";
+import { awsUpload } from "../../../toolkit/classes/AWS_UPLOAD_ANY_FILE/aws.upload";
 import { hrAdmin_controller } from "./hr-admin.controller";
 import { hrAdmin_validation } from "./hr-admin.validation";
 
@@ -17,9 +18,21 @@ router.post(
     { name: "profileImage", maxCount: 1 },
   ]),
   validateRequest(hrAdmin_validation.createHrAdmin),
-  AwsUploadDocImg(
-    { fieldName: "profileImage", isImage: true, multiple: false },
-    { fieldName: "documents", isImage: false, multiple: false }
+  awsUpload.AwsUploader(
+    {
+      fieldName: "profileImage",
+      isImage: true,
+      multiple: false,
+      required: false,
+      maxSizeMB: 5,
+    },
+    {
+      fieldName: "documents",
+      isImage: false,
+      multiple: false,
+      required: false,
+      maxSizeMB: 5,
+    }
   ),
   hrAdmin_controller.createHrAdmin
 );

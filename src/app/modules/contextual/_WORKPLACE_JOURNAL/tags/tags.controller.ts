@@ -16,11 +16,11 @@ const createTags = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllTags = catchAsync(async (req: Request, res: Response) => {
-  const result = await tagsService.getAllTags();
+  const result = await tagsService.getAllTags(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Tagss retrieved successfully",
+    message: "Tags retrieved successfully",
     data: result,
   });
 });

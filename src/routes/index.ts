@@ -21,12 +21,14 @@ import { jobSearchCategoryRoute } from "../app/modules/contextual/_JOB/jobSearch
 import { jobSearchTracker_route } from "../app/modules/contextual/_JOB/jobSearchTracker/jobSearchTracker.route";
 
 import { contentForAdds_route } from "../app/modules/admin/contentForAdds/contentForAdds.route";
+import { guidanceSuggestion_route } from "../app/modules/contextual/_GUIDANCE/guidance_suggestion/guidance_suggestion.route";
 import { jobSearchHelp_route } from "../app/modules/contextual/_JOB/job_search_help/job_search_help.route";
 import { tagsRoute } from "../app/modules/contextual/_WORKPLACE_JOURNAL/tags/tags.route";
 import { workPlaceJournal_routes } from "../app/modules/contextual/_WORKPLACE_JOURNAL/workPlaceJournal/workPlaceJournal.routes";
 import { bookmark_route } from "../app/modules/contextual/bookmark/bookmark.route";
 import { friend_routes } from "../app/modules/contextual/friend/friend.routes";
 import { PolicyRightsRoute } from "../app/modules/contextual/policy&rights/policy&rights.route";
+import { recentActivity_route } from "../app/modules/contextual/recent-activity/recent-activity.route";
 import { scheduleType_route } from "../app/modules/contextual/scheduleType/scheduleType.route";
 import { specialistSchedule_route } from "../app/modules/contextual/specialist_schedule/specialist_schedule.route";
 import { topUsedTools_route } from "../app/modules/contextual/top-used-tools/top-used-tools.route";
@@ -80,13 +82,18 @@ const moduleRoutes = [
   },
 
   {
-    path: "/guidance",
-    route: guidance_routes,
+    path: "/g-category",
+    route: categoryRouter,
   },
 
   {
-    path: "/g-category",
-    route: categoryRouter,
+    path: "/guidance-suggestion",
+    route: guidanceSuggestion_route,
+  },
+
+  {
+    path: "/guidance",
+    route: guidance_routes,
   },
 
   {
@@ -152,6 +159,11 @@ const moduleRoutes = [
   {
     path: "/top-used-tools",
     route: topUsedTools_route,
+  },
+
+  {
+    path: "/recent-activity",
+    route: recentActivity_route,
   },
 
   {

@@ -7,6 +7,7 @@ import app from "./app";
 import { CONFIG } from "./app/core/config";
 
 import { startWorker } from "./app/core/background-worker/worker/worker";
+import { cron_jobs } from "./app/toolkit/helpers/DEFAULT_JOBS/cron.jobs";
 import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
 
@@ -40,11 +41,10 @@ async function main() {
       }
     );
 
-    startWorker();
-
     // * Default data creation
     await defaultJob();
-
+    startWorker();
+    cron_jobs();
     // Start the Socket.IO server
     socketServer.listen(
       {

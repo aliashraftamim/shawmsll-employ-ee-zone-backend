@@ -8,7 +8,7 @@ import { IContentForAdds } from "./contentForAdds.interface";
 import { ContentForAdds } from "./contentForAdds.model";
 
 const createContentForAdds = async (payload: IContentForAdds | any) => {
-  const result = await ContentForAdds.create(payload);
+  const content = await ContentForAdds.create(payload);
 
   const filter: Partial<IUser> | any = { isDeleted: false };
 
@@ -27,10 +27,11 @@ const createContentForAdds = async (payload: IContentForAdds | any) => {
     .filter((token): token is string => token !== undefined);
 
   payload.fcmTokens = fcmTokens;
-  ContentForAddsSchedule(payload);
+  if (content?.status === "active") {
+    ContentForAddsSchedule(payload);
+  }
 
   return await User.find(filter).select("payment.status fcmToken email");
-  return result;
 };
 
 const getAllContentForAdds = async (query: Record<string, any>) => {
@@ -40,7 +41,8 @@ const getAllContentForAdds = async (query: Record<string, any>) => {
     }),
     query
   )
-    .search([])
+    .search(["content", "contentType"])
+    .filter()
     .sort()
     .paginate()
     .fields();
@@ -68,15 +70,11 @@ const updateContentForAdds = async (
   return await ContentForAdds.findByIdAndUpdate(id, updateData, { new: true });
 };
 
-const softDeleteContentForAdds = async (id: string) => {
+const deleteContentForAdds = async (id: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
-  return await ContentForAdds.findByIdAndUpdate(
-    id,
-    { isDeleted: true },
-    { new: true }
-  );
+  return await ContentForAdds.findByIdAndDelete(id);
 };
 
 export const contentForAdds_service = {
@@ -84,5 +82,5 @@ export const contentForAdds_service = {
   getAllContentForAdds,
   getContentForAddsById,
   updateContentForAdds,
-  softDeleteContentForAdds,
+  deleteContentForAdds,
 };

@@ -16,7 +16,7 @@ const guidanceSchema = new Schema<IGuidance>(
       type: String,
       required: true,
     },
-    content: {
+    guidance: {
       type: String,
       required: true,
     },
@@ -24,6 +24,11 @@ const guidanceSchema = new Schema<IGuidance>(
     tips: {
       type: [String],
       default: [],
+    },
+
+    suggestedScript: {
+      type: String,
+      required: true,
     },
 
     isDeleted: {

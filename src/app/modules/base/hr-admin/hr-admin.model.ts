@@ -14,10 +14,10 @@ const hrAdminSchema = new Schema<IHrAdmin>(
     name: { type: String, required: true },
     qualification: { type: String, required: true },
     expertise: [{ type: String, required: true }],
-    documents: { type: String, required: true },
+    documents: { type: String, required: false, default: "" },
     availableTime: [availableTimeSchema],
     description: { type: String, default: "" },
-    howHelp: [{ type: [String], required: true }],
+    howHelp: { type: [String], required: true },
     isDeleted: { type: Boolean, default: false },
   },
   {

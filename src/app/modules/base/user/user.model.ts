@@ -140,6 +140,11 @@ UserSchema.statics.isUserExistById = async function (id: string) {
     return user || null;
   } catch (error: any) {
     console.error("Error checking user existence:", error.message);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
       error.message || "Error checking user existence"
@@ -175,6 +180,11 @@ UserSchema.statics.isUserExistByEmail = async function (email: string) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error checking user existence:", error.message);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
       error.message || "Error checking user existence"

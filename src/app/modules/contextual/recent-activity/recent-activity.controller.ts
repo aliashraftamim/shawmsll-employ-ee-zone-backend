@@ -16,6 +16,12 @@ const createRecentActivity = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllRecentActivity = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  console.log("🚀 ~ query:", query.user);
+
+  query.user = query.user || req.user.id;
+  console.log("🚀 ~ query:", query);
+
   const result = await recentActivity_service.getAllRecentActivity(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -18,7 +18,7 @@ export class JobSearchHelpService {
       }),
       query
     )
-      .search([])
+      .search(["name"])
       .sort()
       .paginate()
       .fields();

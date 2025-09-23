@@ -8,31 +8,31 @@ import { TopUsedTools } from "./top-used-tools.model";
 const defaultTools: ITopUsedTools[] = [
   {
     title: "workplace-journal",
-    image: "tool1.png",
+    image: "https://i.ibb.co.com/HTxWHX27/span-1.png",
     matchField: "workplace-journal",
     priority: 1,
   },
   {
     title: "communication-toolkit",
-    image: "tool2.png",
+    image: "https://i.ibb.co.com/4RG1s8NW/span.png",
     matchField: "communication-toolkit",
     priority: 1,
   },
   {
     title: "guidance",
-    image: "tool3.png",
+    image: "https://i.ibb.co.com/TMS6srJ3/guidances.png",
     matchField: "guidance",
     priority: 1,
   },
   {
     title: "job-search-help",
-    image: "tool4.png",
+    image: "https://i.ibb.co.com/TD0CRm38/job-seeker.png",
     matchField: "job-search-help",
     priority: 1,
   },
   {
     title: "policy-rights",
-    image: "tool5.png",
+    image: "https://i.ibb.co.com/B55px4nk/insurance-policy.png",
     matchField: "policy-rights",
     priority: 1,
   },

@@ -6,7 +6,8 @@ const createGuidance = z.object({
     .object({
       category: objectId,
       scenario: z.string().min(1, "Scenario is required"),
-      content: z.string().min(1, "Content is required"),
+      guidance: z.string().min(1, "guidance is required"),
+      suggestedScript: z.string().min(1, "Suggested Script is required"),
       tips: z.array(z.string()),
     })
     .strict(),
@@ -15,10 +16,7 @@ const createGuidance = z.object({
 const updateGuidance = z.object({
   body: z
     .object({
-      category: objectId.optional(),
-      scenario: z.string().min(1, "Scenario is required").optional(),
-      content: z.string().min(1, "Content is required").optional(),
-      tips: z.array(z.string()).optional(),
+      suggestedScript: z.string().min(1, "Suggested Script is required"),
     })
     .strict(),
 });
