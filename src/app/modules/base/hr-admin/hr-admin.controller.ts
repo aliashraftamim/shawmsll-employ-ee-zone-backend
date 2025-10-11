@@ -53,8 +53,7 @@ export class HrAdminController extends BaseController<typeof hrAdmin_service> {
   }
 
   async updateHrAdmin(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.user;
-    const result = await this.service.updateHrAdmin(id, req.body);
+    const result = await this.service.updateHrAdmin(req.params.id, req.body);
 
     this.handleResponse(
       res,

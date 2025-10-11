@@ -15,7 +15,7 @@ import { sendEmail } from "../../utils/sendEmail/sendEmail";
 export abstract class rootStripe {
   readonly stripe: Stripe;
 
-  constructor(apiVersion: Stripe.LatestApiVersion = "2025-04-30.basil") {
+  constructor(apiVersion: Stripe.LatestApiVersion = "2025-08-27.basil") {
     this.stripe = new Stripe(CONFIG.STRIPE.stripe_secret_key as string, {
       apiVersion,
     });
@@ -55,10 +55,7 @@ export abstract class rootStripe {
       JSON.stringify(body, null, 2)
     );
 
-    await sendAdminNotifications({
-      title: subject,
-      message,
-    });
+    await sendAdminNotifications({ title: subject, message });
 
     await sendNotification([user?.fcmToken as string], {
       title: subject,

@@ -31,9 +31,7 @@ const makeMeRead = async (query: { user: any; notId: string }) => {
   const result = await Notification.findOneAndUpdate(
     { _id: query.notId, receiver: query.user },
     { isRead: true },
-    {
-      new: true,
-    }
+    { new: true }
   );
   return result;
 };
@@ -42,9 +40,7 @@ const markAllMyNotificationRead = async (userId: mongoose.Types.ObjectId) => {
   const result = await Notification.updateMany(
     { receiver: userId },
     { isRead: true },
-    {
-      new: true,
-    }
+    { }
   );
   return result;
 };

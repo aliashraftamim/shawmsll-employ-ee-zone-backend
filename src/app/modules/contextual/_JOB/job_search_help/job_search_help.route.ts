@@ -22,14 +22,14 @@ router.post(
       fieldName: "icon",
       isImage: true,
       multiple: false,
-      required: true,
+      required: false,
       maxSizeMB: 1,
     },
     {
       fieldName: "documents",
       isImage: false,
       multiple: true,
-      required: true,
+      required: false,
       maxSizeMB: 3,
     }
   ),

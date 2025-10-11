@@ -82,18 +82,14 @@ const loginUser = async (payload: IUserLogin) => {
   const accessToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.access_jwt_secret as string,
-    {
-      expiresIn: CONFIG.JWT.access_jwt_expires as string,
-    }
+    { expiresIn: CONFIG.JWT.access_jwt_expires as any }
   );
 
   // Generate refresh token
   const refreshToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.refresh_jwt_secret as string,
-    {
-      expiresIn: CONFIG.JWT.refresh_token_expires,
-    }
+    { expiresIn: CONFIG.JWT.refresh_token_expires as any }
   );
 
   // Return login result
@@ -107,16 +103,12 @@ const sendOtpForVerifyEmail = async (email: string): Promise<unknown> => {
   const hashingOtp = await bcrypt.hash(otp.toString(), 8);
 
   // create  short time reset  password  jwt token
-  const jwtPayload = {
-    email,
-  };
+  const jwtPayload = { email };
 
   const verifyEmailToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.password_reset_secret as string,
-    {
-      expiresIn: CONFIG.MAIL.otp_expires,
-    }
+    { expiresIn: CONFIG.MAIL.otp_expires as any }
   );
 
   // set the otp  on the db
@@ -184,16 +176,12 @@ const forgotPasswordLInk = async (email: string) => {
   // Find validate user by User custom static method
   const user = await User.isUserExistByEmail(email);
   // create  short time reset  password  jwt token
-  const jwtPayload: any = {
-    email: user?.email,
-  };
+  const jwtPayload: any = { email: user?.email };
 
   const resetToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.forgot_pass_secret as string,
-    {
-      expiresIn: CONFIG.MAIL.forgot_pass_link_expire,
-    }
+    { expiresIn: CONFIG.MAIL.forgot_pass_link_expire as any }
   );
 
   sendEmailWithLink(
@@ -235,9 +223,7 @@ const forgotPassword = async (email: string) => {
   const forgetToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.forgot_pass_secret as string,
-    {
-      expiresIn: CONFIG.MAIL.forgot_pass_link_expire,
-    }
+    { expiresIn: CONFIG.MAIL.forgot_pass_link_expire as any }
   );
 
   // set the otp  on the db
@@ -295,29 +281,21 @@ const verifyOtp = async (payload: { otp: string }, token: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "OTP dose not match!");
   }
 
-  const jwtPayload = {
-    email: user?.email,
-  };
+  const jwtPayload = { email: user?.email };
 
   const resetToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.password_reset_secret as string,
-    {
-      expiresIn: CONFIG.MAIL.otp_expires,
-    }
+    { expiresIn: CONFIG.MAIL.otp_expires as any }
   );
   // update new hashed password
   await User.findOneAndUpdate(
     { email: user?.email },
-    {
-      "verification.otp": "",
-    },
+    { "verification.otp": "" },
     { new: true }
   );
 
-  return {
-    resetToken,
-  };
+  return { resetToken };
 };
 
 const resetPassword = async (payload: IResetPassPayload, token: string) => {
@@ -434,22 +412,15 @@ const refreshToken = async (token: string) => {
     throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized !");
   }
 
-  const jwtPayload = {
-    userId: user?.email,
-    role: user?.role,
-  };
+  const jwtPayload = { userId: user?.email, role: user?.role };
 
   const accessToken = jwt.sign(
     jwtPayload,
     CONFIG.JWT.access_jwt_secret as string,
-    {
-      expiresIn: CONFIG.JWT.access_jwt_expires as string,
-    }
+    { expiresIn: String(CONFIG.JWT.access_jwt_expires) as any }
   );
 
-  return {
-    accessToken,
-  };
+  return { accessToken };
 };
 
 const deleteMe = async (id: mongoose.Types.ObjectId) => {

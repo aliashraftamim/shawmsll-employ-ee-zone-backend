@@ -19,7 +19,7 @@ router.post(
     fieldName: "image",
     isImage: true,
     multiple: false,
-    required: true,
+    required: false,
     maxSizeMB: 10,
   }),
   categoryController.createCategory

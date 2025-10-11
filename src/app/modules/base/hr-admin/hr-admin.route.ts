@@ -51,7 +51,7 @@ router.get(
 
 router.put(
   "/:id",
-  auth(USER_ROLE.HR),
+  auth(USER_ROLE.HR, USER_ROLE.SUPPER_ADMIN),
   upload.fields([
     { name: "documents", maxCount: 1 },
     { name: "profileImage", maxCount: 1 },

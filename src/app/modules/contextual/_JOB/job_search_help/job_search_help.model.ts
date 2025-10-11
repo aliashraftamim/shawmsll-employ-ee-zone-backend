@@ -6,7 +6,7 @@ const JobSearchHelpSchema = new Schema<IJobSearchHelp>(
     icon: { type: String, required: true },
     name: { type: String, required: true },
     content: { type: String, required: true },
-    documents: { type: [String], required: true },
+    documents: { type: [String], default: [] },
 
     isDeleted: { type: Boolean, default: false },
   },

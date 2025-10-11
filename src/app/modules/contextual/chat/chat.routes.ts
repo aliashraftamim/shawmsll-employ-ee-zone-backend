@@ -33,7 +33,7 @@ router.post(
     fieldName: "images",
     isImage: true,
     multiple: true,
-    required: true,
+    required: false,
     maxSizeMB: 50,
   }),
   chatController.sendImages

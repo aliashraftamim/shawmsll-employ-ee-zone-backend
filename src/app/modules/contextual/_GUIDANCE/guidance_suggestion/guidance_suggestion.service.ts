@@ -74,6 +74,21 @@ const updateGuidanceSuggestion = async (
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID");
   }
+
+  const filter: Record<string, any> = { isDeleted: { $ne: true } };
+
+  filter._id = new mongoose.Types.ObjectId(updateData.category);
+
+  filter.scenario = updateData.scenario;
+
+  const isCategory = await Category.findOne(filter);
+
+  if (!isCategory) {
+    throw new Error(
+      "Category not found or does not match the provided scenarios"
+    );
+  }
+
   return await GuidanceSuggestion.findByIdAndUpdate(id, updateData, {
     new: true,
   });

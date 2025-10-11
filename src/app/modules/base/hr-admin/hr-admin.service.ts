@@ -59,6 +59,10 @@ export default class HrAdminService {
       throw new Error("Invalid ID");
     }
 
+    const hrAdmin = await this.model.findById(new mongoose.Types.ObjectId(id));
+    if (!hrAdmin)
+      throw new AppError(httpStatus.NOT_FOUND, "HR Admin not found");
+
     const session = await startSession();
     session.startTransaction();
 
