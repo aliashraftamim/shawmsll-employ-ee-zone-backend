@@ -19,7 +19,7 @@ export const sendEmail = async (
 
   const msg = {
     to,
-    from: "info@eezhr.com", //CONFIG.MAIL.send_from, // Must be a verified sender in SendGrid
+    from: CONFIG.MAIL.send_from?.toString() as string, // Must be a verified sender in SendGrid
     subject,
     text: `Set your new password within ${CONFIG.MAIL.otp_expires} minutes`,
     html: htmlEmailBody,
