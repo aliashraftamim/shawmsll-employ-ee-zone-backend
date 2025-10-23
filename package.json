@@ -17,6 +17,7 @@
     "@aws-sdk/client-s3": "^3.842.0",
     "@aws-sdk/lib-storage": "^3.733.0",
     "@graphql-tools/merge": "^9.0.24",
+    "@sendgrid/mail": "^8.1.6",
     "@types/node-cron": "^3.0.11",
     "apollo-server-express": "^3.13.0",
     "aws-sdk": "^2.1692.0",

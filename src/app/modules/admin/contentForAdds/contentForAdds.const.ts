@@ -20,10 +20,8 @@ export const ContentForAddsSchedule = async (
 
     const scheduleDate = new Date(`${adds.date} ${adds.time}`);
     const delay = scheduleDate.getTime() - Date.now();
-    console.log("🚀 ~ ContentForAddsSchedule ~ delay:", delay);
-    console.log(delay, scheduleDate, Date.now());
     if (delay <= 0) {
-      console.log("⚠️ Schedule time already passed, sending immediately...");
+      console.info("⚠️ Schedule time already passed, sending immediately...");
       await sendAdsNotification({
         id: adds._id,
         fcmTokens: adds.fcmTokens,
@@ -51,7 +49,6 @@ export const ContentForAddsSchedule = async (
 // 4️⃣ Notification logic (reusable function)
 const sendAdsNotification = async (data: any) => {
   const { fcmTokens, title, content } = data;
-  console.log("🚀 ~ sendAdsNotification ~ data: ALI", data);
   try {
     await sendNotification(fcmTokens, {
       title,

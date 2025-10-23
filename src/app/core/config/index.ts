@@ -41,6 +41,7 @@ export const CONFIG = {
   },
   // # Mail and  OTP
   MAIL: {
+    send_grid_api_key: process.env.SEND_GRID_API_KEY,
     otp_length: process.env.OTP_LENGTH,
     service_user: process.env.SERVICE_USER,
     mail_app_pass: process.env.MAIL_APP_PASS,

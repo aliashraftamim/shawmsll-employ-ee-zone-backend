@@ -296,7 +296,6 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
     }
   }
 
-  console.log("🚀 ~ updateMe ~ updateData:", updateData);
 
   return await User.findByIdAndUpdate(
     userId,

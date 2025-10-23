@@ -6,12 +6,12 @@ import { CONFIG } from "../../config";
 export const toolWorker = new Worker(
   "tool-usage",
   async (job) => {
-    console.log(`🔥 Job received for ${job.data.title}`);
+    console.info(`🔥 Job received for ${job.data.title}`);
     const { title } = job.data;
     const tool = await TopUsedTools.findOne({ title });
     if (tool) {
       await TopUsedTools.findByIdAndUpdate(tool._id, { $inc: { priority: 1 } });
-      console.log(`✅ Priority updated for ${title}`);
+      console.info(`✅ Priority updated for ${title}`);
     }
   },
   {

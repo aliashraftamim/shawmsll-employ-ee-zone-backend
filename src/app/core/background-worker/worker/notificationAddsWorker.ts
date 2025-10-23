@@ -7,7 +7,7 @@ new Worker(
   "notification-adds",
   async (job) => {
     const { fcmTokens, title, content } = job.data;
-    console.log(
+    console.info(
       `🐦‍🔥🐦‍🔥 BACKGROUND WORKER ~ notification-adds ~ job: ${(job.id, job.delay, title)}`
     );
     await sendNotification(fcmTokens, {
