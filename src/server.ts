@@ -7,6 +7,7 @@ import app from "./app";
 import { CONFIG } from "./app/core/config";
 
 import { startWorker } from "./app/core/background-worker/worker/worker";
+import { sendNotification } from "./app/modules/base/notification/notification.utils";
 import { cron_jobs } from "./app/toolkit/helpers/DEFAULT_JOBS/cron.jobs";
 import { defaultJob } from "./app/toolkit/helpers/DEFAULT_JOBS/main";
 import { server as socketServer } from "./socket/socket.server";
@@ -38,6 +39,19 @@ async function main() {
             `✅ Server is listening on http://${CONFIG.CORE.ip ?? "localhost"}:${CONFIG.CORE.port} `
           )
         );
+      }
+    );
+
+    sendNotification(
+      [
+        "d0BmQQXZTea2nJPHRJ82t7:APA91bFUs7WjB3vsLtc9R8Cn83KNgdKytp-cvWSwuseoBOuHH4_MCSZtRWnvY9WV9zkIA8fxjTiKsLx5mnann92rulJtgqjOnYu_qs0RYqAVDw_lLaiffns",
+      ],
+      {
+        title: "Test Notification",
+        message: "This is a test notification sent from the server.",
+        receiver: new mongoose.Types.ObjectId("68bbfc7d922c4bfd9abd95f2"),
+        receiverEmail: "abc@gmail.com",
+        receiverRole: "USER",
       }
     );
 

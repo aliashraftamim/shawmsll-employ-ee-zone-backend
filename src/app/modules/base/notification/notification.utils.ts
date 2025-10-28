@@ -19,7 +19,7 @@ export const sendNotification = async (
 ): Promise<unknown> => {
   try {
     const response = await admin.messaging().sendEachForMulticast({
-      tokens: fcmToken,
+      tokens: fcmToken.length ? fcmToken : [" "],
       notification: {
         title: payload.title,
         body: payload.message,
@@ -36,6 +36,7 @@ export const sendNotification = async (
         },
       },
     });
+    console.log("🚀 ~ sendNotification ~ response:", response)
 
     // If notifications were successfully sent, log them in the database
     if (response?.successCount > 0) {
