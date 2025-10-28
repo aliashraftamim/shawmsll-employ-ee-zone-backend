@@ -13,7 +13,7 @@ const router = Router();
 router.post(
   "/create",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(categoryValidator.createCategoryValidationSchema),
   awsUpload.AwsUploader({
     fieldName: "image",
@@ -35,7 +35,7 @@ router.put(
 router.put(
   "/:categoryId",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(categoryValidator.updateCategoryValidationSchema),
   awsUpload.AwsUploader({
     fieldName: "image",

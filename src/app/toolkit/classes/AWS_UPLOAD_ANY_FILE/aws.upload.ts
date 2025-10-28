@@ -50,8 +50,11 @@ export class AwsUploadHandler {
 
   constructor() {
     this.s3Client = new AWS.S3({
-      accessKeyId: CONFIG.AWS.aws_access_key_id,
-      secretAccessKey: CONFIG.AWS.aws_secret_access_key,
+      accessKeyId: CONFIG.DO_SPACE.DO_SPACE_ACCESS_KEY,
+      secretAccessKey: CONFIG.DO_SPACE.DO_SPACE_SECRET_KEY,
+      region: CONFIG.DO_SPACE.DO_SPACE_REGION,
+      endpoint: CONFIG.DO_SPACE.DO_SPACE_ENDPOINT,
+      s3ForcePathStyle: false,
     });
   }
 
@@ -74,6 +77,10 @@ export class AwsUploadHandler {
       : file.originalname.split(".").pop() || "bin";
 
     const uniqueFileName = `${CONFIG.CORE.app_name}-${baseName}-${uniqueId}.${fileExt}`;
+    console.log(
+      "🚀 ~ AwsUploadHandler ~ uploadToS3 ~ uniqueFileName:",
+      uniqueFileName
+    );
     const Key = `${folder}/${uniqueFileName}`;
     const ContentType = isImage ? "image/webp" : file.mimetype;
 
@@ -85,7 +92,13 @@ export class AwsUploadHandler {
       : file.buffer;
 
     const uploaded = await this.s3Client
-      .upload({ Bucket: CONFIG.AWS.aws_bucket!, Key, Body, ContentType })
+      .upload({
+        Bucket: CONFIG.DO_SPACE.DO_SPACE_BUCKET!,
+        Key,
+        Body,
+        ContentType,
+        ACL: "public-read",
+      })
       .promise();
 
     return uploaded.Location;

@@ -5,7 +5,7 @@ dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export const CONFIG = {
   CORE: {
-    app_name: process.env.APP_NAME,
+    app_name: process.env.APK_NAME,
     ip: process.env.IP,
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
@@ -58,6 +58,14 @@ export const CONFIG = {
     aws_access_key_id: process.env.AWS_ACCESS_KEY_ID,
     aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY,
     aws_bucket: process.env.AWS_BUCKET,
+  },
+
+  DO_SPACE: {
+    DO_SPACE_ACCESS_KEY: process.env.DO_SPACE_ACCESS_KEY,
+    DO_SPACE_SECRET_KEY: process.env.DO_SPACE_SECRET_KEY,
+    DO_SPACE_ENDPOINT: process.env.DO_SPACE_ENDPOINT,
+    DO_SPACE_BUCKET: process.env.DO_SPACE_BUCKET,
+    DO_SPACE_REGION: process.env.DO_SPACE_REGION,
   },
 
   // # Digital Ocean Spaces

@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../../core/constants/global.constants";
-import { AwsUploadSingle } from "../../../../core/middlewares/!awsUploader/awsUpload.single";
-import { AwsUploadDocImg } from "../../../../core/middlewares/!awsUploader/awsUploadDocImg";
 import { upload } from "../../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../../core/middlewares/auth";
 import validateRequest from "../../../../core/middlewares/validateRequest";
+import { awsUpload } from "../../../../toolkit/classes/AWS_UPLOAD_ANY_FILE/aws.upload";
 import { jobSearchCategory_controller } from "./jobSearchCategory.controller";
 import { jobSearchCategoryValidation } from "./jobSearchCategory.validation";
 
@@ -19,16 +18,32 @@ router.post(
   ]),
   // Validate the request body against
   validateRequest(jobSearchCategoryValidation.createJobSearchCategory),
-  AwsUploadDocImg(
+  // AwsUploadDocImg(
+  //   {
+  //     fieldName: "image",
+  //     isImage: true,
+  //     multiple: false,
+  //   },
+  //   {
+  //     fieldName: "document",
+  //     isImage: false,
+  //     multiple: false,
+  //   }
+  // )
+  awsUpload.AwsUploader(
     {
       fieldName: "image",
       isImage: true,
       multiple: false,
+      required: false,
+      maxSizeMB: 10,
     },
     {
       fieldName: "document",
       isImage: false,
       multiple: false,
+      required: false,
+      maxSizeMB: 10,
     }
   ),
   jobSearchCategory_controller.createJobSearchCategory
@@ -41,9 +56,15 @@ router.get("/:id", jobSearchCategory_controller.getJobSearchCategoryById);
 router.put(
   "/:id",
   auth(USER_ROLE.USER),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(jobSearchCategoryValidation.updateJobSearchCategory),
-  AwsUploadSingle("image"),
+  awsUpload.AwsUploader({
+    fieldName: "image",
+    isImage: true,
+    multiple: false,
+    required: false,
+    maxSizeMB: 10,
+  }),
   jobSearchCategory_controller.updateJobSearchCategory
 );
 

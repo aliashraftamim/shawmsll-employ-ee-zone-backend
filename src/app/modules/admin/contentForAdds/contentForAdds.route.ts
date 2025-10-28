@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { USER_ROLE } from "../../../core/constants/global.constants";
-import { AwsUploadSingle } from "../../../core/middlewares/!awsUploader/awsUpload.single";
 import { upload } from "../../../core/middlewares/!awsUploader/multer.config";
 import auth from "../../../core/middlewares/auth";
 import validateRequest from "../../../core/middlewares/validateRequest";
+import { awsUpload } from "../../../toolkit/classes/AWS_UPLOAD_ANY_FILE/aws.upload";
 import { contentForAdds_controller } from "./contentForAdds.controller";
 import { contentForAdds_validation } from "./contentForAdds.validation";
 
@@ -12,9 +12,15 @@ const router = Router();
 router.post(
   "/",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(contentForAdds_validation.createContentForAdds),
-  AwsUploadSingle("image"),
+  awsUpload.AwsUploader({
+    fieldName: "image",
+    isImage: true,
+    multiple: false,
+    required: false,
+    maxSizeMB: 10,
+  }),
   contentForAdds_controller.createContentForAdds
 );
 
@@ -33,9 +39,15 @@ router.get(
 router.put(
   "/:id",
   auth(USER_ROLE.ADMIN, USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(contentForAdds_validation.updateContentForAdds),
-  AwsUploadSingle("image"),
+  awsUpload.AwsUploader({
+    fieldName: "image",
+    isImage: true,
+    multiple: false,
+    required: false,
+    maxSizeMB: 10,
+  }),
   contentForAdds_controller.updateContentForAdds
 );
 

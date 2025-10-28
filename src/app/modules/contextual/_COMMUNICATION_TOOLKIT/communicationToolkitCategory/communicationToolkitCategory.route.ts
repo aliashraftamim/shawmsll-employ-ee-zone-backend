@@ -13,7 +13,7 @@ const router = Router();
 router.post(
   "/",
   auth(USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(
     communicationToolkitCategoryValidation.createCommunicationToolkitCategory
   ),
@@ -38,7 +38,7 @@ router.get(
 router.put(
   "/:id",
   auth(USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(
     communicationToolkitCategoryValidation.updateCommunicationToolkitCategory
   ),

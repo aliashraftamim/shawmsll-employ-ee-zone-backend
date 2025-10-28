@@ -12,7 +12,7 @@ const router = Router();
 router.post(
   "/",
   auth(USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(PolicyRightsValidation.createPolicyRights),
   awsUpload.AwsUploader({
     fieldName: "image",
@@ -39,7 +39,7 @@ router.get(
 router.put(
   "/:id",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validateRequest(PolicyRightsValidation.updatePolicyRights),
   awsUpload.AwsUploader({
     fieldName: "image",
