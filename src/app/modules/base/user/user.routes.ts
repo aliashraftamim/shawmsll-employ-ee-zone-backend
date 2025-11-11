@@ -26,7 +26,7 @@ router.put(
     isImage: true,
     multiple: false,
     required: false,
-    maxSizeMB: 10,
+    maxSizeMB: 30,
   }),
   userController.updateMe
 );

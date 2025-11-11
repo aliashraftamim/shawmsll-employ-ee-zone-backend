@@ -19,6 +19,7 @@ app.use(
   cors({
     origin: [
       "**",
+      "https://admin.eezhr.com",
       "http://localhost:3000",
       "http://localhost:3002",
       "http://10.10.10.78:3002",
