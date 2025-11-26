@@ -13,7 +13,7 @@ router.post(
   "/",
   auth(USER_ROLE.SUPPER_ADMIN),
   upload.fields([{ name: "image", maxCount: 1 }]),
-  validateRequest(PolicyRightsValidation.createPolicyRights),
+  validateRequest(PolicyRightsValidation.policyRightsCreateSchema),
   awsUpload.AwsUploader({
     fieldName: "image",
     isImage: true,
@@ -40,7 +40,7 @@ router.put(
   "/:id",
   auth(USER_ROLE.USER, USER_ROLE.SUPPER_ADMIN),
   upload.fields([{ name: "image", maxCount: 1 }]),
-  validateRequest(PolicyRightsValidation.updatePolicyRights),
+  validateRequest(PolicyRightsValidation.policyRightsUpdateSchema),
   awsUpload.AwsUploader({
     fieldName: "image",
     isImage: true,
