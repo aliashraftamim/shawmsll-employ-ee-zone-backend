@@ -13,6 +13,7 @@ const PolicyRightsSchema = new Schema<IPolicyRights>(
     state: {
       stateName: { type: String, default: "" },
       stateTitle: { type: String, default: "" },
+      content: { type: String, default: "" },
     },
     isDeleted: { type: Boolean, default: false },
   },

@@ -88,6 +88,7 @@ const updatePolicyRights = async (
       updateData.state = {
         stateName: "",
         stateTitle: "",
+        content: "",
       };
     }
   }

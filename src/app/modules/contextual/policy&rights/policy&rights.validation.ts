@@ -23,6 +23,7 @@ const policyRightsCreateSchema = z.object({
         state: z.object({
           stateName: z.string(),
           stateTitle: z.string(),
+          content: z.string(),
         }),
         isDeleted: z.boolean().optional(),
       })
@@ -57,6 +58,7 @@ const policyRightsUpdateSchema = z.object({
           .object({
             stateName: z.string().optional(),
             stateTitle: z.string().optional(),
+            stateContent: z.string().optional(),
           })
           .optional(),
         isDeleted: z.boolean().optional(),

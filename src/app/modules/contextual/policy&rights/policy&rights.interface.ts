@@ -18,6 +18,7 @@ export interface IPolicyRights {
   state?: {
     stateName: string;
     stateTitle: string;
+    content: string;
   };
 
   isDeleted?: boolean;
