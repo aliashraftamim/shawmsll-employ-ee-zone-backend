@@ -280,6 +280,7 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
   // profileImage update করলে শুধু nested field use করো
   if (payload?.profileImage) {
     updateData["profile.profileImage"] = payload.profileImage;
+    delete payload.profileImage;
   }
 
   // location update
