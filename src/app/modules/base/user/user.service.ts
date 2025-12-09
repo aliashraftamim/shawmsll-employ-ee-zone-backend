@@ -271,17 +271,12 @@ const usersForAdmin = async (
   return { meta, data: users };
 };
 
-// const getSingleUser = async() => {};
-
+// ----- Update Functions -----
 const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
-  console.log("🚀 ~ updateMe ~ payload:", payload);
   const updateData: any = {};
 
-  // profileImage update করলে শুধু nested field use করো
-  if (payload?.profileImage) {
-    updateData["profile.profileImage"] = payload.profileImage;
-    delete payload.profileImage;
-  }
+  // profileImage আলাদাভাবে handle
+  const profileImage = payload?.profileImage;
 
   // location update
   if (payload?.location?.coordinates) {
@@ -289,17 +284,29 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
       type: "Point",
       coordinates: payload.location.coordinates,
     };
+    delete payload.location;
   }
 
-  // profile update
+  // profile update with proper merging
   if (payload?.profile) {
-    updateData["profile"] = payload.profile;
+    const profileData = payload.profile;
+    // ⚠️ এখানে nested field update করো, পুরো object নয়
+    for (const [key, value] of Object.entries(profileData)) {
+      updateData[`profile.${key}`] = value;
+    }
+    delete payload.profile;
   }
 
-  // অন্য non-nested fields
-  for (const key of Object.keys(payload)) {
+  // profileImage separately add (যদি থাকে)
+  if (profileImage) {
+    updateData["profile.profileImage"] = profileImage;
+    delete payload.profileImage;
+  }
+
+  // rest fields
+  for (const [key, value] of Object.entries(payload)) {
     if (!["profileImage", "location", "profile"].includes(key)) {
-      updateData[key] = payload[key];
+      updateData[key] = value;
     }
   }
 
@@ -309,7 +316,6 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
     { new: true }
   );
 };
-
 const getMe = async (currentUser: ObjectId) => {
   // Step 1: Match only active & verified users
 
