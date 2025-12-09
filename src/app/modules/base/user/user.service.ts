@@ -274,6 +274,7 @@ const usersForAdmin = async (
 // const getSingleUser = async() => {};
 
 const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
+  console.log("🚀 ~ updateMe ~ payload:", payload);
   const updateData: any = {};
 
   // profileImage update করলে শুধু nested field use করো
@@ -289,13 +290,17 @@ const updateMe = async (userId: ObjectId, payload: Partial<IUser> | any) => {
     };
   }
 
+  // profile update
+  if (payload?.profile) {
+    updateData["profile"] = payload.profile;
+  }
+
   // অন্য non-nested fields
   for (const key of Object.keys(payload)) {
     if (!["profileImage", "location", "profile"].includes(key)) {
       updateData[key] = payload[key];
     }
   }
-
 
   return await User.findByIdAndUpdate(
     userId,
